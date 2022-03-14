@@ -160,6 +160,32 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     }
 }
 
+#payment-modal{
+    .form-modal-content {
+
+        .form-modal-body {
+            padding: 60px;
+            overflow: auto;
+
+            .scroll-modal-body {
+                height: calc(100vh - 280px);
+                width: unset;
+                position: relative;
+                min-height: 400px;
+                padding: 0 10px;
+            }
+        }
+        
+        .form-modal-footer {
+            padding: 20px 0 30px;
+
+            button {
+                padding: 5px 30px;
+            }
+        }
+    }
+}
+
 .header {
     padding: 7px 50px 7px 20px;
 

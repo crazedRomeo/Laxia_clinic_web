@@ -9,13 +9,17 @@ import VueLazyLoad from 'vue-lazyload'
 import ToggleButton from 'vue-js-toggle-button'
 import Firebase from 'firebase'
 import Multiselect from 'vue-multiselect'
+import VCalendar from 'v-calendar';
+import VueTimepicker from 'vue2-timepicker'
+import 'vue2-timepicker/dist/VueTimepicker.css'
 
 require("./firebase_info")
 
 Vue.use(VueLazyLoad)
 Vue.use(ToggleButton)
-Vue.component('multiselect', Multiselect)
-
+Vue.component('multiselect', Multiselect);
+Vue.component('vue-timepicker', VueTimepicker);
+Vue.use(VCalendar);
 const moment = require('moment')
 require('moment/locale/ja')
 Vue.use(require('vue-moment'), { moment })
@@ -41,6 +45,11 @@ Vue.filter('formatDate', function(value) {
     return moment(String(value)).format('YYYY年MM月DD日')
   }
 });
+Vue.filter('formatDateWithOutDay', function(value) {
+  if (value) {
+    return moment(String(value)).format('YYYY年MM月')
+  }
+});
 Vue.filter('formatDateTimeWithDay', function(value) {
   if (value) {
     return moment(String(value)).format('YYYY/MM/DD(ddd) HH:mm')
@@ -48,7 +57,13 @@ Vue.filter('formatDateTimeWithDay', function(value) {
 });
 Vue.filter('formatDateWithDay', function(value) {
   if (value) {
-    return moment(String(value)).format('YYYY/MM/DD(ddd)')
+    return moment(String(value)).format('MM月DD日(ddd)')
+  }
+});
+
+Vue.filter('formatDateWithTime', function(value) {
+  if (value) {
+    return moment(String(value)).format('MM月DD日(ddd) HH:mm')
   }
 });
 Vue.filter('formatTime', function(value) {
@@ -56,7 +71,7 @@ Vue.filter('formatTime', function(value) {
 });
 Vue.filter('formatTime12', function(value) {
   if (value) {
-    return moment(String(value)).format('h:mm a')
+    return moment(String(value)).format('HH:mm')
   }
 });
 

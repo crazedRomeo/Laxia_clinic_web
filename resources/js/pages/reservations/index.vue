@@ -12,11 +12,11 @@
           <a @click="handleFilterStatus({status: 10})">不在着信<span v-if="count.missed_call" class="rsv-status__missed_call">{{ count.missed_call }}</span></a>
         </li>
         <li :class="{ 'active' : query.status == 15 }">
-          <a @click="handleFilterStatus({status: 15})">予約調整中<span v-if="count.in_progress" class="rsv-status__in_progress">{{ count.in_progress }}</span></a>
+          <a @click="handleFilterStatus({status: 15})">日時確定<span v-if="count.in_progress" class="rsv-status__in_progress">{{ count.in_progress }}</span></a>
         </li>
-        <li :class="{ 'active' : query.status == 20 }">
+        <!-- <li :class="{ 'active' : query.status == 20 }">
           <a @click="handleFilterStatus({status: 20})">予約完了<span v-if="count.approved" class="rsv-status__approved">{{ count.approved }}</span></a>
-        </li>
+        </li> -->
       </ul>
       <div class="tab-content">
         <div id="tab-content1">
@@ -25,7 +25,7 @@
               <tr>
                 <th>{{ $t('予約ID') }}</th>
                 <th>{{ $t('ステータス') }}</th>
-                <th>{{ $t('来院日時') }}</th>
+                <th>{{ $t('送受信時間') }}</th>
                 <th>{{ $t('氏名') }}</th>
                 <th>{{ $t('性別') }}</th>
                 <th>{{ $t('電話番号') }}</th>
@@ -44,7 +44,8 @@
                     :selected="rsv.status"
                     @change="handleChangeStatus" />
                 </td>
-                <td>{{ rsv.visit_date | visit_date_filter }}</td>
+                <td v-if="rsv.last_chat_time">{{ rsv.last_chat_time.created_at | formatDateWithTime}}</td>
+                <td v-else>{{ $t('未確定') }}</td>
                 <td>
                   <small>{{ rsv.patient_info.kana }}</small>
                   <br>
@@ -84,14 +85,15 @@
             <div>{{ $t('診察者') }}</div>
             <div class="rsv-main-content">
               <div>
-                <span>{{ $t('氏名') }}</span>
-                {{ selected.patient_info.name }}
-              </div>
-              <div>
-                <span>{{ $t('シメイ') }}</span>
+                <span>{{ $t('名前') }}</span>
+                <!-- {{ selected.patient_info.name }} -->
                 {{ selected.patient_info.kana }}
               </div>
-              <div class="half">
+              <!-- <div>
+                <span>{{ $t('シメイ') }}</span>
+                {{ selected.patient_info.kana }}
+              </div> -->
+              <!-- <div class="half"> -->
                 <div>
                   <span>{{ $t('性別') }}</span>
                   {{ gender_types[selected.patient_info.gender] }}
@@ -100,40 +102,50 @@
                   <span>{{ $t('年齢') }}</span>
                   {{ selected.patient_info.age }}
                 </div>
+              <!-- </div> -->
+              <div>
+                <span>{{ $t('生年月日') }}</span>
+                {{ selected.patient_info.birthday | formatDate }}
               </div>
               <div>
                 <span>{{ $t('電話番号') }}</span>
                   {{ selected.patient_info.phone_number }}
               </div>
-              <div>
-                <span>{{ $t('生年月日') }}</span>
-                {{ selected.patient_info.birthday | formatDate }}
-              </div>
             </div>
           </li>
           <li>
-            <div>{{ $t('予定日') }}</div>
-            <div class="rsv-main-content">
+            <div>{{ $t('予約日') }}</div>
+            <div class="rsv-main-content2">
               <div>
                 <span>{{ $t('日にち') }}</span>
-                <input type="date" :min="currentDate" v-model="form.reservations.visit_date" :class="{'is-invalid' : errors && errors['reservations.visit_date'] }"/>
+                <!-- <input type="date" :min="currentDate" v-model="form.reservations.visit_date" :class="{'is-invalid' : errors && errors['reservations.visit_date'] }"/> -->
+                <v-date-picker v-model="date">
+                  <template v-slot="{ inputValue, inputEvents }">
+                    <input
+                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                    />
+                  </template>
+                </v-date-picker>
                 <div v-if="errors && errors['reservations.visit_date']" class="error invalid-feedback">{{ errors['reservations.visit_date'][0] }}</div>
               </div>
-              <div>
-                <span>{{ $t('診察時間') }}</span>
-                <input type="time" v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" />
+              <div class="time-picker-content">
+                <span>{{ $t('診断時間') }}</span>
+                <!-- <input type="time" v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" /> -->
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[0, [6, 23]]" :minute-interval="15"></vue-timepicker>
                 <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
               </div>
-              <div>
+              <!-- <div>
                 <span></span>
                 <input type="time" v-model="form.reservations.end_time" :class="{'is-invalid' : errors && errors['reservations.end_time'] }" />
                 <div v-if="errors && errors['reservations.end_time']" class="error invalid-feedback">{{ errors['reservations.end_time'][0] }}</div>
-              </div>
+              </div> -->
             </div>
           </li>
           <li>
             <div>{{ $t('担当者') }}</div>
-            <div class="rsv-main-content">
+            <div class="rsv-main-content2">
               <div>
                 <span>{{ $t('医師・スタッフ') }}</span>
                 <select v-model="form.reservations.stuff_id" :class="{'is-invalid' : errors && errors['reservations.stuff_id'] }">
@@ -150,23 +162,23 @@
                 </select>
                 <div v-if="errors && errors['reservations.rsv_content_id']" class="error invalid-feedback">{{ errors['reservations.rsv_content_id'][0] }}</div>
               </div>
-              <div>
+              <!-- <div>
                 <span>{{ $t('施術メニュー') }}</span>
                 <select v-model="form.reservations.menu_id" :class="{'is-invalid' : errors && errors['reservations.menu_id'] }">
                   <option></option>
                   <option v-for="(name, id) in menus" :key="id" :value="id">{{ name }}</option>
                 </select>
                 <div v-if="errors && errors['reservations.menu_id']" class="error invalid-feedback">{{ errors['reservations.menu_id'][0] }}</div>
-              </div>
+              </div> -->
             </div>
           </li>
-          <li class="rsv-modal--point-row">
+          <!-- <li class="rsv-modal--point-row">
             <div>{{ $t('利用ポイント') }}</div>
             <div class="point-content">
               <span class="use-point">{{ form.reservations.use_point }}ポイント</span>
               <p>※1ポイント＝1円です。お支払いの際ポイント分を割引きしてください。</p>
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
       <div class="btn-wrapper">
@@ -362,13 +374,13 @@ export default {
     },
   },
 
-  filters: {
-    visit_date_filter(value) {
-      if (value) return value;
+  // filters: {
+  //   last_chat_time_filter(value) {
+  //     if (value) return value;
 
-      return "未確定";
-    },
-  }
+  //     return "未確定";
+  //   },
+  // }
 }
 </script>
 

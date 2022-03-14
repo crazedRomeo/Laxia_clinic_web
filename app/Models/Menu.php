@@ -28,6 +28,7 @@ class Menu extends Model
     'risk',
     'guarantee',
     'treat_time',
+    'required_time',
     'masui',
     'hospital_visit',
     'hare',

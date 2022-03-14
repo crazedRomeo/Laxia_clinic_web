@@ -532,6 +532,11 @@ button:focus {
 }
 .btn-wrapper{
 	text-align: center;
+	margin-top: 50px;
+}
+.btn-payment-wrapper{
+	display: flex;
+	justify-content: space-around;
 }
 .btn-cancel{
 	color: #000;
@@ -661,9 +666,13 @@ button:focus {
 .task-list th, .task-list td{
 	padding: 8px 0;
 	font-weight: normal;
+	text-align: center;
 }
 .task-list th{
 	color: #757296;
+}
+.task-list th:nth-child(4){
+	min-width: 160px;
 }
 .task-list tr{
 	border-bottom: 1px solid #E1E1F1;
@@ -723,16 +732,18 @@ button:focus {
 .reserve-content>ul>li>div:first-child{
 	width: 140px;
 	font-weight: bold;
-	padding-top: 26px;
+	// padding-top: 26px;
+	align-items: center;
 }
 .reserve-content>ul>li>div:last-child{
-	width: calc(100% - 140px);
+	width: 100%;
 }
 .reserve-content>ul>li>div:last-child>div{
 	display: inline-block;
 	margin-bottom: 20px;
 	vertical-align: top;
 }
+
 .reserve-content>ul>li>div:last-child>div.half{
 	width: 60px;
 }
@@ -774,7 +785,9 @@ button:focus {
 .reserve-content2>div:first-child>div>span{
 	display: block;
 	margin-bottom: 4px;
-	font-size: 13px;
+	font-size: 24px;
+	font-weight: bold;
+	letter-spacing: 0.1em;
 }
 .reserve-content2>div:first-child{
 	margin-bottom: 18px;
@@ -805,10 +818,15 @@ button:focus {
 	display: block;
 	color: #757296;
 	margin-bottom: 5px;
+	white-space: nowrap;
 }
 .reserve-content2>div:nth-child(4) input{
-	width: 140px;
+	min-width: 160px;
 	height: 28px;
+}
+.payment-result{
+	background: none;
+	border: none;
 }
 .reserve-content2>div:nth-child(5){
 	display: flex;
@@ -855,6 +873,53 @@ button:focus {
 			}
 		}
 	}
+	.rsv-main-content2 {
+		display: flex;
+		justify-content: space-between;
+		margin: 0 -10px;
+		> div {
+			flex: 50%;
+			max-width: 45%;
+			padding: 0 10px;
+			&.half {
+				display: flex !important;
+				justify-content: space-between;
+				> div {
+					flex: 49%;
+					max-width: 49%;
+					span {
+						height: 20px;
+						font-size: 14px;
+						line-height: 20px;
+						color: #757296;
+						display: block;
+						margin-bottom: 5px;
+					}
+				}
+			}
+		}
+	}
+}
+.time-picker-content{
+	>.vue__time-picker{
+		width: 100%;
+		height: initial !important;
+		> input.display-time{
+			width: 100% !important;
+		}
+	}
+}
+.time-picker-content>.vue__time-picker .controls .char{
+	font-size: 2em !important;
+}
+.time-picker-content>.is-invalid input{
+	border-color: red !important;
+}
+.vue__time-picker .dropdown{
+	width: 100% !important;
+}
+.vue__time-picker .dropdown>.select-list{
+	width: 100% !important;
 }
 .chat{
 	background-color: #fff;
@@ -866,6 +931,7 @@ button:focus {
 	width: 256px;
 	padding: 16px 26px;
 	border-left: 1px solid #E1E1F1;
+	font-size: 12px;
 }
 .chat-content{
 	width: calc(100% - 257px);
@@ -879,12 +945,13 @@ button:focus {
 .chat-user-name{
 	text-align: center;
 	font-size: 18px;
+	font-weight: bold;
 	margin-top: 5px;
 	line-height: 26px;
-	margin-bottom: 28px;
+	margin-bottom: 10px;
 }
 .chat-user-profile>ul>li{
-	margin-bottom: 22px;
+	margin-bottom: 10px;
 }
 .chat-user-profile>ul>li>p{
 	margin-bottom: 4px;
@@ -895,6 +962,21 @@ button:focus {
 .chat-user-profile>ul>li>p>span{
 	color: #728396;
 }
+.chat-user-profile .btn{
+	font-size: 14px;
+	padding: 5px 25px;
+	width: 175px;
+	margin-top: 20px;
+}
+.btn-chat-confirm{
+	font-size: 14px;
+	padding: 5px 25px;
+	background: #5CA3F6;
+	width: 175px;
+}
+.item-center{
+	text-align: center;
+}
 .chat-content{
 	height: 100%;
 }
@@ -902,7 +984,7 @@ button:focus {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: calc(100% - 85px);
+	height: calc(100% - 175px);
 	.chat-main {
 		padding: 0 34px 10px;
 		margin-top: 40px;
@@ -911,15 +993,20 @@ button:focus {
 	}
 }
 .chat-input{
-	border-top: 1px solid #E1E1F1;
-	display: flex;
-	padding: 20px 40px;
+	// border-top: 1px solid #E1E1F1;
+	padding: 5px 15px;
 }
 .chat-input button{
 	border: none;
-	outline: none;
-	background-color: #fff;
-	margin-left: 15px;
+	padding: 5px 30px;
+	float: right;
+	background: #5CA3F6;
+	border-radius: 3px;
+	color: #FFFFFF;
+	font-size: 16px;
+}
+.chat-input .more-add-image-clicker{
+	padding-left: 10px;
 }
 .chat-input textarea{
 	border:none;
@@ -928,6 +1015,8 @@ button:focus {
 	line-height: 19px;
 	width: 100%;
 	resize: none;
+	background-color: #F5F5F5;
+	height: 116px;
 }
 .chat-date{
 	text-align: center;
@@ -943,7 +1032,7 @@ button:focus {
 .chat-main .other>div>div>p{
 	position: relative;
 	padding: 8px 34px;
-	border-radius: 30px;
+	border-radius: 5px 5px 5px 0px;
 	background: #F1F2F6;
 }
 .chat-main .other>div>div:first-child>p{
@@ -955,7 +1044,7 @@ button:focus {
 }
 .chat-main>div>div>div>p{
 	display: inline-block;
-	max-width: 500px;
+	max-width: 550px;
 	margin-bottom: 5px;
 }
 .chat-main>div>div>div:last-child>p{
@@ -972,7 +1061,7 @@ button:focus {
 	position: relative;
 	text-align: left;
 	padding: 8px 34px;
-	border-radius: 30px;
+	border-radius: 5px 5px 0 5px;
 	background: #5CA3F6;
 	color: #fff;
 }
@@ -980,6 +1069,10 @@ button:focus {
 	border-bottom-right-radius: 0;
 }
 
+.vue__time-picker .controls .char{
+	font-size: 2em;
+	-webkit-margin-before: 0.8em;
+}
 
 .date-pick{
 	display: flex;
@@ -1047,6 +1140,14 @@ button:focus {
 }
 .payment>div:first-child{
 	margin-right: 20px;
+	display: flex;
+	font-size: 20px;
+}
+.payment > div:first-child > div:first-child{
+	margin-right: 50px;
+}
+.refund-calc > strong{
+	color: red;
 }
 .payment-div>div>span{
 	min-width: 80px;
@@ -1659,6 +1760,54 @@ span.switcher.switcher-1 input:not(:checked) + label {
 	margin-bottom: 5px;
 	color: #5F6377;
 }
+.create-menu-content .col-9, .create-menu-content .col-3{
+	padding-left: 40px;
+	padding-right: 5px;
+}
+.create-menu-flow>div>div{
+	margin-bottom: 5px;
+}
+.create-menu-flow-increase {
+	text-align: center;
+}
+.create-menu-flow-increase>img{
+	width: 25px;
+	margin-bottom: 5px;
+}
+.create-menu-flow-title{
+	margin-right: 0 !important;
+	margin-left: 0 !important;
+	div {
+		padding: 0px;
+		margin-bottom: 5px;
+	}
+} 
+.create-menu-flow-index{
+	width: 22px;
+    height: 22px;
+	line-height: 20px;
+    text-align: center;
+    border: 1px solid;
+    border-radius: 50%;
+    position: absolute;
+	margin-top: 10px;
+}
+.result-menu-flow{
+	justify-content: space-between;
+}
+.result-menu-flow small{
+	color: #131340;
+}
+.result-menu-flow span{
+	color: #5F6377;
+}
+.result-menu-flow>div>div>p{
+	margin-left: 40px;
+	margin-top: 10px;
+}
+.result-menu-flow .create-menu-flow-index{
+	margin-top: 5px;
+}
 .create-menu-header>div:first-child input{
 	width: 522px;
 	// height: 43px;
@@ -1684,6 +1833,7 @@ span.switcher.switcher-1 input:not(:checked) + label {
 		width: 100%;
 	}
 }
+
 .create-menu-gurantee {
 	margin-bottom: 35px;
 	textarea {
@@ -2024,7 +2174,7 @@ span.switcher.switcher-1 input:not(:checked) + label {
 	}
 	> span {
 		width: 40px;
-		padding-top: 30px;
+		padding-top: 38px;
     flex-shrink: 0;
 	}
 }
@@ -2279,6 +2429,14 @@ i.i-login-valid{
 .multi-files-uploader .dropzone-wrapper .dropzone-in > div div{
 	// margin-top: 45px;
 }
+.chat-input .multi-files-uploader.dropzone{
+	min-height: initial !important;
+	height: 25px !important;
+	width: 25px;
+	position: absolute;
+	background-color: #F5F5F5;
+	bottom: 85px;
+}
 .multi-files-uploader.dropzone{
 	min-height: 190px !important;
 	&.vue-dropzone {
@@ -2473,16 +2631,17 @@ i.i-login-valid{
 		.avatar {
 			display: none;
 		}
-		+ .me {
-			.message {
-				border-bottom-right-radius: 30px;
-			}
-		}
+		// + .me {
+		// 	.message {
+		// 		border-bottom-right-radius: 30px;
+		// 	}
+		// }
 		+ .other {
 			margin-top: 34px;
 		}
 		.chat-time {
-			left: -78px;
+			left: -50px;
+			font-size: 12px;
 		}
 	}
 	.other {
@@ -2501,14 +2660,15 @@ i.i-login-valid{
 			.avatar {
 				display: none;
 			}
-			> div {
-				.message {
-					border-bottom-left-radius: 30px;
-				}
-			}
+			// > div {
+			// 	.message {
+			// 		border-bottom-left-radius: 30px;
+			// 	}
+			// }
 		}
 		.chat-time {
-			right: -78px;
+			right: -50px;
+			font-size: 12px;
 		}
 	}
 }

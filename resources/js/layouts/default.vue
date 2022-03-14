@@ -64,6 +64,7 @@ export default {
           this.$store.dispatch('constant/saveMenuBasshiTypes', { basshi : res.data.basshi })
           this.$store.dispatch('constant/saveMenuHareTypes', { hare : res.data.hare })
           this.$store.dispatch('constant/saveMenuTreatTimeTypes', { treat_time : res.data.treat_time })
+          this.$store.dispatch('constant/saveMenuRequiredTimeTypes', { required_time : res.data.required_time })
           this.$store.dispatch('state/setIsEnumLoaded')
         })
     },

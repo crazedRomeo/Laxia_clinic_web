@@ -9,10 +9,10 @@
         <table class="task-list">
           <thead>
             <tr>
-              <th>{{ $t('患者名') }}</th>
-              <th>{{ $t('支払日') }}</th>
+              <th>{{ $t('氏名') }}</th>
+              <th>{{ $t('診断日時') }}</th>
               <th>{{ $t('予約内容') }}</th>
-              <th>{{ $t('診断メニュー') }}</th>
+              <th>{{ $t('担当者') }}</th>
               <th>{{ $t('利用ポイント') }}</th>
               <th>{{ $t('支払い金額') }}</th>
             </tr>
@@ -21,10 +21,12 @@
             <tr v-for="payment in payments" :key="payment.id">
               <td>
                 <small>{{ payment.reservation.patient_info.kana }}</small>
-                <br>
-                {{ payment.reservation.patient_info.name }}
+                <!-- <br>
+                {{ payment.reservation.patient_info.name }} -->
               </td>
-              <td>{{ payment.created_at | formatDateTimeWithDay }}</td>
+              <td>{{ payment.reservation.visit_date | formatDateWithDay }}
+                  <br>
+                 {{ payment.reservation.end_time | formatTime }}</td>
               <td>{{ payment.reservation.rsv_content ? payment.reservation.rsv_content.name : '' }}</td>
               <td>{{ payment.reservation.menu ? payment.reservation.menu.name : '' }}</td>
               <td>{{ payment.reservation.use_point.toLocaleString() }}</td>

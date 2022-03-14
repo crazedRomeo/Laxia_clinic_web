@@ -19,6 +19,7 @@ use App\Enums\Menu\SportImpossible;
 use App\Enums\Menu\Basshi;
 use App\Enums\Menu\Hare;
 use App\Enums\Menu\TreatTime;
+use App\Enums\Menu\RequiredTime;
 use App\Services\Master\JobService;
 use App\Services\Master\RsvContentService;
 use App\Services\Master\SpecialityService;
@@ -106,6 +107,7 @@ class MasterDataController extends Controller
         $basshi = Basshi::asList();
         $hare = Hare::asList();
         $treatTime = TreatTime::asList();
+        $requiredTime = RequiredTime::asList();
 
         return response()->json([
             'genders' => $genders,
@@ -123,6 +125,7 @@ class MasterDataController extends Controller
             'basshi' => $basshi,
             'hare' => $hare,
             'treat_time' => $treatTime,
+            'required_time' => $requiredTime,
         ], 200);
     }
 

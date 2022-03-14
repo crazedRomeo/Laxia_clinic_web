@@ -17,6 +17,7 @@ export const state = {
   basshi: null,
   hare: null,
   treat_time: null,
+  required_time: null,
 }
 
 // getters
@@ -36,6 +37,7 @@ export const getters = {
   basshi: state => state.basshi,
   hare: state => state.hare,
   treat_time: state => state.treat_time,
+  required_time: state => state.required_time,
 }
 
 // mutations
@@ -106,6 +108,9 @@ export const mutations = {
   [types.SAVE_MENU_TREAT_TIME_TYPES] (state, { treat_time }) {
     state.treat_time = treat_time
   },
+  [types.SAVE_MENU_REQUIRED_TIME_TYPES] (state, { required_time }) {
+    state.required_time = required_time
+  },
 }
 
 // actions
@@ -168,5 +173,8 @@ export const actions = {
 
   saveMenuTreatTimeTypes ({ commit }, payload) {
     commit(types.SAVE_MENU_TREAT_TIME_TYPES, payload)
+  },
+  saveMenuRequiredTimeTypes ({ commit }, payload) {
+    commit(types.SAVE_MENU_REQUIRED_TIME_TYPES, payload)
   },
 }

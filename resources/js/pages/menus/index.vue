@@ -165,6 +165,31 @@
             <textarea rows="5" v-model="form.menus.guarantee" class="form-control" :class="{'is-invalid' : errors && errors['menus.guarantee'], 'fulled-status' : form.menus.guarantee ? 'fulled-input': '' }" placeholder="例：何日間の保証があります。"></textarea>
             <div v-if="errors && errors['menus.guarantee']" class="error invalid-feedback">{{ errors['menus.guarantee'][0] }}</div>
           </div>
+          <div class="row create-menu-flow-title">
+            <div class="col-9">
+              <div>{{ $t('施術の流れ') }}</div>
+            </div>
+            <div class="col-3">
+              <div>{{ $t('所要時間') }}</div>
+            </div>
+          </div>
+          <div class="form-group row m-row create-menu-flow" v-for="(inp, ind) in inputGroups" :key="ind"> 
+            <div class= "create-menu-flow-index">{{ind + 1}}</div>
+            <div class="col-9">
+              <div>
+                <input type="text" placeholder="例：麻酔">
+              </div>
+            </div>
+            <div class="col-3">
+              <select class="form-control" :class="{'fulled-status' : form.menus.treat_time ? 'fulled-input': ''}" :key="ind" >
+                <option></option>
+                  <option v-for="(item, key) in required_time" :key="key" :value="key">{{ item }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="create-menu-flow-increase">
+            <img @click="handleClick" src="/img/icons-plus.svg"/>
+          </div>
           <div class="form-group row m-row">
             <div class="col-6">
                 <small>{{ $t('施術時間') }}</small>
@@ -339,6 +364,21 @@
               <p class="pre-wrap">{{form.menus.guarantee}}</p>
             </div>
           </div>
+          <div class="form-group row result-menu-flow">
+            <div>
+              <small>{{ $t('施術の流れ') }}</small>
+              <span>{{ $t('施術の工程') }}</span>
+              <div>
+                <div class= "create-menu-flow-index">{{ $t('1') }}</div>
+                <p>局部麻酔を二ヶ所</p>
+              </div>
+            </div>
+            <div>
+              <small>{{ $t('施術時間 75分') }}</small>
+              <span>{{ $t('施術の工程') }}</span>
+              <p>{{ $t('10分') }}</p>
+            </div>
+          </div>          
           <div class="form-group row">
             <div class="col">
               <small>{{ $t('施術時間') }}</small>
@@ -476,6 +516,7 @@ export default {
   data() {
     return {
       menus: [],
+      inputGroups: [1],
       form: undefined,
       errors: undefined,
       tmp: {
@@ -487,6 +528,7 @@ export default {
           risk: '',
           guarantee: '',
           treat_time: '',
+          required_time: '',
           masui: '',
           hospital_visit: '',
           hare: '',
@@ -544,6 +586,7 @@ export default {
       basshi: 'constant/basshi',
       hare: 'constant/hare',
       treat_time: 'constant/treat_time',
+      required_time: 'constant/required_time',
     }),
 
     category_options() {
@@ -605,6 +648,9 @@ export default {
     removeCategory(idx) {
       this.selected_categories.splice(idx, 1);
     },
+    handleClick() {
+      this.inputGroups.push(1);
+    },
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
@@ -639,6 +685,7 @@ export default {
           risk: selected.risk,
           guarantee: selected.guarantee,
           treat_time: selected.treat_time,
+          // required_time: selected.required_time,
           masui: selected.masui,
           hospital_visit: selected.hospital_visit,
           hare: selected.hare,

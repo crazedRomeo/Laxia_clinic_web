@@ -42,7 +42,7 @@
 						<span>{{ $t('会計') }}</span>
 					</router-link>
 				</li>
-				<li>
+				<!-- <li>
 					<router-link :to="{ name: 'patients' }" active-class="active">
 						<p>
 							<svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +51,7 @@
 						</p>
 						<span>{{ $t('患者') }}</span>
 					</router-link>
-				</li>
+				</li> -->
 				<li>
 					<router-link :to="{ name: 'clinic' }" active-class="active">
 						<p>

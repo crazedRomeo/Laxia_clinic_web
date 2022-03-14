@@ -14,7 +14,7 @@
     @vdropzone-complete="handleUploadComplete"
     @vdropzone-complete-multiple="handleMultipleUploadComplete"
     >
-    <div v-if="!avatar" class="dropzone-wrapper">
+    <div v-if="!avatar && !chat" class="dropzone-wrapper">
       <div class="dropzone-in">
         <div class="dropzone-title">
         <svg width="36" height="44" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,8 +42,12 @@
       </div>
       <button class="btn btn-file-upload mt-3"><i class="far fa-file-image"></i> {{ $t('アップロード') }}</button>
     </div>
+    <a v-if="chat" class="more-add-image-clicker dropzone-trigger">
+      <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.56015 0H2.04016C1.00616 0 0.169556 0.9 0.169556 2L0.160156 18C0.160156 19.1 0.996756 20 2.03076 20H13.3202C14.3542 20 15.2002 19.1 15.2002 18V6L9.56015 0ZM13.3202 18H2.04016V2H8.62015V7H13.3202V18ZM3.92016 13.01L5.24555 14.42L6.74016 12.84V17H8.62015V12.84L10.1148 14.43L11.4402 13.01L7.68956 9L3.92016 13.01Z" fill="#5F6377"/>
+      </svg>
+    </a>
   </vue-dropzone>
-  
 </template>
 
 <script>
@@ -79,6 +83,10 @@
         default: 1,
       },
       autoStatus: {
+        type: Boolean,
+        default: false,
+      },
+      chat: {
         type: Boolean,
         default: false,
       },

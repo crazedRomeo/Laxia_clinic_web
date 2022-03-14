@@ -3,35 +3,43 @@
     <div class="main-content">
       <div v-if="current" class="payment">
         <div>
-          <p class="payment-ttl">12月の支払い</p>
-          <div class="payment-calc">
-            <div>
-              <span>{{ $t('売上') }}</span>
-              {{ current.price | currency }}
-            </div>
-            <div class="text-center">
-              <span></span>
-              ×
-            </div>
-            <div>
-              <span>{{ $t('手数料') }}</span>
-              {{ current.tax + "%" }}
-            </div>
-            <div class="text-center">
-              <span></span>
-              +
-            </div>
-            <div>
-              <span>{{ $t('システム利用料') }}</span>
-              {{ current.system_fee | currency }}
-            </div>
-            <div class="text-center">
-              <span></span>
-              =
-            </div>
-            <div>
-              <span>{{ $t('支払い金額') }}</span>
-              <strong>{{ current.total | currency }}</strong>
+          <div>
+            <p class="payment-ttl">12月請求金額</p>
+              <!-- <div class="payment-calc">
+                <div>
+                  <span>{{ $t('売上') }}</span>
+                  {{ current.price | currency }}
+                </div>
+                <div class="text-center">
+                  <span></span>
+                  ×
+                </div>
+                <div>
+                  <span>{{ $t('手数料') }}</span>
+                  {{ current.tax + "%" }}
+                </div>
+                <div class="text-center">
+                  <span></span>
+                  +
+                </div>
+                <div>
+                  <span>{{ $t('システム利用料') }}</span>
+                  {{ current.system_fee | currency }}
+                </div>
+                <div class="text-center">
+                  <span></span>
+                  =
+                </div>
+              </div> -->
+              <div>
+                <!-- <span>{{ $t('支払い金額') }}</span> -->
+                <strong>{{ current.total | currency }}</strong>
+              </div>
+          </div>
+          <div>
+            <p class="payment-ttl">12月払い戻し金額</p>
+            <div class="refund-calc">
+              <strong>30000円</strong>
             </div>
           </div>
         </div>
@@ -51,20 +59,22 @@
         <table class="task-list payment-list">
           <thead>
             <tr>
-              <th>{{ $t('日にち') }}</th>
-              <th>{{ $t('売上') }}</th>
+              <th>{{ $t('月') }}</th>
+              <th>{{ $t('支払い合計金額') }}</th>
               <th>{{ $t('手数料') }}</th>
               <th>{{ $t('システム利用料') }}</th>
-              <th>{{ $t('支払い金額') }}</th>
+              <th>{{ $t('利用ポイント') }}</th>
+              <th>{{ $t('請求金額') }}</th>
               <th>{{ $t('PDF') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in withdraws">
-              <td>{{ item.month.replace("-", "/") }}</td>
+              <td>{{ item.month | formatDateWithOutDay }}</td>
               <td>{{ item.price | currency }}</td>
               <td>{{ item.tax }}%</td>
               <td>{{ item.system_fee | currency }}</td>
+              <td>{{ $t('30000') }}</td>
               <td>{{ (item.price * item.tax / 100 + item.system_fee) | currency }}</td>
               <td><a href="" download>{{ $t('ダウンロード') }}</a></td>
             </tr>

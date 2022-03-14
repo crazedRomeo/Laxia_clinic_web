@@ -5,7 +5,7 @@
         <div class="chat-main--wrapper">
           <div class="chat-main" id="chat-main">
             <template v-for="(msg, index) in messages">
-              <div v-if="!index || getDateString(messages[index-1].created_at) != getDateString(msg.created_at)" class="chat-date">{{ msg.created_at | formatDate }}</div>
+              <div v-if="!index || getDateString(messages[index-1].created_at) != getDateString(msg.created_at)" class="chat-date">{{ msg.created_at | formatDateWithDay }}</div>
               <div :class="{'other': !msg.is_mine, 'me': msg.is_mine }">
                 <p class="avatar"><img src="/img/img.svg" width="45px"></p>
                 <div>
@@ -21,63 +21,95 @@
               </div>
             </template>
           </div>
-          <div class="chat-attachment--wrapper">
-            <file-upload
-              v-if="mailboxId"
-              ref="messageFileUploadComponent"
-              id="attachment-dropzone"
-              :maxFiles="5"
-              :uploadUrl="`/api/clinic/mailboxes/${this.mailboxId}/fileupload`"
-              @file-upload-success="handleFileSaved"
-              @queue-complete="handleMultiFilesQueueComplete"
-            />
-          </div>
         </div>
         <div class="chat-input">
+          <file-upload
+            v-if="mailboxId"
+            ref="messageFileUploadComponent"
+            id="attachment-dropzone"
+            :maxFiles="5"
+            :uploadUrl="`/api/clinic/mailboxes/${this.mailboxId}/fileupload`"
+            :chat="true"
+            @file-upload-success="handleFileSaved"
+            @queue-complete="handleMultiFilesQueueComplete"
+          />
           <textarea
             v-if="reservation"
             :placeholder="`${reservation.patient_info.name01}さんにメッセージを書く`"
             v-model="newMessage" ></textarea>
-          <button class="add-file" @click="handleFileInput"><img src="/img/addFile.svg"></button>
-          <button class="message-send" @click="handleSendMessage"><img src="/img/send.svg"></button>
+          <!-- <button class="add-file" @click="handleFileInput"><img src="/img/addFile.svg"></button> -->
+          <button class="message-send" @click="handleSendMessage">{{ $t('送信') }}</button>
         </div>
       </div>
       <div v-if="reservation" class="chat-user">
-        <p class="chat-user-img"><img src="/img/img.svg"></p>
-        <p class="chat-user-name">{{ reservation.patient_info.name }}</p>
+        <!-- <p class="chat-user-img"><img src="/img/img.svg"></p> -->
+        <!-- <p class="chat-user-name">{{ reservation.patient_info.name }}</p> -->
+        <p class="chat-user-name">予約内容</p>
         <div class="chat-user-profile">
           <ul>
             <li>
               <p><span>{{ $t('名前') }}</span></p>
               <p class="hiragana">{{ reservation.patient_info.kana }}</p>
-              <p>{{ reservation.patient_info.name }}</p>
-            </li>
-            <li>
-              <p><span>{{ $t('年齢') }}</span></p>
-              <p>{{ reservation.patient_info.age }}才</p>
+              <!-- <p>{{ reservation.patient_info.name }}</p> -->
             </li>
             <li>
               <p><span>{{ $t('生年月日') }}</span></p>
-              <p>{{ reservation.patient_info.birthday | formatDate }}</p>
+              <p>{{ reservation.patient_info.birthday | formatDate }}{{ reservation.patient_info.age }}歳</p>
             </li>
+            <li>
+              <p><span>{{ $t('性別') }}</span></p>
+              <p>{{reservation.patient_info.gender && gender_types[reservation.patient_info.gender]}}</p>
+            </li>
+            <!-- <li>
+              <p><span>{{ $t('年齢') }}</span></p>
+              <p>{{ reservation.patient_info.age }}才</p>
+            </li> -->
             <li>
               <p><span>{{ $t('電話番号') }}</span></p>
               <p>{{ reservation.patient_info.phone_number }}</p>
             </li>
-            <li>
+            <!-- <li>
               <p><span>{{ $t('予約内容') }}</span></p>
               <p>{{ reservation.rsv_content ? reservation.rsv_content.name : '未確定' }}</p>
             </li>
             <li>
               <p><span>{{ $t('診察メニュー') }}</span></p>
               <p>{{ reservation.menu ? reservation.menu.name : '未確定' }}</p>
+            </li> -->
+            <li>
+              <p><span>{{ $t('希望ドクター') }}</span></p>
+              <p>西田 仁</p>
             </li>
+            <li>
+              <p><span>{{ $t('当日の施術について') }}</span></p>
+              <p>カウンセリングのみ</p>
+            </li>
+            <li>
+              <p><span>{{ $t('相談したいこと') }}</span></p>
+              <p>ニキビ跡や肌荒れで悩んでいます。どういった施術が適していますでしょうか？</p>
+            </li>
+            <li>
+              <p><span>{{ $t('来院希望日時') }}</span></p>
+              <p>第1希望</p>
+              <p>2021年5月22日(水) 13:30</p>
+              <p>第2希望</p>
+              <p>2021年5月22日(水) 13:30</p>
+              <p>第希望</p>
+              <p>2021年5月22日(水) 13:30</p>
+            </li>            
           </ul>
+          <div class="item-center">
+            <button class="btn  btn-chat-confirm">日時を確定</button>
+          </div>
+          <div class="item-center"> 
+            <button class="btn btn-danger">予約をキャンセル</button>
+          </div>
+          
         </div>
-        <div class="btn-wrapper">
+        <!-- <div class="btn-wrapper">
           <button v-if="reservation.status == 5 || reservation.status == 10" class="btn2" @click="handleChangeStatus(15)">{{ $t('調整中') }}</button>
           <button v-if="reservation.status == 15" class="btn" @click="handleChangeStatus(20)">{{ $t('調整完了') }}</button>
-        </div>
+        </div> -->
       </div>
     </div>
     <VueEasyLightbox
@@ -125,6 +157,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      gender_types: 'constant/gender_types',
     }),
   },
 

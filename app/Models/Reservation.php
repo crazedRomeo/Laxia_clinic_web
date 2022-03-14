@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Master\RsvContent;
 use App\Models\Master\TreatCategory;
+use DateTime;
 
 class Reservation extends Model
 {
@@ -38,13 +39,24 @@ class Reservation extends Model
   ];
 
   protected $appends = [
-    'visit_time'
+    'visit_time',
+    'last_chat_time',
   ];
 
   public function getVisitTimeAttribute()
   {
-    return substr($this->start_time, 0, 5) . ' ~ ' . substr($this->end_time, 0, 5);
+    $dteStart  = new DateTime($this->start_time);
+    $dteEnd    = new DateTime($this->end_time);
+    
+    // return substr($this->start_time, 0, 5) . ' ~ ' . substr($this->end_time, 0, 5);
+    return $dteStart->diff($dteEnd)->format("%H:%I");
   }
+
+  public function getLastChatTimeAttribute()
+  {
+    return $this->hasOne(Mailbox::class)->first()->hasMany(Message::class)->orderBy('created_at', 'desc')->first();
+  }
+
 
   public function hopeTimes()
   {

@@ -10,7 +10,7 @@
         <table class="task-list">
           <thead>
             <tr>
-              <th>{{ $t('日にち') }}</th>
+              <th>{{ $t('来院日時') }}</th>
               <th>{{ $t('診断時間') }}</th>
               <th>{{ $t('氏名') }}</th>
               <th>{{ $t('性別') }}</th>
@@ -60,8 +60,39 @@
         <div v-if="selectedRsv" class="reserve-content">
           <ul>
             <li>
-              <div>{{ $t('予定日') }}</div>
+              <div>{{ $t('診察者') }}</div>
               <div class="rsv-main-content">
+                <!-- <div>
+                  <span>{{ $t('氏名') }}({{ $t('漢字') }})</span>
+                  {{ selectedRsv.patient_info.name }}
+                </div> -->
+                <div>
+                  <span>{{ $t('名前') }}</span>
+                  {{ selectedRsv.patient_info.kana }}
+                </div>
+                <!-- <div class="half"> -->
+                  <div>
+                    <span>{{ $t('性別') }}</span>
+                  {{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
+                  </div>
+                  <div>
+                    <span>{{ $t('年齢') }}</span>
+                  {{ selectedRsv.patient_info.age }}
+                  </div>
+                <!-- </div> -->
+                <div>
+                  <span>{{ $t('電話番号') }}</span>
+                  {{ selectedRsv.patient_info.phone_number }}
+                </div>
+                <div>
+                  <span>{{ $t('生年月日') }}</span>
+                  {{ selectedRsv.patient_info.birthday | formatDate }}
+                </div>
+              </div>
+            </li>
+            <li>
+              <div>{{ $t('予定日') }}</div>
+              <div class="rsv-main-content2">
                 <div>
                   <span>{{ $t('日にち') }}</span>
                   {{ selectedRsv.visit_date | formatDateWithDay }}
@@ -74,7 +105,7 @@
             </li>
             <li>
               <div>{{ $t('担当者') }}</div>
-              <div class="rsv-main-content">
+              <div class="rsv-main-content2">
                 <div>
                   <span>{{ $t('医師・スタッフ') }}</span>
                   {{ selectedRsv.stuff && selectedRsv.stuff.name }}
@@ -83,48 +114,23 @@
                   <span>{{ $t('予約内容') }}</span>
                   {{ selectedRsv.rsv_content && selectedRsv.rsv_content.name }}
                 </div>
-                <div>
+                <!-- <div>
                   <span>{{ $t('施術メニュー') }}</span>
                   {{ selectedRsv.menu && selectedRsv.menu.name }}
-                </div>
-              </div>
-            </li>
-            <li>
-              <div>{{ $t('診察者') }}</div>
-              <div class="rsv-main-content">
-                <div>
-                  <span>{{ $t('氏名') }}({{ $t('漢字') }})</span>
-                  {{ selectedRsv.patient_info.name }}
-                </div>
-                <div>
-                  <span>{{ $t('氏名') }}({{ $t('カタカナ') }})</span>
-                  {{ selectedRsv.patient_info.kana }}
-                </div>
-                <div class="half">
-                  <div>
-                    <span>{{ $t('性別') }}</span>
-                  {{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
-                  </div>
-                  <div>
-                    <span>{{ $t('年齢') }}</span>
-                  {{ selectedRsv.patient_info.age }}
-                  </div>
-                </div>
-                <div>
-                  <span>{{ $t('電話番号') }}</span>
-                  {{ selectedRsv.patient_info.phone_number }}
-                </div>
-                <div>
-                  <span>{{ $t('生年月日') }}</span>
-                  {{ selectedRsv.patient_info.birthday | formatDate }}
-                </div>
+                </div> -->
               </div>
             </li>
           </ul>
         </div>
-        <div class="btn-wrapper">
-          <button type="button" class="btn btn-primary" @click="handleEditRsv">{{ $t('予約を編集する') }}</button>
+        <div class="btn-payment-wrapper">
+          <div class="btn-wrapper">
+            <button type="button" class="btn btn-danger" @click="handleModalClose">{{ $t('予約をキャンセル') }}</button>
+          </div>
+          <div class="btn-wrapper">
+            <button type="button" class="btn btn-primary" @click="handleEditRsv">{{ $t('予約を編集する') }}</button>
+          </div>
         </div>
+        
       </div>
       <div v-else>
         <div v-if="selectedRsv" class="reserve-content">
@@ -245,17 +251,17 @@
         <div>
           <div>
             <span>{{ selectedRsv.patient_info.kana }}</span>
-            {{ selectedRsv.patient_info.name }}
+            <!-- {{ selectedRsv.patient_info.name }} -->
           </div>
           <div>
             <span></span>
-            {{ selectedRsv.patient_info.age }}才/{{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
+            {{ selectedRsv.patient_info.age }}歳/{{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
           </div>
         </div>
         <div class="rsv-summary-content">
           <div>
             <span>{{ $t('来院日時') }}</span>
-            {{ selectedRsv.visit_date | formatDate }}　{{ selectedRsv.visit_time }}
+            {{ selectedRsv.visit_date | formatDateWithDay }}　{{ selectedRsv.visit_time }}
           </div>
           <div>
             <span>{{ $t('予約内容') }}</span>
@@ -279,11 +285,11 @@
           <span class="operator">　ー　</span>
           <div>
             <div>
-              <span>{{ $t('除外金額') }}({{ $t('税抜') }})</span>
+              <span>{{ $t('施術金額') }}</span>
               <input type="number" name="" v-model="form.payments.except_price" min="0" :class="{'is-invalid' : errors && errors['payments.except_price'] }">
               <div v-if="errors && errors['payments.except_price']" class="error invalid-feedback">{{ errors['payments.except_price'][0] }}</div>
-              <span>{{ $t('除外項目') }}</span>
-              <input type="text" name="" v-model="form.payments.except_item" :class="{'is-invalid' : errors && errors['payments.except_item'] }">
+              <!-- <span>{{ $t('除外項目') }}</span>
+              <input type="text" name="" v-model="form.payments.except_item" :class="{'is-invalid' : errors && errors['payments.except_item'] }"> -->
               <div v-if="errors && errors['payments.except_item']" class="error invalid-feedback">{{ errors['payments.except_item'][0] }}</div>
             </div>
           </div>
@@ -294,11 +300,11 @@
               <p class="payment-use-point">{{ selectedRsv.use_point }}</p>
             </div>
           </div>
-          <span class="operator">　＝　</span>
+          <span class="operator"> =  </span>
           <div>
             <div>
               <span>{{ $t('施術金額') }}({{ $t('税抜') }})</span>
-              <input type="text" name="" disabled v-model="treat_price">
+              <input class="payment-result" type="text" name="" disabled v-model="treat_price">
             </div>
           </div>
         </div>
@@ -331,10 +337,10 @@ export default {
       form: undefined,
       form_tmp: {
         payments: {
-          total_price: 0,
+          total_price: '',
           except_item: '',
-          except_price: 0,
-          treat_price: 0,
+          except_price: '',
+          treat_price: '',
         }
       },
       rsv_form: undefined,
@@ -527,6 +533,6 @@ export default {
 
 <style scoped>
 .payment-use-point {
-  padding-top: 5px;
+  padding-top: 10px;
 }
 </style>
