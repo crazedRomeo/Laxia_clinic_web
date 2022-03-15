@@ -240,8 +240,8 @@ button:focus {
 	//background: linear-gradient(90deg, rgba(225, 225, 241, 0.5) 0%, rgba(196, 196, 196, 0) 100%);
 }
 .menu ul li a.active{
-	color: #5CA3F6;
-	background: #D3E7FF;
+	// color: #5CA3F6;
+	background: #E1E9F1;
 }
 .menu ul li a svg path{
 	stroke: #5F6377;	
@@ -898,6 +898,9 @@ button:focus {
 				}
 			}
 		}
+		input{
+			width: 100%;
+		}
 	}
 }
 .time-picker-content{
@@ -938,9 +941,10 @@ button:focus {
 }
 .chat-user-img{
 	text-align: center;
-}
-.chat-user-img img{
-	width: 100px;
+
+	img{
+		width: 100px;
+	}
 }
 .chat-user-name{
 	text-align: center;
@@ -951,7 +955,7 @@ button:focus {
 	margin-bottom: 10px;
 }
 .chat-user-profile>ul>li{
-	margin-bottom: 10px;
+	margin-bottom: 16px;
 }
 .chat-user-profile>ul>li>p{
 	margin-bottom: 4px;
@@ -962,20 +966,25 @@ button:focus {
 .chat-user-profile>ul>li>p>span{
 	color: #728396;
 }
-.chat-user-profile .btn{
-	font-size: 14px;
-	padding: 5px 25px;
-	width: 175px;
-	margin-top: 20px;
+.chat-user-profile{
+	height: calc(100% - 200px);
+	overflow: auto;
 }
-.btn-chat-confirm{
-	font-size: 14px;
-	padding: 5px 25px;
-	background: #5CA3F6;
-	width: 175px;
-}
-.item-center{
+.item-center {
 	text-align: center;
+	margin-top: 15px;
+	.btn{
+		font-size: 14px;
+		padding: 5px 25px;
+		width: 175px;
+		margin-top: 20px;
+	}
+	.btn-chat-confirm{
+		font-size: 14px;
+		padding: 5px 25px;
+		background: #5CA3F6;
+		width: 175px;
+	}
 }
 .chat-content{
 	height: 100%;
@@ -1021,7 +1030,7 @@ button:focus {
 .chat-date{
 	text-align: center;
 	color: #728396;
-	font-weight: bold;
+	// font-weight: bold;
 }
 .chat-main>div{
 	margin-bottom: 34px;
@@ -1060,7 +1069,7 @@ button:focus {
 .chat-main .me>div>div>p{
 	position: relative;
 	text-align: left;
-	padding: 8px 34px;
+	padding: 10px;
 	border-radius: 5px 5px 0 5px;
 	background: #5CA3F6;
 	color: #fff;

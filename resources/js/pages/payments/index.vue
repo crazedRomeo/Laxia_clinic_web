@@ -27,8 +27,8 @@
               <td>{{ item.visit_time }}</td>
               <td>
                 <small>{{ item.patient_info.kana }}</small>
-                <br>
-                {{ item.patient_info.name }}
+                <!-- <br>
+                {{ item.patient_info.name }} -->
               </td>
               <td>{{ item.patient_info.gender && gender_types[item.patient_info.gender] }}</td>
               <td>{{ item.menu ? item.menu.name : '' }}</td>
@@ -130,64 +130,13 @@
             <button type="button" class="btn btn-primary" @click="handleEditRsv">{{ $t('予約を編集する') }}</button>
           </div>
         </div>
-        
       </div>
       <div v-else>
         <div v-if="selectedRsv" class="reserve-content">
           <ul>
             <li>
-              <div>{{ $t('予定日') }}</div>
-              <div>
-                <div>
-                  <span>{{ $t('日にち') }}</span>
-                  <input type="date" v-model="rsv_form.reservations.visit_date" :class="{'is-invalid' : errors && errors['reservations.visit_date'] }">
-                  <div v-if="errors && errors['reservations.visit_date']" class="error invalid-feedback">{{ errors['reservations.visit_date'][0] }}</div>
-                </div>
-                <div class="full">
-                  <span>{{ $t('診察時間') }}</span>
-                  <div class="time-wrapper">
-                    <div>
-                      <input type="time" v-model="rsv_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }">
-                      <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
-                    </div>
-                    <span> ~ </span>
-                    <div>
-                      <input type="time" v-model="rsv_form.reservations.end_time" :class="{'is-invalid' : errors && errors['reservations.end_time'] }">
-                      <div v-if="errors && errors['reservations.end_time']" class="error invalid-feedback">{{ errors['reservations.end_time'][0] }}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div>{{ $t('担当者') }}</div>
-              <div>
-                <div>
-                  <span>{{ $t('医師・スタッフ') }}</span>
-                  <select v-model="rsv_form.reservations.stuff_id" :class="{'is-invalid' : errors && errors['reservations.stuff_id'] }">
-                    <option v-for="(name, id) in stuffs" :key="id" :value="id">{{ name }}</option>
-                  </select>
-                  <div v-if="errors && errors['reservations.stuff_id']" class="error invalid-feedback">{{ errors['reservations.stuff_id'][0] }}</div>
-                </div>
-                <div>
-                  <span>{{ $t('予約内容') }}</span>
-                  <select v-model="rsv_form.reservations.rsv_content_id" :class="{'is-invalid' : errors && errors['reservations.rsv_content_id'] }">
-                    <option v-for="(name, id) in rsv_contents" :key="id" :value="id">{{ name }}</option>
-                  </select>
-                  <div v-if="errors && errors['reservations.rsv_content_id']" class="error invalid-feedback">{{ errors['reservations.rsv_content_id'][0] }}</div>
-                </div>
-                <div>
-                  <span>{{ $t('施術メニュー') }}</span>
-                  <select v-model="rsv_form.reservations.menu_id" :class="{'is-invalid' : errors && errors['reservations.menu_id'] }">
-                    <option v-for="(name, id) in menus" :key="id" :value="id">{{ name }}</option>
-                  </select>
-                  <div v-if="errors && errors['reservations.menu_id']" class="error invalid-feedback">{{ errors['reservations.menu_id'][0] }}</div>
-                </div>
-              </div>
-            </li>
-            <li>
               <div>{{ $t('診察者') }}</div>
-              <div>
+              <!-- <div>
                 <div>
                   <span>{{ $t('氏名') }}({{ $t('漢字') }})</span>
                   <div class="name-wrapper">
@@ -232,6 +181,90 @@
                   <input type="date" v-model="rsv_form.patient_infos.birthday" :class="{'is-invalid' : errors && errors['patient_infos.birthday'] }">
                   <div v-if="errors && errors['patient_infos.birthday']" class="error invalid-feedback">{{ errors['patient_infos.birthday'][0] }}</div>
                 </div>
+              </div> -->
+              <div class="rsv-main-content">
+                <!-- <div>
+                  <span>{{ $t('氏名') }}({{ $t('漢字') }})</span>
+                  {{ selectedRsv.patient_info.name }}
+                </div> -->
+                <div>
+                  <span>{{ $t('名前') }}</span>
+                  {{ selectedRsv.patient_info.kana }}
+                </div>
+                <!-- <div class="half"> -->
+                  <div>
+                    <span>{{ $t('性別') }}</span>
+                  {{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
+                  </div>
+                  <div>
+                    <span>{{ $t('年齢') }}</span>
+                  {{ selectedRsv.patient_info.age }}
+                  </div>
+                <!-- </div> -->
+                <div>
+                  <span>{{ $t('生年月日') }}</span>
+                  {{ selectedRsv.patient_info.birthday | formatDate }}
+                </div>
+                <div>
+                  <span>{{ $t('電話番号') }}</span>
+                  {{ selectedRsv.patient_info.phone_number }}
+                </div>
+              </div>
+            </li>
+            <li>
+              <div>{{ $t('予約日') }}</div>
+              <div class="rsv-main-content2">
+                <div>
+                  <span>{{ $t('日にち') }}</span>
+                  <!-- <input type="date" v-model="rsv_form.reservations.visit_date" :class="{'is-invalid' : errors && errors['reservations.visit_date'] }"> -->
+                  <v-date-picker>
+                    <template v-slot="{ inputValue, inputEvents }">
+                      <input
+                        class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                        :value="inputValue"
+                        v-on="inputEvents"
+                      />
+                    </template>
+                  </v-date-picker>
+                  <div v-if="errors && errors['reservations.visit_date']" class="error invalid-feedback">{{ errors['reservations.visit_date'][0] }}</div>
+                </div>
+                <div class="time-picker-content">
+                  <span>{{ $t('診断時間') }}</span>
+                    <!-- <input type="time" v-model="rsv_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }"> -->
+                    <vue-timepicker fixed-dropdown-button placeholder=" " :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[0, [6, 23]]" :minute-interval="15"></vue-timepicker>
+                    <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
+                    <!-- <span> ~ </span> -->
+                    <!-- <div>
+                      <input type="time" v-model="rsv_form.reservations.end_time" :class="{'is-invalid' : errors && errors['reservations.end_time'] }">
+                      <div v-if="errors && errors['reservations.end_time']" class="error invalid-feedback">{{ errors['reservations.end_time'][0] }}</div>
+                    </div> -->
+                </div>
+              </div>
+            </li>
+            <li>
+              <div>{{ $t('担当者') }}</div>
+              <div class="rsv-main-content2">
+                <div>
+                  <span>{{ $t('医師・スタッフ') }}</span>
+                  <select v-model="rsv_form.reservations.stuff_id" :class="{'is-invalid' : errors && errors['reservations.stuff_id'] }">
+                    <option v-for="(name, id) in stuffs" :key="id" :value="id">{{ name }}</option>
+                  </select>
+                  <div v-if="errors && errors['reservations.stuff_id']" class="error invalid-feedback">{{ errors['reservations.stuff_id'][0] }}</div>
+                </div>
+                <div>
+                  <span>{{ $t('予約内容') }}</span>
+                  <select v-model="rsv_form.reservations.rsv_content_id" :class="{'is-invalid' : errors && errors['reservations.rsv_content_id'] }">
+                    <option v-for="(name, id) in rsv_contents" :key="id" :value="id">{{ name }}</option>
+                  </select>
+                  <div v-if="errors && errors['reservations.rsv_content_id']" class="error invalid-feedback">{{ errors['reservations.rsv_content_id'][0] }}</div>
+                </div>
+                <!-- <div>
+                  <span>{{ $t('施術メニュー') }}</span>
+                  <select v-model="rsv_form.reservations.menu_id" :class="{'is-invalid' : errors && errors['reservations.menu_id'] }">
+                    <option v-for="(name, id) in menus" :key="id" :value="id">{{ name }}</option>
+                  </select>
+                  <div v-if="errors && errors['reservations.menu_id']" class="error invalid-feedback">{{ errors['reservations.menu_id'][0] }}</div>
+                </div> -->
               </div>
             </li>
           </ul>
@@ -285,7 +318,7 @@
           <span class="operator">　ー　</span>
           <div>
             <div>
-              <span>{{ $t('施術金額') }}</span>
+              <span>{{ $t('控除金額') }}({{ $t('税抜') }})</span>
               <input type="number" name="" v-model="form.payments.except_price" min="0" :class="{'is-invalid' : errors && errors['payments.except_price'] }">
               <div v-if="errors && errors['payments.except_price']" class="error invalid-feedback">{{ errors['payments.except_price'][0] }}</div>
               <!-- <span>{{ $t('除外項目') }}</span>
@@ -303,7 +336,7 @@
           <span class="operator"> =  </span>
           <div>
             <div>
-              <span>{{ $t('施術金額') }}({{ $t('税抜') }})</span>
+              <span>{{ $t('施術金額') }}</span>
               <input class="payment-result" type="text" name="" disabled v-model="treat_price">
             </div>
           </div>

@@ -38,6 +38,7 @@ Vue.use(VueSweetalert2, {
 });
 
 Vue.filter("currency", function (value) {
+  value = parseInt(value);
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円";
 });
 Vue.filter('formatDate', function(value) {

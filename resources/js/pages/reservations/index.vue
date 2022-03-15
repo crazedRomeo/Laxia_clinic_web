@@ -3,8 +3,10 @@
     <div class="main-content">
       <ul class="nav nav-tabs">
         <li :class="{ 'active' : query.status == 0 }">
-          <a @click="handleFilterStatus({status: 0})">すべて<span v-if="count.total" class="rsv-status__all">{{ count.total }}</span>
-        </a></li>
+          <a @click="handleFilterStatus({status: 0})">すべて
+            <!-- <span v-if="count.total" class="rsv-status__all">{{ count.total }}</span> -->
+          </a>
+        </li>
         <li :class="{ 'active' : query.status == 5 }">
           <a @click="handleFilterStatus({status: 5})">未対応<span v-if="count.not_supported" class="rsv-status__not_supported">{{ count.not_supported }}</span></a>
         </li>
@@ -12,7 +14,9 @@
           <a @click="handleFilterStatus({status: 10})">不在着信<span v-if="count.missed_call" class="rsv-status__missed_call">{{ count.missed_call }}</span></a>
         </li>
         <li :class="{ 'active' : query.status == 15 }">
-          <a @click="handleFilterStatus({status: 15})">日時確定<span v-if="count.in_progress" class="rsv-status__in_progress">{{ count.in_progress }}</span></a>
+          <a @click="handleFilterStatus({status: 15})">日時確定
+            <!-- <span v-if="count.in_progress" class="rsv-status__in_progress">{{ count.in_progress }}</span> -->
+          </a>
         </li>
         <!-- <li :class="{ 'active' : query.status == 20 }">
           <a @click="handleFilterStatus({status: 20})">予約完了<span v-if="count.approved" class="rsv-status__approved">{{ count.approved }}</span></a>
@@ -45,11 +49,11 @@
                     @change="handleChangeStatus" />
                 </td>
                 <td v-if="rsv.last_chat_time">{{ rsv.last_chat_time.created_at | formatDateWithTime}}</td>
-                <td v-else>{{ $t('未確定') }}</td>
+                <td v-else>{{ $t('22:05') }}</td>
                 <td>
                   <small>{{ rsv.patient_info.kana }}</small>
-                  <br>
-                  <span>{{ rsv.patient_info.name }}</span>
+                  <!-- <br>
+                  <span>{{ rsv.patient_info.name }}</span> -->
                 </td>
                 <td>{{ gender_types[rsv.patient_info.gender] || '' }}</td>
                 <td>{{ rsv.patient_info.phone_number }}</td>

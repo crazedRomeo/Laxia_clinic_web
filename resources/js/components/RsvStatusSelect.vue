@@ -2,15 +2,15 @@
 	<div class="rsv-status-select" v-if="selected && rsv_status_types" v-click-outside="closeDropdown">
 		<h4 :class="selectedClass" @click="toggleDropdown">
 			{{ selectedItem }}
-			<svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<!-- <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M6.73176 7.10653C6.33249 7.57518 5.60863 7.57518 5.20936 7.10653L0.985327 2.14851C0.43218 1.49925 0.893587 0.5 1.74653 0.5L10.1946 0.500001C11.0475 0.500001 11.5089 1.49925 10.9558 2.14852L6.73176 7.10653Z"/>
-			</svg>
+			</svg> -->
 		</h4>
-		<ul class="dropdown__container" :class="{ dropped: dropFlag }">
+		<!-- <ul class="dropdown__container" :class="{ dropped: dropFlag }">
 			<li v-for="(item, key) in rsv_status_types" :key="key">
 				<a @click="handleSelectStatus(key)">{{ item }}</a>
 			</li>
-		</ul>
+		</ul> -->
 	</div>
 </template>
 <script>
@@ -92,12 +92,12 @@ export default {
 	h4 {
 		position: relative;
 		height: 25px;
-		display: flex;
+		// display: flex;
 		justify-content: flex-start;
 		font-size: 14px;
 		color: white;
 		align-items: center;
-		padding-left: 20px;
+		// padding-left: 20px;
 		border-radius: 45px;
 		background-color: #294884;
 		cursor: pointer;
@@ -116,8 +116,8 @@ export default {
 			}
 		}
 		&.in-progress {
-			color: #3E9969;
-			background-color: rgba(203, 255, 228, .5);
+			color: #878787;
+			background-color: #EAEAEA;
 			svg {
 				fill: #3E9969;
 			}
