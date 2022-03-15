@@ -56,7 +56,8 @@
                   <span>{{ rsv.patient_info.name }}</span> -->
                 </td>
                 <td>{{ gender_types[rsv.patient_info.gender] || '' }}</td>
-                <td>{{ rsv.patient_info.phone_number }}</td>
+                <!-- <td>{{ rsv.patient_info.phone_number }}</td> -->
+                <td>3929674207380</td>
                 <td>
                   <div v-if="rsv.source == '5'" class="source-info"><img src="/img/msg.svg">{{ $t('チャット') }}</div>
                   <div v-if="rsv.source == '10'" class="source-info"><img src="/img/tel.svg">{{ $t('電話予約') }}</div>
