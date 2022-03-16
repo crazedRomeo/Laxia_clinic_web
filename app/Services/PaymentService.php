@@ -20,9 +20,8 @@ class PaymentService
 
     $query = Payment::with([
       'reservation',
-      'reservation.patient_info',
-      'reservation.menu',
-      'reservation.rsv_content',
+      'reservation.patient',
+      'reservation.doctor',
     ]);
     
     if (isset($search['clinic_id'])) {
@@ -32,10 +31,10 @@ class PaymentService
       });
     }
 
-    if (isset($search['patient_info_id'])) {
-      $patientInfoId = $search['patient_info_id'];
-      $query->whereHas('reservation', function($subquery) use ($patientInfoId) {
-        $subquery->where('patient_info_id', $patientInfoId);
+    if (isset($search['patient_id'])) {
+      $patientId = $search['patient_id'];
+      $query->whereHas('reservation', function($subquery) use ($patientId) {
+        $subquery->where('patient_id', $patientId);
       });
     }
 

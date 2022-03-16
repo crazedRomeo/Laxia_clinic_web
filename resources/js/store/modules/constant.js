@@ -4,7 +4,8 @@ import * as types from '../mutation-types'
 export const state = {
   gender_types: null,
   rsv_status_types: null,
-  rsv_source_types: null,
+  rsv_type_types: null,
+  hope_treat_types: null,
   masui: null,
   bleeding: null,
   hospital_need: null,
@@ -24,7 +25,8 @@ export const state = {
 export const getters = {
   rsv_status_types: state => state.rsv_status_types,
   gender_types: state => state.gender_types,
-  rsv_source_types: state => state.rsv_source_types,
+  rsv_type_types: state => state.rsv_type_types,
+  hope_treat_types: state => state.hope_treat_types,
   masui: state => state.masui,
   bleeding: state => state.bleeding,
   hospital_need: state => state.hospital_need,
@@ -57,8 +59,12 @@ export const mutations = {
     state.gender_types = gender_types
   },
 
-  [types.SAVE_RSV_SOURCE_TYPES] (state, { rsv_source_types }) {
-    state.rsv_source_types = rsv_source_types
+  [types.SAVE_RSV_TYPE_TYPES] (state, { rsv_type_types }) {
+    state.rsv_type_types = rsv_type_types
+  },
+
+  [types.SAVE_HOPE_TREAT_TYPES] (state, { hope_treat_types }) {
+    state.hope_treat_types = hope_treat_types
   },
 
   [types.SAVE_MENU_MASUI_TYPES] (state, { masui }) {
@@ -123,8 +129,12 @@ export const actions = {
     commit(types.SAVE_GENDER_TYPES, payload)
   },
 
-  saveRsvSourceTypes ({ commit }, payload) {
-    commit(types.SAVE_RSV_SOURCE_TYPES, payload)
+  saveRsvTypeTypes ({ commit }, payload) {
+    commit(types.SAVE_RSV_TYPE_TYPES, payload)
+  },
+
+  saveHopeTreatTypes ({ commit }, payload) {
+    commit(types.SAVE_HOPE_TREAT_TYPES, payload)
   },
 
   saveMenuMasuiTypes ({ commit }, payload) {

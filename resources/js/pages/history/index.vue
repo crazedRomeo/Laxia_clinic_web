@@ -20,15 +20,14 @@
           <tbody v-if="payments.length > 0">
             <tr v-for="payment in payments" :key="payment.id">
               <td>
-                <small>{{ payment.reservation.patient_info.kana }}</small>
-                <!-- <br>
-                {{ payment.reservation.patient_info.name }} -->
+                <small>{{ payment.reservation.patient.kana }}</small>
               </td>
               <td>{{ payment.reservation.visit_date | formatDateWithDay }}
                   <br>
-                 {{ payment.reservation.end_time | formatTime }}</td>
-              <td>{{ payment.reservation.rsv_content ? payment.reservation.rsv_content.name : '' }}</td>
-              <td>{{ payment.reservation.menu ? payment.reservation.menu.name : '' }}</td>
+                 <!-- {{ payment.reservation.end_time | formatTime }} -->
+              </td>
+              <td>{{ payment.reservation.hope_treat ? hope_treat_types[payment.reservation.hope_treat] : '' }}</td>
+              <td>{{ payment.reservation.doctor ? payment.reservation.doctor.kata_name : '' }}</td>
               <td>{{ payment.reservation.use_point.toLocaleString() }}</td>
               <td>{{ payment.total_price | currency }}</td>
             </tr>
@@ -46,6 +45,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
   middleware: 'auth',
@@ -56,12 +56,18 @@ export default {
       query: {
         per_page: 20,
         page: 1,
-        start_time: "",
-        start_time: "",
+        // start_time: "",
+        // start_time: "",
       },
       pageInfo: undefined,
       total: 0,
     }
+  },
+  
+  computed: {
+    ...mapGetters({
+      hope_treat_types: 'constant/hope_treat_types',
+    }),
   },
 
   mounted() {

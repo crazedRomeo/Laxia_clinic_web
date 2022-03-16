@@ -43,6 +43,7 @@ class Patient extends Model
     'follows_count',
     'followers_count',
     'is_follow',
+    'phone_only_number'
   ];
 
   public function getFirebaseKeyAttribute()
@@ -78,6 +79,10 @@ class Patient extends Model
     $patient = $currentUser->patient;
     if (!$patient) return false;
     return $patient->follows->contains($this);
+  }
+
+  public function getPhoneOnlyNumberAttribute() {
+    return preg_replace('/\D+/', '', $this->phone_number);
   }
 
   public function user()

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\Common\Gender;
-use App\Enums\Reservation\Source;
+use App\Enums\Reservation\Type;
 use App\Enums\Reservation\Status;
 use App\Enums\Menu\Masui;
 use App\Enums\Menu\Bleeding;
@@ -108,7 +108,7 @@ class MasterDataController extends Controller
     public function loadEnumData(Request $request)
     {
         $genders = Gender::asList();
-        $rsv_sources = Source::asList();
+        $rsv_type = Type::asList();
         $rsv_status = Status::asList();
         $masui = Masui::asList();
         $bleeding = Bleeding::asList();
@@ -125,7 +125,7 @@ class MasterDataController extends Controller
 
         return response()->json([
             'genders' => $genders,
-            'rsv_sources' => $rsv_sources,
+            'rsv_type' => $rsv_type,
             'rsv_status' => $rsv_status,
             'masui' => $masui,
             'bleeding' => $bleeding,

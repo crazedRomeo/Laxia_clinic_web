@@ -6,6 +6,7 @@ use App\Models\Reservation;
 use App\Models\Payment;
 use App\Models\PatientInfo;
 use App\Models\RsvHopeTime;
+use App\Enums\Reservation\Status;
 use DB;
 use Auth;
 use Throwable;
@@ -19,30 +20,26 @@ class RsvService
   public function paginate($search)
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
+
     $query = Reservation::query()
-      ->with(['patient_info', 'stuff', 'menu', 'rsv_content', 'payment']);
+      ->with(['patient', 'doctor', 'clinic']);
     
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
     }
     
     if (isset($search['status']) && $search['status']) {
-      $status = $search['status'];
-      if ($status =='20') {
-        $query->whereIn('status', ['20', '25', '30']);
-      } else {
-        $query->where('status', $search['status']);
-      }
+      $query->where('status', $search['status']);
     }
 
-    if (isset($search['patient_info_id'])) {
-      $query->where('patient_info_id', $search['patient_info_id']);
+    if (isset($search['patient_id'])) {
+      $query->where('patient_id', $search['patient_id']);
     }
 
     // 決済一覧
     if (isset($search['confirmed'])) {
       $query->whereNotNull('visit_date')
-        ->whereDoesntHave('payment')
+        // ->whereDoesntHave('payment')
         ->orderBy('visit_date', 'asc');
     }
 
@@ -53,38 +50,20 @@ class RsvService
 
   public function getCountInfo($where)
   {
-    $totalCount = Reservation::where($where)
-      ->get()
-      ->count();
-    $notSupportedCount = Reservation::where($where)
-      ->where('status', '5')
-      ->get()
-      ->count();
-    $missedCallCount = Reservation::where($where)
-      ->where('status', '10')
-      ->get()
-      ->count();
-    $inProgressCount = Reservation::where($where)
-      ->where('status', '15')
-      ->get()
-      ->count();
-    $approvedCount = Reservation::where($where)
-      ->whereIn('status', ['20', '25', '30'])
-      ->get()
-      ->count();
+    $totalCount = Reservation::where($where)->count();
+    $notSupportedCount = Reservation::where($where)->where('status', Status::NOTSUPPORTED)->count();
+    $inProgressCount = Reservation::where($where)->where('status', Status::INPROGRESS)->count();
     
     return [
       'all' => $totalCount,
       'not_supported' => $notSupportedCount,
-      'missed_call' => $missedCallCount,
       'in_progress' => $inProgressCount,
-      'approved' => $approvedCount,
     ];
   } 
 
   public function get($id)
   {
-    return Reservation::with(['patient_info', 'rsv_content', 'menu', 'payment'])
+    return Reservation::with(['patient', 'doctor', 'clinic'])
       ->findOrFail($id);
   }
 
@@ -115,17 +94,13 @@ class RsvService
   {
     $rsvAttrs = Arr::get($attributes, 'reservations');
     unset($rsvAttrs['use_point']);
+
     $rsv = Reservation::where($where)
       ->firstOrFail();
     $rsv->fill($rsvAttrs);
     $rsv->save();
 
-    $patientInfoAttrs = Arr::get($attributes, 'patient_infos');
-    if (isset($patientInfoAttrs)) {
-      $rsv->patient_info()->update($patientInfoAttrs);
-    }
-
-    return $rsv->load(['patient_info', 'rsv_content', 'menu', 'stuff', 'payment']);
+    return $rsv->load(['patient', 'doctor', 'clinic']);
   }
 
   public function updateStatus($id, $status)
@@ -134,7 +109,7 @@ class RsvService
     $rsv->status = $status;
     $rsv->save();
 
-    return $rsv->load(['patient_info', 'rsv_content', 'menu', 'stuff', 'payment']);
+    return $rsv->load(['patient', 'doctor', 'clinic']);
   }
 
   public function updatePayment($attrs, $where)
@@ -146,7 +121,7 @@ class RsvService
       $payAttrs
     );
 
-    return $rsv->load(['patient_info', 'rsv_content', 'menu', 'stuff', 'payment']);
+    return $rsv->load(['patient', 'doctor', 'clinic']);
   }
 
   public function getPatientInfo($patient_id)
@@ -154,5 +129,11 @@ class RsvService
     $patient = Patient::find($patient_id);
     if (!$patient) return null;
     return $patient->info;
+  }
+
+  public function delete($id) {
+    Reservation::where('id', $id)->delete();
+
+    return true;
   }
 }

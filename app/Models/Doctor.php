@@ -22,7 +22,7 @@ class Doctor extends Model
    * @var array
    */
   protected $fillable = [
-    'doctor_id',
+    'user_id',
     'kata_name',
     'hira_name',
     'gender',
@@ -65,7 +65,7 @@ class Doctor extends Model
 
   public function user()
   {
-    return $this->belongsTo(User::class, 'doctor_id');
+    return $this->belongsTo(User::class);
   }
 
   public function getNameAttribute()

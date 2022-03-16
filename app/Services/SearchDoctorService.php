@@ -24,14 +24,14 @@ class SearchDoctorService
     if (isset($search['q'])) {
       $query->where('name', 'LIKE', "%{$search['q']}%")
       ->where('role', UserType::DOCTOR)
-      ->join('doctors', 'doctors.doctor_id', '=', 'users.id');
+      ->join('doctors', 'doctors.user_id', '=', 'users.id');
     }
 
     return $query->paginate($per_page);
     */
 
     $doctor = User::where(['name' => $search['q'], 'role' => UserType::DOCTOR])
-      ->join('doctors', 'doctors.doctor_id', '=', 'users.id')
+      ->join('doctors', 'doctors.user_id', '=', 'users.id')
       ->first();
 
     return $doctor;

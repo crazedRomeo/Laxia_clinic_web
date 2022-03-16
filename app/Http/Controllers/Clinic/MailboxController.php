@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Clinic;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\MailboxService;
+use App\Services\DoctorService;
 use App\Models\Mailbox;
 use App\Models\Message;
 use App\Traits\MediaUpload;
@@ -18,10 +19,17 @@ class MailboxController extends Controller
      */
     protected $service;
 
+    /**
+     * @var DoctorService
+     */
+    protected $doctorService;
+
     public function __construct(
-        MailboxService $service
+        MailboxService $service,
+        DoctorService $doctorService
     ) {
         $this->service = $service;
+        $this->doctorService = $doctorService;
     }
 
     public function index()
@@ -43,13 +51,24 @@ class MailboxController extends Controller
         // ], 200);
     }
 
+    public function commonData(Request $request) {
+        $currentUser = auth()->guard('api')->user();
+        $clinic_id = $currentUser->clinic->id;
+
+        $doctors = $this->doctorService->getDoctorsByClinic($clinic_id);
+
+        return response()->json([
+            'doctors' => $doctors,
+        ], 200);
+    }
+
     public function getReservation($id)
     {
         $mailbox = $this->service->get($id);
         $this->authorize('rw', $mailbox);
         
         return response()->json([
-            'reservation' => $mailbox->reservation->load(['patient_info', 'clinic'])
+            'reservation' => $mailbox->reservation->load(['patient', 'clinic', 'doctor', 'hopeTimes'])
         ]);
     }
 

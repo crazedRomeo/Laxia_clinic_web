@@ -51,7 +51,8 @@ export default {
         .then(res => {
           this.$store.dispatch('constant/saveGenderTypes', { gender_types : res.data.genders })
           this.$store.dispatch('constant/saveRsvStatusTypes', { rsv_status_types : res.data.rsv_status })
-          this.$store.dispatch('constant/saveRsvSourceTypes', { rsv_source_types : res.data.rsv_sources })
+          this.$store.dispatch('constant/saveRsvTypeTypes', { rsv_type_types : res.data.rsv_type })
+          this.$store.dispatch('constant/saveHopeTreatTypes', { hope_treat_types : res.data.hope_treat })
           this.$store.dispatch('constant/saveMenuMasuiTypes', { masui : res.data.masui })
           this.$store.dispatch('constant/saveMenuBleedingTypes', { bleeding : res.data.bleeding })
           this.$store.dispatch('constant/saveMenuHospitalNeedTypes', { hospital_need : res.data.hospital_need })
@@ -73,7 +74,6 @@ export default {
       axios.get('/api/clinic/load/master')
         .then(res => {
           this.$store.dispatch('data/saveJobs', { jobs : res.data.jobs })
-          this.$store.dispatch('data/saveRsvContents', { rsv_contents : res.data.rsvContents })
           this.$store.dispatch('data/saveSpecialities', { specialities : res.data.specialities })
           this.$store.dispatch('data/saveCategories', { categories : res.data.categories })
           this.$store.dispatch('data/savePrefs', { prefs : res.data.prefs })

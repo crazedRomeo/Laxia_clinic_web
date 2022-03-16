@@ -48,7 +48,7 @@ class MailboxController extends Controller
         $mailbox = $this->service->get($id);
         
         return response()->json([
-            'reservation' => $mailbox->reservation->load(['patient_info', 'clinic'])
+            'reservation' => $mailbox->reservation->load(['patient', 'clinic'])
         ]);
     }
 

@@ -1366,6 +1366,10 @@ export default {
           this.towns = res.data
         });
     },
+
+    handleModalClose() {
+
+    },
   }
 }
 </script>

@@ -20,7 +20,7 @@ class RsvService
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = Reservation::query()
-      ->with(['patient_info', 'stuff', 'menu', 'rsv_content', 'payment']);
+      ->with(['patient', 'doctor', 'clinic']);
     
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
@@ -88,7 +88,7 @@ class RsvService
 
   public function get($id)
   {
-    return Reservation::with(['patient_info', 'rsv_content', 'menu', 'payment'])
+    return Reservation::with(['patient', 'doctor', 'clinic'])
       ->findOrFail($id);
   }
 
@@ -128,7 +128,7 @@ class RsvService
       $rsv->patient_info()->update($patientInfoAttrs);
     }
 
-    return $rsv->load(['patient_info', 'rsv_content', 'menu', 'stuff', 'payment']);
+    return $rsv->load(['patient', 'doctor', 'clinic']);
   }
 
   public function updateStatus($id, $status)
@@ -137,7 +137,7 @@ class RsvService
     $rsv->status = $status;
     $rsv->save();
 
-    return $rsv->load(['patient_info', 'rsv_content', 'menu', 'stuff', 'payment']);
+    return $rsv->load(['patient', 'doctor', 'clinic']);
   }
 
   public function updatePayment($attrs, $where)
@@ -149,7 +149,7 @@ class RsvService
       $payAttrs
     );
 
-    return $rsv->load(['patient_info', 'rsv_content', 'menu', 'stuff', 'payment']);
+    return $rsv->load(['patient', 'doctor', 'clinic']);
   }
 
   public function getPatientInfo($patient_id)

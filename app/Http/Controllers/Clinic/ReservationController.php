@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Clinic;
 
+use App\Enums\Reservation\Status;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\RsvService;
+use App\Services\DoctorService;
 use App\Models\Reservation;
 use App\Http\Requests\Clinic\RsvRequest;
 use App\Http\Requests\Clinic\RsvPayRequest;
@@ -17,23 +19,44 @@ class ReservationController extends Controller
      */
     protected $service;
 
+    /**
+     * @var DoctorService
+     */
+    protected $doctorService;
+
     public function __construct(
-        RsvService $service
+        RsvService $service,
+        DoctorService $doctorService
     ) {
         $this->service = $service;
+        $this->doctorService = $doctorService;
     }
 
     public function index(Request $request)
     {
         $currentUser = auth()->guard('api')->user();
+
         $params = $request->all();
         $params['clinic_id'] = $currentUser->clinic->id;
+
         $reservations = $this->service->paginate($params);
+
         $count = $this->service->getCountInfo(['clinic_id' => $currentUser->clinic->id]);
         
         return response()->json([
             'reservations' => $reservations,
             'count' => $count
+        ], 200);
+    }
+
+    public function commonData(Request $request) {
+        $currentUser = auth()->guard('api')->user();
+        $clinic_id = $currentUser->clinic->id;
+
+        $doctors = $this->doctorService->getDoctorsByClinic($clinic_id);
+
+        return response()->json([
+            'doctors' => $doctors,
         ], 200);
     }
 
@@ -89,6 +112,7 @@ class ReservationController extends Controller
         \DB::beginTransaction();
         try {
             $rsv = $this->service->update($request->all(), ['id' => $id]);
+            $rsv = $this->service->updateStatus($id, Status::INPROGRESS);            
 
             \DB::commit();
         } catch (\Throwable $e) {
@@ -168,4 +192,26 @@ class ReservationController extends Controller
         ], 200);
     }
     
+    public function delete(Request $request, $id)
+    {
+        \DB::beginTransaction();
+        try {
+            $reservation = $this->service->delete($id);
+
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            \Log::error($e->getMessage());
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'ドクターを削除できません。'
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'id' => $reservation
+        ], 200);
+    }
 }

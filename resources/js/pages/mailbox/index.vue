@@ -35,78 +35,57 @@
           />
           <textarea
             v-if="reservation"
-            :placeholder="`${reservation.patient_info.name01}さんにメッセージを書く`"
+            :placeholder="`${reservation.patient.kana}さんにメッセージを書く`"
             v-model="newMessage" ></textarea>
-          <!-- <button class="add-file" @click="handleFileInput"><img src="/img/addFile.svg"></button> -->
           <button class="message-send" @click="handleSendMessage">{{ $t('送信') }}</button>
         </div>
       </div>
       <div v-if="reservation" class="chat-user">
         <p class="chat-user-name">予約内容</p>
           <div class="chat-user-profile">
-            <!-- <p class="chat-user-img"><img src="/img/img.svg"></p> -->
-            <!-- <p class="chat-user-name">{{ reservation.patient_info.name }}</p> -->
             <ul>
               <li>
                 <p><span>{{ $t('名前') }}</span></p>
-                <p class="hiragana">{{ reservation.patient_info.kana }}</p>
-                <!-- <p>{{ reservation.patient_info.name }}</p> -->
+                <p class="hiragana">{{ reservation.patient.kana }}</p>
               </li>
               <li>
                 <p><span>{{ $t('生年月日') }}</span></p>
-                <p>{{ reservation.patient_info.birthday | formatDate }}{{ reservation.patient_info.age }}歳</p>
+                <p>{{ reservation.patient.birthday | formatDate }}{{ reservation.patient.age }}歳</p>
               </li>
               <li>
                 <p><span>{{ $t('性別') }}</span></p>
-                <p>{{reservation.patient_info.gender && gender_types[reservation.patient_info.gender]}}</p>
+                <p>{{reservation.patient.gender && gender_types[reservation.patient.gender]}}</p>
               </li>
-              <!-- <li>
-                <p><span>{{ $t('年齢') }}</span></p>
-                <p>{{ reservation.patient_info.age }}才</p>
-              </li> -->
               <li>
                 <p><span>{{ $t('電話番号') }}</span></p>
-                <p>{{ reservation.patient_info.phone_number }}</p>
+                <p>{{ reservation.patient.phone_number }}</p>
               </li>
-              <!-- <li>
-                <p><span>{{ $t('予約内容') }}</span></p>
-                <p>{{ reservation.rsv_content ? reservation.rsv_content.name : '未確定' }}</p>
-              </li>
-              <li>
-                <p><span>{{ $t('診察メニュー') }}</span></p>
-                <p>{{ reservation.menu ? reservation.menu.name : '未確定' }}</p>
-              </li> -->
               <li>
                 <p><span>{{ $t('希望ドクター') }}</span></p>
-                <p>西田 仁</p>
+                <p v-if="reservation.doctor">{{ reservation.doctor.kata_name }}</p>
+                <p v-else></p>
               </li>
               <li>
                 <p><span>{{ $t('当日の施術について') }}</span></p>
-                <p>カウンセリングのみ</p>
+                <p>{{ hope_treat_types[reservation.hope_treat] }}</p>
               </li>
               <li>
                 <p><span>{{ $t('相談したいこと') }}</span></p>
-                <p>ニキビ跡や肌荒れで悩んでいます。どういった施術が適していますでしょうか？</p>
+                <p>{{ reservation.note }}</p>
               </li>
               <li>
                 <p><span>{{ $t('来院希望日時') }}</span></p>
-                <p>第1希望</p>
-                <p>2021年5月22日(水) 13:30</p>
-                <p>第2希望</p>
-                <p>2021年5月22日(水) 13:30</p>
-                <p>第希望</p>
-                <p>2021年5月22日(水) 13:30</p>
+                <div v-for="(hope_time, index) in reservation.hope_times" :key="hope_time.id">
+                  <p>第{{ index + 1 }}希望</p>
+                  <p>{{ hope_time.start_time_str }}</p>
+                </div>
               </li>            
             </ul>
           </div>
         <div class="item-center">
-            <button class="btn  btn-chat-confirm">日時を確定</button>
-            <button class="btn btn-danger">予約をキャンセル</button>
+            <button class="btn btn-chat-confirm" @click="showRsvModal()">日時を確定</button>
+            <button class="btn btn-danger" @click="cancelReservation()">予約をキャンセル</button>
         </div>
-        <!-- <div class="btn-wrapper">
-          <button v-if="reservation.status == 5 || reservation.status == 10" class="btn2" @click="handleChangeStatus(15)">{{ $t('調整中') }}</button>
-          <button v-if="reservation.status == 15" class="btn" @click="handleChangeStatus(20)">{{ $t('調整完了') }}</button>
-        </div> -->
       </div>
     </div>
     <VueEasyLightbox
@@ -115,6 +94,92 @@
       :index="0"
       @hide="handleHideImageFullscreen"
     ></VueEasyLightbox>
+
+    <form-modal
+      ref="modal"
+      :title="$t('予約内容')"
+      >
+      <div v-if="reservation_form && reservation" class="reserve-content">
+        <ul>
+          <li>  
+            <div>{{ $t('診察者') }}</div>
+            <div class="rsv-main-content">
+              <div>
+                <span>{{ $t('名前') }}</span>
+                {{ reservation.patient.kana }}
+              </div>
+              <div>
+                <span>{{ $t('性別') }}</span>
+                {{ gender_types[reservation.patient.gender] }}
+              </div>
+              <div>
+                <span>{{ $t('年齢') }}</span>
+                {{ reservation.patient.age }}
+              </div>
+              <div>
+                <span>{{ $t('生年月日') }}</span>
+                {{ reservation.patient.birthday | formatDate }}
+              </div>
+              <div>
+                <span>{{ $t('電話番号') }}</span>
+                  {{ reservation.patient.phone_number }}
+              </div>
+            </div>
+          </li>
+          <li>
+            <div>{{ $t('予約日') }}</div>
+            <div class="rsv-main-content2">
+              <div>
+                <span>{{ $t('日にち') }}</span>
+                <v-date-picker
+                  v-model="reservation_form.reservations.visit_date"
+                  :masks="{ L: 'YYYY-MM-DD' }"
+                  :attributes='attrs'
+                >
+                  <template v-slot="{ inputValue, inputEvents }">
+                    <input
+                      class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
+                      :value="inputValue"
+                      v-on="inputEvents"
+                    />
+                  </template>
+                </v-date-picker>
+                <div v-if="errors && errors['reservations.visit_date']" class="error invalid-feedback">{{ errors['reservations.visit_date'][0] }}</div>
+              </div>
+              <div class="time-picker-content">
+                <span>{{ $t('診断時間') }}</span>
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="reservation_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[0, [6, 23]]" :minute-interval="15"></vue-timepicker>
+                <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div>{{ $t('担当者') }}</div>
+            <div class="rsv-main-content2">
+              <div>
+                <span>{{ $t('医師') }}</span>
+                <select v-model="reservation_form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
+                  <option></option>
+                  <option v-for="(doctor) in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.kata_name }}</option>
+                </select>
+                <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
+              </div>
+              <div>
+                <span>{{ $t('予約内容') }}</span>
+                <select v-model="reservation_form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
+                  <option></option>
+                  <option v-for="(name, id) in hope_treat_types" :key="id" :value="id">{{ name }}</option>
+                </select>
+                <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="btn-wrapper">
+        <button type="button" class="btn btn-primary" @click="handleConfirmRsv">{{ $t('予約を確定する') }}</button>
+      </div>
+    </form-modal>
   </div>
 </template>
 
@@ -129,6 +194,7 @@ export default {
   data() {
     return {
         messages: [],
+        doctors: [],
         mailboxId: undefined,
         reservation: undefined,
         form: {
@@ -137,6 +203,7 @@ export default {
             },
             files: [],
         },
+        reservation_form: undefined,
         newMessage: '',
         newMessages: [],
         isSedning: false,
@@ -144,6 +211,14 @@ export default {
         lastMessageId: undefined,
         fullscreen: false,
         image: '',
+        errors: undefined,
+        attrs: [
+          {
+            key: 'today',
+            highlight: true,
+            dates: new Date(),
+          },
+        ],
     }
   },
 
@@ -155,22 +230,23 @@ export default {
     ...mapGetters({
       user: 'auth/user',
       gender_types: 'constant/gender_types',
+      hope_treat_types: 'constant/hope_treat_types',
     }),
   },
 
   mounted() {
     this.mailboxId = this.$route.params.id;
-
-    this.registerSnapshot()
-
+    // this.registerSnapshot()
     this.$store.dispatch('state/setIsLoading')
 
     return Promise.all([
         axios.get(`/api/clinic/mailboxes/${this.mailboxId}/reservation`),
-        axios.get(`/api/clinic/mailboxes/${this.mailboxId}/messages`)
-      ]).then(([res1, res2]) => {
+        axios.get(`/api/clinic/mailboxes/${this.mailboxId}/messages`),
+        axios.get(`/api/clinic/mailboxes/common_data`),
+      ]).then(([res1, res2, res3]) => {
         this.reservation = res1.data.reservation
         this.messages = res2.data.messages
+        this.doctors = res3.data.doctors;
 
         this.$nextTick(() => this.scrollToEnd());
       }).finally(() => {
@@ -179,6 +255,20 @@ export default {
   },
 
   methods: {
+    showRsvModal() {
+      this.reservation_form = {
+        reservations: {
+          visit_date: this.reservation.visit_date,
+          start_time: this.reservation.start_time,
+          end_time: this.reservation.end_time,
+          doctor_id: this.reservation.doctor_id,
+          hope_treat: this.reservation.hope_treat,
+        }
+      }
+
+      this.$refs.modal.show()
+    },
+
     scrollToEnd() {
       setTimeout(() => {
         var container = this.$el.querySelector("#chat-main");
@@ -190,41 +280,41 @@ export default {
       }, 500)
     },
 
-    handleChangeStatus(newStatus) {
-      this.$swal({
-        title: '本当に変更しますか？',
-        icon: 'warning',
-        showCancelButton: true,
-      }).then((result) => {
-        if (result.value) {
-          this.$store.dispatch('state/setIsLoading')
-          axios.get(`/api/clinic/reservations/${this.reservation.id}/status/${newStatus}`)
-            .then(res => {
-              this.reservation = res.data.reservation
-              this.$swal({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                title: '変更しました。',
-                icon: 'success',
-              })
-              this.$store.dispatch('state/removeIsLoading')
-            })
-            .catch(error => {
-              this.$swal({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                title: '変更できません。',
-                icon: 'error',
-              })
-              this.$store.dispatch('state/removeIsLoading')
-            })
-        }
-      })
-    },
+    // handleChangeStatus(newStatus) {
+    //   this.$swal({
+    //     title: '本当に変更しますか？',
+    //     icon: 'warning',
+    //     showCancelButton: true,
+    //   }).then((result) => {
+    //     if (result.value) {
+    //       this.$store.dispatch('state/setIsLoading')
+    //       axios.get(`/api/clinic/reservations/${this.reservation.id}/status/${newStatus}`)
+    //         .then(res => {
+    //           this.reservation = res.data.reservation
+    //           this.$swal({
+    //             toast: true,
+    //             position: 'top-end',
+    //             showConfirmButton: false,
+    //             timer: 3000,
+    //             title: '変更しました。',
+    //             icon: 'success',
+    //           })
+    //           this.$store.dispatch('state/removeIsLoading')
+    //         })
+    //         .catch(error => {
+    //           this.$swal({
+    //             toast: true,
+    //             position: 'top-end',
+    //             showConfirmButton: false,
+    //             timer: 3000,
+    //             title: '変更できません。',
+    //             icon: 'error',
+    //           })
+    //           this.$store.dispatch('state/removeIsLoading')
+    //         })
+    //     }
+    //   })
+    // },
 
     handleSendMessage(e) {
       let fileCount = this.$refs.messageFileUploadComponent.getQueuedFiles()
@@ -285,7 +375,7 @@ export default {
                     }
                 }
 
-                this.updateFirebase(this.reservation.patient_info.firebase_key, pushMessage)
+                // this.updateFirebase(this.reservation.patient_info.firebase_key, pushMessage)
                 
                 this.$forceUpdate();
 
@@ -326,52 +416,52 @@ export default {
         }
     },
 
-    registerSnapshot() {
-        if (this.user.firebase_key) {
+    // registerSnapshot() {
+    //     if (this.user.firebase_key) {
           
-          let self = this;
-          this.snapShot = firestore.collection("users").doc(this.user.firebase_key)
-              .onSnapshot(function (docRef) {
-                  let to = docRef.data();
-                  if (!self.lastMessage) {
-                    self.lastMessage = { ...to.message }
-                  }
+    //       let self = this;
+    //       this.snapShot = firestore.collection("users").doc(this.user.firebase_key)
+    //           .onSnapshot(function (docRef) {
+    //               let to = docRef.data();
+    //               if (!self.lastMessage) {
+    //                 self.lastMessage = { ...to.message }
+    //               }
                 
-                  if (!to.message) return;
+    //               if (!to.message) return;
                 
-                  if (self.lastMessage && JSON.stringify(self.lastMessage) !== JSON.stringify(to.message) && parseInt(to.message.mailbox_id) === parseInt(self.mailboxId)) {
+    //               if (self.lastMessage && JSON.stringify(self.lastMessage) !== JSON.stringify(to.message) && parseInt(to.message.mailbox_id) === parseInt(self.mailboxId)) {
                       
-                      if (to.message.user_id === self.reservation.patient_info.user_id) {
-                          self.messages.push({
-                              is_mine: false,
-                              message: to.message.message,
-                              is_file: to.message.is_file,
-                              file_thumb_url: to.message.is_file && `${to.message.message}`,
-                              created_at: to.message.created_at,
-                          })
+    //                   if (to.message.user_id === self.reservation.patient.user_id) {
+    //                       self.messages.push({
+    //                           is_mine: false,
+    //                           message: to.message.message,
+    //                           is_file: to.message.is_file,
+    //                           file_thumb_url: to.message.is_file && `${to.message.message}`,
+    //                           created_at: to.message.created_at,
+    //                       })
 
-                          self.messages = self.messages.sort((a, b) => {
-                              if (a.created_at > b.created_at) return 1;
-                              if (a.created_at < b.created_at) return -1;
-                              return 0;
-                          })
+    //                       self.messages = self.messages.sort((a, b) => {
+    //                           if (a.created_at > b.created_at) return 1;
+    //                           if (a.created_at < b.created_at) return -1;
+    //                           return 0;
+    //                       })
 
-                          self.lastMessage = { ...to.message }
+    //                       self.lastMessage = { ...to.message }
 
-                          self.$forceUpdate()
+    //                       self.$forceUpdate()
                           
-                          self.scrollToEnd()
-                      }
-                  }
-            })
-        }
-    },
+    //                       self.scrollToEnd()
+    //                   }
+    //               }
+    //         })
+    //     }
+    // },
 
-    updateFirebase(key, data) {
-        if (!key) return;
-        firestore.collection('users').doc(key)
-            .update(data)
-    },
+    // updateFirebase(key, data) {
+    //     if (!key) return;
+    //     firestore.collection('users').doc(key)
+    //         .update(data)
+    // },
 
     handleShowImageFullscreen(thumnUrl)
     {
@@ -381,6 +471,52 @@ export default {
 
     handleHideImageFullscreen() {
         this.fullscreen = false
+    },
+    
+    handleConfirmRsv() {
+      this.$store.dispatch('state/setIsLoading')
+      this.reservation_form.reservations.start_time = this.reservation_form.reservations.start_time.HH + ':' + this.reservation_form.reservations.start_time.mm;
+      this.reservation_form.reservations.visit_date = this.reservation_form.reservations.visit_date.toISOString().substring(0, 10);
+
+      axios.put(`/api/clinic/reservations/${this.reservation.id}`, this.reservation_form)
+        .then(res => {
+          this.reservation = res.data.reservation
+
+          this.$store.dispatch('state/removeIsLoading')
+          this.$refs.modal.hide()
+          this.$swal({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            title: '変更しました。',
+            icon: 'success',
+          })
+        })
+        .catch(error => {
+          this.errors = { ...error.response.data.errors }
+          this.$store.dispatch('state/removeIsLoading')
+        })
+    },
+
+    cancelReservation() {
+      this.$store.dispatch('state/setIsLoading')
+      axios.delete(`/api/clinic/reservations/delete/${this.reservation.id}`)
+      .then(res => {
+        // this.$store.dispatch('state/removeIsLoading');
+        this.$router.push({name: 'reservations'});
+        this.$swal({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          title: '削除。',
+          icon: 'success',
+        })
+      })
+      .catch(error => {
+        this.$store.dispatch('state/removeIsLoading')
+      })
     }
   },
 }

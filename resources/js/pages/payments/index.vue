@@ -14,7 +14,6 @@
               <th>{{ $t('診断時間') }}</th>
               <th>{{ $t('氏名') }}</th>
               <th>{{ $t('性別') }}</th>
-              <th>{{ $t('診断メニュー') }}</th>
               <th>{{ $t('担当医師') }}</th>
               <th>{{ $t('予約内容') }}</th>
               <th>{{ $t('詳細') }}</th>
@@ -24,16 +23,13 @@
           <tbody>
             <tr v-for="(item, index) in reservations" :key="index">
               <td>{{ item.visit_date | formatDateWithDay }}</td>
-              <td>{{ item.visit_time }}</td>
+              <td>{{ item.start_time }}</td>
               <td>
-                <small>{{ item.patient_info.kana }}</small>
-                <!-- <br>
-                {{ item.patient_info.name }} -->
+                <small>{{ item.patient.kana }}</small>
               </td>
-              <td>{{ item.patient_info.gender && gender_types[item.patient_info.gender] }}</td>
-              <td>{{ item.menu ? item.menu.name : '' }}</td>
-              <td>{{ item.stuff ? item.stuff.name : '' }}</td>
-              <td>{{ item.rsv_content ? item.rsv_content.name : '' }}</td>
+              <td>{{ item.patient.gender && gender_types[item.patient.gender] }}</td>
+              <td>{{ item.doctor ? item.doctor.name : '' }}</td>
+              <td>{{ item.hope_treat ? hope_treat_types[item.hope_treat] : '' }}</td>
               <td>
                 <button type="button" class="btn-primary normal-btn" @click="handleShowRsvModal(item.id)">{{ $t('詳細') }}</button>
               </td>
@@ -62,31 +58,25 @@
             <li>
               <div>{{ $t('診察者') }}</div>
               <div class="rsv-main-content">
-                <!-- <div>
-                  <span>{{ $t('氏名') }}({{ $t('漢字') }})</span>
-                  {{ selectedRsv.patient_info.name }}
-                </div> -->
                 <div>
                   <span>{{ $t('名前') }}</span>
-                  {{ selectedRsv.patient_info.kana }}
+                  {{ selectedRsv.patient.kana }}
                 </div>
-                <!-- <div class="half"> -->
-                  <div>
-                    <span>{{ $t('性別') }}</span>
-                  {{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
-                  </div>
-                  <div>
-                    <span>{{ $t('年齢') }}</span>
-                  {{ selectedRsv.patient_info.age }}
-                  </div>
-                <!-- </div> -->
+                <div>
+                  <span>{{ $t('性別') }}</span>
+                {{ selectedRsv.patient.gender && gender_types[selectedRsv.patient.gender] }}
+                </div>
+                <div>
+                  <span>{{ $t('年齢') }}</span>
+                {{ selectedRsv.patient.age }}
+                </div>
                 <div>
                   <span>{{ $t('電話番号') }}</span>
-                  {{ selectedRsv.patient_info.phone_number }}
+                  {{ selectedRsv.patient.phone_number }}
                 </div>
                 <div>
                   <span>{{ $t('生年月日') }}</span>
-                  {{ selectedRsv.patient_info.birthday | formatDate }}
+                  {{ selectedRsv.patient.birthday | formatDate }}
                 </div>
               </div>
             </li>
@@ -99,7 +89,7 @@
                 </div>
                 <div>
                   <span>{{ $t('診察時間') }}</span>
-                  {{ selectedRsv.visit_time }}
+                  {{ selectedRsv.start_time }}
                 </div>
               </div>
             </li>
@@ -107,17 +97,13 @@
               <div>{{ $t('担当者') }}</div>
               <div class="rsv-main-content2">
                 <div>
-                  <span>{{ $t('医師・スタッフ') }}</span>
-                  {{ selectedRsv.stuff && selectedRsv.stuff.name }}
+                  <span>{{ $t('医師') }}</span>
+                  {{ selectedRsv.doctor && selectedRsv.doctor.name }}
                 </div>
                 <div>
                   <span>{{ $t('予約内容') }}</span>
-                  {{ selectedRsv.rsv_content && selectedRsv.rsv_content.name }}
+                  {{ selectedRsv.hope_treat && hope_treat_types[selectedRsv.hope_treat] }}
                 </div>
-                <!-- <div>
-                  <span>{{ $t('施術メニュー') }}</span>
-                  {{ selectedRsv.menu && selectedRsv.menu.name }}
-                </div> -->
               </div>
             </li>
           </ul>
@@ -136,78 +122,26 @@
           <ul>
             <li>
               <div>{{ $t('診察者') }}</div>
-              <!-- <div>
-                <div>
-                  <span>{{ $t('氏名') }}({{ $t('漢字') }})</span>
-                  <div class="name-wrapper">
-                    <div>
-                      <input type="text" name="" v-model="rsv_form.patient_infos.name01" :class="{'is-invalid' : errors && errors['patient_infos.name01'] }">
-                      <div v-if="errors && errors['patient_infos.name01']" class="error invalid-feedback">{{ errors['patient_infos.name01'][0] }}</div>
-                    </div>
-                    <div>
-                      <input type="text" name="" v-model="rsv_form.patient_infos.name02" :class="{'is-invalid' : errors && errors['patient_infos.name02'] }">
-                      <div v-if="errors && errors['patient_infos.name02']" class="error invalid-feedback">{{ errors['patient_infos.name02'][0] }}</div>
-                    </div>
-                  </div>                  
-                </div>
-                <div>
-                  <span>{{ $t('氏名') }}({{ $t('カタカナ') }})</span>
-                  <div class="name-wrapper">
-                    <div>
-                      <input type="text" name="" v-model="rsv_form.patient_infos.kana01" :class="{'is-invalid' : errors && errors['patient_infos.kana01'] }">
-                      <div v-if="errors && errors['patient_infos.kana01']" class="error invalid-feedback">{{ errors['patient_infos.kana01'][0] }}</div>
-                    </div>
-                    <div>
-                      <input type="text" name="" v-model="rsv_form.patient_infos.kana02" :class="{'is-invalid' : errors && errors['patient_infos.kana02'] }">
-                      <div v-if="errors && errors['patient_infos.kana02']" class="error invalid-feedback">{{ errors['patient_infos.kana02'][0] }}</div>
-                    </div>
-                  </div>              
-                </div>
-                <br>
-                <div>
-                  <span>{{ $t('性別') }}</span>
-                  <select v-model="rsv_form.patient_infos.gender" :class="{'is-invalid' : errors && errors['patient_infos.gender'] }">
-                    <option v-for="(item, key) in gender_types" :key="key" :value="key">{{ item }}</option>
-                  </select>
-                  <div v-if="errors && errors['patient_infos.gender']" class="error invalid-feedback">{{ errors['patient_infos.gender'][0] }}</div>
-                </div>
-                <div>
-                  <span>{{ $t('電話番号') }}</span>
-                  <input type="text" name="" v-model="rsv_form.patient_infos.phone_number" :class="{'is-invalid' : errors && errors['patient_infos.phone_number'] }">
-                  <div v-if="errors && errors['patient_infos.phone_number']" class="error invalid-feedback">{{ errors['patient_infos.phone_number'][0] }}</div>
-                </div>
-                <div>
-                  <span>{{ $t('生年月日') }}</span>
-                  <input type="date" v-model="rsv_form.patient_infos.birthday" :class="{'is-invalid' : errors && errors['patient_infos.birthday'] }">
-                  <div v-if="errors && errors['patient_infos.birthday']" class="error invalid-feedback">{{ errors['patient_infos.birthday'][0] }}</div>
-                </div>
-              </div> -->
               <div class="rsv-main-content">
-                <!-- <div>
-                  <span>{{ $t('氏名') }}({{ $t('漢字') }})</span>
-                  {{ selectedRsv.patient_info.name }}
-                </div> -->
                 <div>
                   <span>{{ $t('名前') }}</span>
-                  {{ selectedRsv.patient_info.kana }}
+                  {{ selectedRsv.patient.kana }}
                 </div>
-                <!-- <div class="half"> -->
-                  <div>
-                    <span>{{ $t('性別') }}</span>
-                  {{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
-                  </div>
-                  <div>
-                    <span>{{ $t('年齢') }}</span>
-                  {{ selectedRsv.patient_info.age }}
-                  </div>
-                <!-- </div> -->
+                <div>
+                  <span>{{ $t('性別') }}</span>
+                {{ selectedRsv.patient.gender && gender_types[selectedRsv.patient.gender] }}
+                </div>
+                <div>
+                  <span>{{ $t('年齢') }}</span>
+                {{ selectedRsv.patient.age }}
+                </div>
                 <div>
                   <span>{{ $t('生年月日') }}</span>
-                  {{ selectedRsv.patient_info.birthday | formatDate }}
+                  {{ selectedRsv.patient.birthday | formatDate }}
                 </div>
                 <div>
                   <span>{{ $t('電話番号') }}</span>
-                  {{ selectedRsv.patient_info.phone_number }}
+                  {{ selectedRsv.patient.phone_number }}
                 </div>
               </div>
             </li>
@@ -217,7 +151,7 @@
                 <div>
                   <span>{{ $t('日にち') }}</span>
                   <!-- <input type="date" v-model="rsv_form.reservations.visit_date" :class="{'is-invalid' : errors && errors['reservations.visit_date'] }"> -->
-                  <v-date-picker>
+                  <v-date-picker v-model="rsv_form.reservations.visit_date">
                     <template v-slot="{ inputValue, inputEvents }">
                       <input
                         class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -233,11 +167,6 @@
                     <!-- <input type="time" v-model="rsv_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }"> -->
                     <vue-timepicker fixed-dropdown-button placeholder=" " :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[0, [6, 23]]" :minute-interval="15"></vue-timepicker>
                     <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
-                    <!-- <span> ~ </span> -->
-                    <!-- <div>
-                      <input type="time" v-model="rsv_form.reservations.end_time" :class="{'is-invalid' : errors && errors['reservations.end_time'] }">
-                      <div v-if="errors && errors['reservations.end_time']" class="error invalid-feedback">{{ errors['reservations.end_time'][0] }}</div>
-                    </div> -->
                 </div>
               </div>
             </li>
@@ -246,25 +175,18 @@
               <div class="rsv-main-content2">
                 <div>
                   <span>{{ $t('医師・スタッフ') }}</span>
-                  <select v-model="rsv_form.reservations.stuff_id" :class="{'is-invalid' : errors && errors['reservations.stuff_id'] }">
-                    <option v-for="(name, id) in stuffs" :key="id" :value="id">{{ name }}</option>
+                  <select v-model="rsv_form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
+                    <option v-for="(doctor) in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.kata_name }}</option>
                   </select>
-                  <div v-if="errors && errors['reservations.stuff_id']" class="error invalid-feedback">{{ errors['reservations.stuff_id'][0] }}</div>
+                  <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
                 </div>
                 <div>
                   <span>{{ $t('予約内容') }}</span>
-                  <select v-model="rsv_form.reservations.rsv_content_id" :class="{'is-invalid' : errors && errors['reservations.rsv_content_id'] }">
-                    <option v-for="(name, id) in rsv_contents" :key="id" :value="id">{{ name }}</option>
+                  <select v-model="rsv_form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
+                    <option v-for="(name, id) in hope_treat_types" :key="id" :value="id">{{ name }}</option>
                   </select>
-                  <div v-if="errors && errors['reservations.rsv_content_id']" class="error invalid-feedback">{{ errors['reservations.rsv_content_id'][0] }}</div>
+                  <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
                 </div>
-                <!-- <div>
-                  <span>{{ $t('施術メニュー') }}</span>
-                  <select v-model="rsv_form.reservations.menu_id" :class="{'is-invalid' : errors && errors['reservations.menu_id'] }">
-                    <option v-for="(name, id) in menus" :key="id" :value="id">{{ name }}</option>
-                  </select>
-                  <div v-if="errors && errors['reservations.menu_id']" class="error invalid-feedback">{{ errors['reservations.menu_id'][0] }}</div>
-                </div> -->
               </div>
             </li>
           </ul>
@@ -283,12 +205,11 @@
       <div v-if="selectedRsv && form" class="reserve-content2">
         <div>
           <div>
-            <span>{{ selectedRsv.patient_info.kana }}</span>
-            <!-- {{ selectedRsv.patient_info.name }} -->
+            <span>{{ selectedRsv.patient.kana }}</span>
           </div>
           <div>
             <span></span>
-            {{ selectedRsv.patient_info.age }}歳/{{ selectedRsv.patient_info.gender && gender_types[selectedRsv.patient_info.gender] }}
+            {{ selectedRsv.patient.age }}歳/{{ selectedRsv.patient.gender && gender_types[selectedRsv.patient.gender] }}
           </div>
         </div>
         <div class="rsv-summary-content">
@@ -360,6 +281,7 @@ export default {
     return {
       // 予約ステータスが「調整完了」である予約一覧取得
       reservations: [],
+      doctors: [],
       query: {
         per_page: 20,
         page: 1,
@@ -382,18 +304,8 @@ export default {
           visit_date: '',
           start_time: '',
           end_time: '',
-          stuff_id: '',
-          rsv_content_id: '',
-          menu_id: '',
-        },
-        patient_infos: {
-          name01: '',
-          name02: '',
-          kana01: '',
-          kana02: '',
-          gender: '',
-          phone_number: '',
-          birthday: '',
+          doctor_id: '',
+          hope_treat: '',
         }
       },
       pageInfo: undefined,
@@ -402,6 +314,7 @@ export default {
   },
 
   mounted() {
+    this.getCommonData();
     this.getData();
   },
 
@@ -409,9 +322,7 @@ export default {
     ...mapGetters({
       is_master_loaded: 'state/is_master_loaded',
       gender_types: 'constant/gender_types',
-      stuffs: 'data/stuffs',
-      menus: 'data/menus',
-      rsv_contents: 'data/rsv_contents',
+      hope_treat_types: 'constant/hope_treat_types',
     }),
     treat_price: function() {
       return this.form.payments.total_price - this.form.payments.except_price - this.selectedRsv.use_point;
@@ -424,6 +335,19 @@ export default {
   },
 
   methods: {
+    getCommonData() {
+      this.$store.dispatch('state/setIsLoading')
+
+      axios.get(`/api/clinic/payments/common_data`)
+        .then(res => {
+          this.doctors = res.data.doctors;
+
+          this.$store.dispatch('state/removeIsLoading')
+        })
+        .catch(error => {
+          this.$store.dispatch('state/removeIsLoading')
+        })
+    },
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
@@ -475,18 +399,8 @@ export default {
           visit_date: this.selectedRsv.visit_date,
           start_time: this.selectedRsv.start_time,
           end_time: this.selectedRsv.end_time,
-          stuff_id: this.selectedRsv.stuff_id,
-          rsv_content_id: this.selectedRsv.rsv_content_id,
-          menu_id: this.selectedRsv.menu_id,
-        },
-        patient_infos: {
-          name01: this.selectedRsv.patient_info.name01,
-          name02: this.selectedRsv.patient_info.name02,
-          kana01: this.selectedRsv.patient_info.kana01,
-          kana02: this.selectedRsv.patient_info.kana02,
-          gender: this.selectedRsv.patient_info.gender,
-          phone_number: this.selectedRsv.patient_info.phone_number,
-          birthday: this.selectedRsv.patient_info.birthday,
+          doctor_id: this.selectedRsv.doctor_id,
+          hope_treat: this.selectedRsv.hope_treat,
         }
       }
       this.$refs.rsvModal.show()

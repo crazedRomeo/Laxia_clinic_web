@@ -74,4 +74,8 @@ class DoctorService
     $doctor->save();
     return $doctor;
   }
+
+  public function getDoctorsByClinic($clinic_id) {
+    return Doctor::where('clinic_id', $clinic_id)->get();
+  }
 }

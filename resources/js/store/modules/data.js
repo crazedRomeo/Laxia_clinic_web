@@ -3,7 +3,6 @@ import * as types from '../mutation-types'
 // state
 export const state = {
   stuffs: [],
-  rsv_contents: [],
   menus: [],
   menu_details: [],
   jobs: [],
@@ -15,7 +14,6 @@ export const state = {
 
 // getters
 export const getters = {
-  rsv_contents: state => state.rsv_contents,  
   jobs: state => state.jobs,
   stuffs: state => state.stuffs,
   menus: state => state.menus,
@@ -36,10 +34,6 @@ export const mutations = {
       ...state.stuffs,
       [stuff.id]: stuff.name
     }
-  },
-
-  [types.SAVE_RSV_CONTENTS] (state, { rsv_contents }) {
-    state.rsv_contents = rsv_contents
   },
 
   [types.SAVE_MENUS] (state, { menus }) {
@@ -86,10 +80,6 @@ export const actions = {
 
   addStuff({commit}, payload) {
     commit(types.ADD_STUFF, payload)
-  },
-
-  saveRsvContents ({ commit }, payload) {
-    commit(types.SAVE_RSV_CONTENTS, payload)
   },
 
   saveMenuDetails({ commit }, payload) {

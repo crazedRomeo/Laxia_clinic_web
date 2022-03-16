@@ -49,7 +49,7 @@ class MailboxController extends Controller
         $this->authorize('rw', $mailbox);
         
         return response()->json([
-            'reservation' => $mailbox->reservation->load(['patient_info', 'clinic'])
+            'reservation' => $mailbox->reservation->load(['patient', 'clinic'])
         ]);
     }
 

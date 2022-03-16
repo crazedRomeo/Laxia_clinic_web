@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth.clinic']], function() {
 
   Route::get('/reservations/{id}/status/{status}', 'ReservationController@updateStatus');
   Route::get('/reservations/payments', 'ReservationController@indexWithPayments');
+  Route::get('/reservations/common_data', 'ReservationController@commonData');
+  Route::delete('/reservations/delete/{id}', 'ReservationController@delete');
   Route::get('/reservations/{id}', 'ReservationController@get');
   Route::get('/reservations', 'ReservationController@index');
   Route::put('/reservations/{id}', 'ReservationController@update');
@@ -71,10 +73,12 @@ Route::group(['middleware' => ['auth.clinic']], function() {
   Route::put('/{id}', 'ClinicController@update');
 
   Route::get('/payments', 'PaymentController@index');
+  Route::get('/payments/common_data', 'PaymentController@commonData');
 
   Route::get('/withdarws', 'WithdrawController@index');
   Route::get('/withdarws/{ym}', 'WithdrawController@get');
 
+  Route::get('/mailboxes/common_data', 'MailboxController@commonData');
   Route::get('/mailboxes/{id}/reservation', 'MailboxController@getReservation');
   Route::get('/mailboxes/{id}/messages', 'MailboxController@getMessages');
   Route::post('/mailboxes/{id}/messages', 'MailboxController@addMessage');

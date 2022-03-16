@@ -3,7 +3,7 @@ namespace App\Enums\Reservation;
 
 use App\Enums\BaseEnum;
 
-final class Source extends BaseEnum
+final class Type extends BaseEnum
 {
     const CHAT = 5;
     const PHONE = 10;
