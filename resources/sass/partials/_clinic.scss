@@ -771,79 +771,102 @@ button:focus {
 .reserve-content>ul>li>div:last-child>div.birth>select{
 	width: 80px;
 }
-.reserve-content2>div:first-child>div{
-	display: inline-block;
-	font-weight: 500;
+.reserve-content2 {
+	> div {
+		&:first-child {
+			margin-bottom: 18px;
+
+			> div {
+				display: inline-block;
+				font-weight: 500;
+
+				&:first-child{
+					margin-right: 38px;
+					font-size: 22px;
+				}
+
+				&:last-child{
+					font-size: 18px;
+				}
+
+				> span {
+					display: block;
+					margin-bottom: 4px;
+					font-size: 24px;
+					font-weight: bold;
+					letter-spacing: 0.1em;
+				}
+			}
+		}
+
+		&:nth-child(2){
+			margin-bottom: 26px;
+
+			> div {
+				display: inline-block;
+				margin-right: 50px;
+				font-size: 16px;
+
+				> span {
+					font-size: 14px;
+					margin-bottom: 4px;
+					color: #757296;
+					display: block;
+				}
+			}
+		}
+
+		&:nth-child(3){
+			font-size: 16px;
+			margin-bottom: 18px;
+		}
+
+		&:nth-child(4){
+			font-size: 13px;
+			display: flex;
+
+			span {
+				display: block;
+				color: #757296;
+				margin-bottom: 5px;
+				white-space: nowrap;
+			}
+
+			input{
+				min-width: 160px;
+				max-width: 190px;
+				height: 28px;
+			}
+		}
+
+		&:nth-child(5){
+			display: flex;
+			font-size: 13px;
+			margin-top: 10px;
+			margin-bottom: 40px;
+
+			span {
+				display: block;
+				color: #757296;
+			}
+
+			input {
+				width: 140px;
+				height: 28px;
+			}
+
+			> div {
+				&:first-child{
+					width: 179px;
+				}
+			}
+		}
+	}
 }
-.reserve-content2>div:first-child>div:first-child{
-	margin-right: 38px;
-	font-size: 22px;
-}
-.reserve-content2>div:first-child>div:last-child{
-	font-size: 18px;
-}
-.reserve-content2>div:first-child>div>span{
-	display: block;
-	margin-bottom: 4px;
-	font-size: 24px;
-	font-weight: bold;
-	letter-spacing: 0.1em;
-}
-.reserve-content2>div:first-child{
-	margin-bottom: 18px;
-}
-.reserve-content2>div:nth-child(2){
-	margin-bottom: 26px;
-}
-.reserve-content2>div:nth-child(2)>div{
-	display: inline-block;
-	margin-right: 50px;
-	font-size: 16px;
-}
-.reserve-content2>div:nth-child(2)>div>span{
-	font-size: 14px;
-	margin-bottom: 4px;
-	color: #757296;
-	display: block;
-}
-.reserve-content2>div:nth-child(3){
-	font-size: 16px;
-	margin-bottom: 18px;
-}
-.reserve-content2>div:nth-child(4){
-	font-size: 13px;
-	display: flex;
-}
-.reserve-content2>div:nth-child(4) span{
-	display: block;
-	color: #757296;
-	margin-bottom: 5px;
-	white-space: nowrap;
-}
-.reserve-content2>div:nth-child(4) input{
-	min-width: 160px;
-	height: 28px;
-}
+
 .payment-result{
 	background: none;
 	border: none;
-}
-.reserve-content2>div:nth-child(5){
-	display: flex;
-	font-size: 13px;
-	margin-top: 10px;
-	margin-bottom: 40px;
-}
-.reserve-content2>div:nth-child(5) span{
-	display: block;
-	color: #757296;
-}
-.reserve-content2>div:nth-child(5) input{
-	width: 140px;
-	height: 28px;
-}
-.reserve-content2>div:nth-child(5)>div:first-child{
-	width: 179px;
 }
 
 .reserve-content {
@@ -1102,42 +1125,51 @@ button:focus {
 	position: relative;
 	padding-bottom: 18px;
 	border-bottom: 2px solid #E1E1F1;
-}
-.date-pick .price{
-	position: absolute;
-	right: 0;
-}
-.date-pick button{
-	width: 24px;
-	height: 24px;
-	font-weight: bold;
-	background: transparent;
-	padding: 0 9px;
-	border-radius: 16px;
-	border:none;
-	outline: none;
-}
-.date-pick button img{
-	// margin-top: -3px;
-}
-.date-pick button:hover{
-	background-color: #E1E1F1;
-}
-.date-pick input{
-	width: 165px;
-	margin: 0 10px;
-	border: 1px solid #E1E1F1;
-	border-radius: 48px;
-	padding: 0 10px;
-	&:focus {
+
+	.price{
+		position: absolute;
+		right: 0;
+	}
+
+	button{
+		width: 24px;
+		height: 24px;
+		font-weight: bold;
+		background: transparent;
+		padding: 0 9px;
+		border-radius: 16px;
+		border:none;
 		outline: none;
+
+		&:hover{
+			background-color: #E1E1F1;
+		}
+	}
+
+	> p {
+		display: flex;
+		align-items: center;
+
+		input{
+			width: 165px;
+			margin: 0 10px;
+			border: 1px solid #E1E1F1;
+			border-radius: 48px;
+			padding: 0 10px;
+	
+			&:focus {
+				outline: none;
+			}
+		}
+	
+		span{
+			border: 1px solid #E1E1F1;
+			border-radius: 48px;
+			padding: 1px 10px;
+		}
 	}
 }
-.date-pick span{
-	border: 1px solid #E1E1F1;
-	border-radius: 48px;
-	padding: 1px 10px;
-}
+
 .payment{
 	display: flex;
 	justify-content: space-between;

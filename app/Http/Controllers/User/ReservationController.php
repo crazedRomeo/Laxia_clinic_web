@@ -30,10 +30,10 @@ class ReservationController extends Controller
     {
         $params = $request->all();
         $currentUser = auth()->guard('patient')->user();
-        $patientInfo = $currentUser->patient->info;
-        if (!isset($patientInfo)) $rsvs = null;
+        $patient = $currentUser->patient;
+        if (!isset($patient)) $rsvs = null;
         else {
-            $params['patient_info_id'] = $patientInfo->id;
+            $params['patient_id'] = $patient->id;
             $rsvs = $this->service->paginate($params);
         }
 

@@ -33,11 +33,16 @@ class Reservation extends Model
 
   protected $appends = [
     'last_chat_time',
+    'start_time_without_sec',
   ];
 
   public function getLastChatTimeAttribute()
   {
     return $this->hasOne(Mailbox::class)->first()->hasMany(Message::class)->orderBy('created_at', 'desc')->first();
+  }
+
+  public function getStartTimeWithoutSecAttribute() {
+    return empty($this->start_time) ? '': substr($this->start_time, 0, 5);
   }
 
   public function clinic()
@@ -58,6 +63,11 @@ class Reservation extends Model
   public function hopeTimes()
   {
     return $this->hasMany(RsvHopeTime::class);
+  }
+
+  public function payments()
+  {
+    return $this->hasOne(Payment::class);
   }
 
   public function mailbox()

@@ -211,7 +211,7 @@ class ReservationController extends Controller
 
         return response()->json([
             'status' => 1,
-            'id' => $reservation
+            'id' => $id
         ], 200);
     }
 }

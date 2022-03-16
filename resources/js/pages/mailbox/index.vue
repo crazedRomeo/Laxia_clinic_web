@@ -148,7 +148,7 @@
               </div>
               <div class="time-picker-content">
                 <span>{{ $t('診断時間') }}</span>
-                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="reservation_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[0, [6, 23]]" :minute-interval="15"></vue-timepicker>
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="reservation_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15"></vue-timepicker>
                 <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
               </div>
             </div>

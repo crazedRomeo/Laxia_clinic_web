@@ -31,7 +31,7 @@ class PaymentObserver
         // ユーザーにポイント付与
         $addPoint = floor(config('constants.reservation_success_point_rate') * $payment->treat_price);
         
-        $patient = $payment->reservation->patient_info->patient;
+        $patient = $payment->reservation->patient;
         PointHistory::create([
             'patient_id' => $patient->id,
             'type' => 'reservation_finished',

@@ -46,8 +46,8 @@ class RsvRequest extends FormRequest
             'reservations.visit_date' => '日にち',
             'reservations.start_time' => '診察時間',
             'reservations.end_time' => '診察時間',
-            'reservations.stuff_id' => '医師',
-            'reservations.rsv_content_id' => '予約内容',
+            'reservations.doctor_id' => '医師',
+            'reservations.hope_treat' => '予約内容',
             // 'reservations.menu_id' => '施術メニュー',
         ];
     }

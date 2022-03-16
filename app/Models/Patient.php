@@ -90,11 +90,6 @@ class Patient extends Model
     return $this->belongsTo(User::class);
   }
 
-  public function info()
-  {
-    return $this->hasOne(PatientInfo::class);
-  }
-
   public function categories()
   {
     return $this->belongsToMany(Category::class, 'patient_categories', 'patient_id', 'category_id');

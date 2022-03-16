@@ -3,7 +3,7 @@
     <div class="main-content">
       <div class="date-pick">
         <button @click="handleSelectDate('prev')"><img src="/img/date-prev.svg"></button>
-        <p><input type="date" v-model="query.selected_date"> <span class="select-current-date-btn" @click="handleSelectDate('current')">{{ $t('今日') }}</span></p>
+        <p><input type="date" v-model="query.selected_date"><span class="select-current-date-btn" @click="handleSelectDate('current')">{{ $t('今日') }}</span></p>
         <button @click="handleSelectDate('next')"><img src="/img/date-next.svg"></button>
       </div>
       <div class="tab-content">
@@ -23,7 +23,7 @@
           <tbody>
             <tr v-for="(item, index) in reservations" :key="index">
               <td>{{ item.visit_date | formatDateWithDay }}</td>
-              <td>{{ item.start_time }}</td>
+              <td>{{ item.start_time_without_sec }}</td>
               <td>
                 <small>{{ item.patient.kana }}</small>
               </td>
@@ -50,7 +50,6 @@
       ref="rsvModal"
       id="reservation-modal"
       :title="$t('予約内容')"
-      @cancel="handleModalClose"
       >
       <div v-if="!isEditing">
         <div v-if="selectedRsv" class="reserve-content">
@@ -89,7 +88,7 @@
                 </div>
                 <div>
                   <span>{{ $t('診察時間') }}</span>
-                  {{ selectedRsv.start_time }}
+                  {{ selectedRsv.start_time_without_sec }}
                 </div>
               </div>
             </li>
@@ -110,7 +109,7 @@
         </div>
         <div class="btn-payment-wrapper">
           <div class="btn-wrapper">
-            <button type="button" class="btn btn-danger" @click="handleModalClose">{{ $t('予約をキャンセル') }}</button>
+            <button type="button" class="btn btn-danger" @click="handleCancelRsv">{{ $t('予約をキャンセル') }}</button>
           </div>
           <div class="btn-wrapper">
             <button type="button" class="btn btn-primary" @click="handleEditRsv">{{ $t('予約を編集する') }}</button>
@@ -150,8 +149,11 @@
               <div class="rsv-main-content2">
                 <div>
                   <span>{{ $t('日にち') }}</span>
-                  <!-- <input type="date" v-model="rsv_form.reservations.visit_date" :class="{'is-invalid' : errors && errors['reservations.visit_date'] }"> -->
-                  <v-date-picker v-model="rsv_form.reservations.visit_date">
+                  <v-date-picker 
+                    v-model="rsv_form.reservations.visit_date"
+                    :masks="{ L: 'YYYY-MM-DD' }"
+                    :attributes="attrs"
+                  >
                     <template v-slot="{ inputValue, inputEvents }">
                       <input
                         class="px-2 py-1 border rounded focus:outline-none focus:border-blue-300"
@@ -164,8 +166,15 @@
                 </div>
                 <div class="time-picker-content">
                   <span>{{ $t('診断時間') }}</span>
-                    <!-- <input type="time" v-model="rsv_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }"> -->
-                    <vue-timepicker fixed-dropdown-button placeholder=" " :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[0, [6, 23]]" :minute-interval="15"></vue-timepicker>
+                    <vue-timepicker 
+                      fixed-dropdown-button
+                      placeholder=" "
+                      v-model="rsv_form.reservations.start_time" 
+                      :class="{'is-invalid' : errors && errors['reservations.start_time'] }" 
+                      :hour-range="[[6, 23]]" 
+                      :minute-interval="15"
+                    >
+                    </vue-timepicker>
                     <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
                 </div>
               </div>
@@ -215,15 +224,15 @@
         <div class="rsv-summary-content">
           <div>
             <span>{{ $t('来院日時') }}</span>
-            {{ selectedRsv.visit_date | formatDateWithDay }}　{{ selectedRsv.visit_time }}
+            {{ selectedRsv.visit_date | formatDateWithDay }} {{ selectedRsv.start_time_without_sec }}
           </div>
           <div>
             <span>{{ $t('予約内容') }}</span>
-            {{ selectedRsv.rsv_content && selectedRsv.rsv_content.name }}
+            {{ selectedRsv.hope_treat && hope_treat_types[selectedRsv.hope_treat] }}
           </div>
           <div>
-            <span>{{ $t('施術メニュー') }}</span>
-            {{ selectedRsv.menu && selectedRsv.menu.name }}
+            <span>{{ $t('担当者') }}</span>
+            {{ selectedRsv.doctor && selectedRsv.doctor.kata_name }}
           </div>
         </div>
 
@@ -242,9 +251,6 @@
               <span>{{ $t('控除金額') }}({{ $t('税抜') }})</span>
               <input type="number" name="" v-model="form.payments.except_price" min="0" :class="{'is-invalid' : errors && errors['payments.except_price'] }">
               <div v-if="errors && errors['payments.except_price']" class="error invalid-feedback">{{ errors['payments.except_price'][0] }}</div>
-              <!-- <span>{{ $t('除外項目') }}</span>
-              <input type="text" name="" v-model="form.payments.except_item" :class="{'is-invalid' : errors && errors['payments.except_item'] }"> -->
-              <div v-if="errors && errors['payments.except_item']" class="error invalid-feedback">{{ errors['payments.except_item'][0] }}</div>
             </div>
           </div>
           <span class="operator">　ー　</span>
@@ -309,7 +315,14 @@ export default {
         }
       },
       pageInfo: undefined,
-      errors: undefined
+      errors: undefined,
+      attrs: [
+        {
+          key: 'today',
+          highlight: true,
+          dates: new Date(),
+        },
+      ],
     }
   },
 
@@ -379,12 +392,21 @@ export default {
       this.form = {
         payments: { ...this.form_tmp.payments }
       }
-      if (this.selectedRsv.payment) {
+      if (this.selectedRsv.payments !== null) {
         this.form = {
           payments: {
-            total_price: this.selectedRsv.payment.total_price,
-            except_item: this.selectedRsv.payment.except_item,
-            except_price: this.selectedRsv.payment.except_price,
+            total_price: this.selectedRsv.payments.total_price,
+            except_item: this.selectedRsv.payments.except_item,
+            except_price: this.selectedRsv.payments.except_price,
+            treat_price: 0,
+          }
+        }
+      } else {
+        this.selectedRsv = {
+          ...this.selectedRsv, payments: {
+            total_price: '',
+            except_item: '',
+            except_price: '',
             treat_price: 0,
           }
         }
@@ -457,6 +479,35 @@ export default {
     handleModalClose() {
       this.isEditing = false
       this.errors = undefined
+    },
+
+    handleCancelRsv() {
+      this.$store.dispatch('state/setIsLoading')
+      axios.delete(`/api/clinic/reservations/delete/${this.selectedRsv.id}`)
+      .then(res => {
+        if(res.data.status == 1) {
+          this.reservations = this.reservations.filter(el => el.id != res.data.id);
+  
+          this.$store.dispatch('state/removeIsLoading');
+          this.$refs.rsvModal.hide()
+
+          this.$swal({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            title: '削除。',
+            icon: 'success',
+          });
+        } else {
+          this.$store.dispatch('state/removeIsLoading');
+          this.$refs.rsvModal.hide()
+        };
+      })
+      .catch(error => {
+        this.$refs.rsvModal.hide()
+        this.$store.dispatch('state/removeIsLoading')
+      })
     },
 
     handlePaginate(pageNum) {

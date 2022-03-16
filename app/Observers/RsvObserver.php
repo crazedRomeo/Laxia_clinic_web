@@ -22,7 +22,7 @@ class RsvObserver
         $mailbox = Mailbox::create([
             'reservation_id' => $rsv->id
         ]);
-        $patient = $rsv->patient_info->patient;
+        $patient = $rsv->patient;
         $mailbox->users()->attach([
             $rsv->clinic->user->id,
             $patient->user->id

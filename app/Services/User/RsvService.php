@@ -4,7 +4,7 @@ namespace App\Services\User;
 use Illuminate\Support\Arr;
 use App\Models\Reservation;
 use App\Models\Payment;
-use App\Models\PatientInfo;
+use App\Models\Patient;
 use App\Models\RsvHopeTime;
 use DB;
 use Auth;
@@ -39,8 +39,8 @@ class RsvService
       }
     }
 
-    if (isset($search['patient_info_id'])) {
-      $query->where('patient_info_id', $search['patient_info_id']);
+    if (isset($search['patient_id'])) {
+      $query->where('patien_id', $search['patient_id']);
     }
 
     // 決済一覧
@@ -123,10 +123,10 @@ class RsvService
     $rsv->fill($rsvAttrs);
     $rsv->save();
 
-    $patientInfoAttrs = Arr::get($attributes, 'patient_infos');
-    if (isset($patientInfoAttrs)) {
-      $rsv->patient_info()->update($patientInfoAttrs);
-    }
+    // $patientInfoAttrs = Arr::get($attributes, 'patient_infos');
+    // if (isset($patientInfoAttrs)) {
+    //   $rsv->patient_info()->update($patientInfoAttrs);
+    // }
 
     return $rsv->load(['patient', 'doctor', 'clinic']);
   }
@@ -156,6 +156,6 @@ class RsvService
   {
     $patient = Patient::find($patient_id);
     if (!$patient) return null;
-    return $patient->info;
+    return $patient;
   }
 }

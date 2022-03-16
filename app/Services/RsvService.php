@@ -4,7 +4,7 @@ namespace App\Services;
 use Illuminate\Support\Arr;
 use App\Models\Reservation;
 use App\Models\Payment;
-use App\Models\PatientInfo;
+use App\Models\Patient;
 use App\Models\RsvHopeTime;
 use App\Enums\Reservation\Status;
 use DB;
@@ -22,7 +22,7 @@ class RsvService
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
 
     $query = Reservation::query()
-      ->with(['patient', 'doctor', 'clinic']);
+      ->with(['patient', 'doctor', 'clinic', 'payments']);
     
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
@@ -40,6 +40,7 @@ class RsvService
     if (isset($search['confirmed'])) {
       $query->whereNotNull('visit_date')
         // ->whereDoesntHave('payment')
+        ->where('status', Status::INPROGRESS)
         ->orderBy('visit_date', 'asc');
     }
 
@@ -128,7 +129,7 @@ class RsvService
   {
     $patient = Patient::find($patient_id);
     if (!$patient) return null;
-    return $patient->info;
+    return $patient;
   }
 
   public function delete($id) {

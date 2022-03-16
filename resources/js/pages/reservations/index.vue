@@ -113,7 +113,7 @@
                 <v-date-picker
                   v-model="form.reservations.visit_date"
                   :masks="{ L: 'YYYY-MM-DD' }"
-                  :attributes='attrs'
+                  :attributes="attrs"
                 >
                   <template v-slot="{ inputValue, inputEvents }">
                     <input
@@ -127,8 +127,7 @@
               </div>
               <div class="time-picker-content">
                 <span>{{ $t('診断時間') }}</span>
-                <!-- <input type="time" v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" /> -->
-                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[0, [6, 23]]" :minute-interval="15"></vue-timepicker>
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15"></vue-timepicker>
                 <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
               </div>
             </div>
@@ -137,11 +136,9 @@
             <div>{{ $t('担当者') }}</div>
             <div class="rsv-main-content2">
               <div>
-                <!-- <span>{{ $t('医師・スタッフ') }}</span> -->
                 <span>{{ $t('医師') }}</span>
                 <select v-model="form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
                   <option></option>
-                  <!-- <option v-for="(name, id) in stuffs" :key="id" :value="id">{{ name }}</option> -->
                   <option v-for="(doctor) in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.kata_name }}</option>
                 </select>
                 <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
