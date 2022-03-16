@@ -1143,8 +1143,6 @@ button:focus {
 	justify-content: space-between;
 }
 .payment-ttl{
-	font-size: 20px;
-	font-weight: bold;
 	margin-bottom: 16px;
 }
 .payment-calc{
@@ -1482,12 +1480,20 @@ button:focus {
 		}
 	}
 }
-.company-content span{
-	font-size: 18px;
-	line-height: 26px;
-	color: #757296;
-	display: block;
-	margin-bottom: 10px;
+.company-content {
+	padding: 0 18px;
+	span{
+		font-size: 16px;
+		line-height: 26px;
+		color: #757296;
+		display: block;
+	}
+	p{
+		font-size: 18px;
+		color: #131340;
+		margin-bottom: 40px;
+	}
+
 }
 .company-name{
 	width: 48%;
@@ -1499,11 +1505,20 @@ button:focus {
 	flex-wrap: wrap;
 	margin-bottom: 16px;
 }
-.company-info>div{
-	width: 48%;
-	margin-right: 4%;
-	margin-bottom: 14px;
+.work-time{
+	display: flex;
+	p{
+		margin-bottom: 20px;
+		margin-right: 25px;
+		color:#000000;
+	}
 }
+
+// .company-info>div{
+// 	width: 48%;
+// 	margin-right: 4%;
+// 	margin-bottom: 14px;
+// }
 .company-info>div:nth-child(2n){
 	margin-right: 0;
 }
@@ -2234,7 +2249,7 @@ span.switcher.switcher-1 input:not(:checked) + label {
 }
 .company-name {
 	span + p {
-		font-size: 14px;
+		font-size: 18px;
 	}
 }
 .company-profile-img-list {
@@ -2244,7 +2259,11 @@ span.switcher.switcher-1 input:not(:checked) + label {
 	> div {
 		flex: 20%;
 		max-width: 20%;
-		padding: 10px 15px;
+		padding: 0px 6px;
+		img{
+			width: 100%;
+			border-radius: 5px;
+		}
 	}
 }
 .over-hidden {
@@ -2560,6 +2579,48 @@ i.i-login-valid{
 		}
 	}
 }
+.clinic{
+	.btn-file-upload {
+		padding: 5px 15px !important;
+		min-width: 0px !important;
+	}
+	.vue-dropzone:hover{
+		background-color: transparent !important;
+	}
+	.form-group{
+		input{
+			padding: 10px 15px;
+		}
+		select{
+			padding: 10px 15px;
+		}
+	}
+}
+.clinic-time{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	span{
+		margin: 0;
+		color: #5F6377;
+	}
+	p{
+		font-size: 18px;
+		color: #000000;
+	}
+	div{
+		width: 28%;
+	}
+	div:first-child{
+		width: initial;
+	}
+	div:nth-child(2){
+		margin-right: 10px;
+	}
+}
+.p-t-20{
+	padding-top: 20px;
+}
 .multi-files-uploader {
 	padding: 0 8px;
 	.dz-image-preview {
@@ -2798,6 +2859,9 @@ i.i-login-valid{
 	margin-bottom: 10px;
 	span {
 		margin: 0 8px;
+	}
+	i{
+		margin-top: 15px;
 	}
 }
 .multiselect {

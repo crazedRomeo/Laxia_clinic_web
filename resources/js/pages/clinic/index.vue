@@ -2,64 +2,121 @@
   <div class="main-in">
     <div class="main-content">
       <div v-if="!isEditing && clinic" class="company-content edit-close">
-        <div v-if="clinic.photo" class="company-img">
-          <img :src="clinic.photo" />
-        </div>
         <div class="company-name">
-          <span>{{ $t('クリニック名') }}</span>
-          <p>{{ clinic.name | emptyValue }}</p>
+          <span>{{ $t('クリニックロゴ') }}</span>
         </div>
-        <div class="company-info">
-          <div>
-            <span>{{ $t('住所') }}</span>
-            <p>{{ address | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('ネット予約') }}</span>
-            <p>{{ clinic.net_reservation | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('最寄駅') }}</span>
-            <p>{{ clinic.nearest_station | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('公式サイト') }}</span>
-            <p>{{ clinic.site | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('アクセス') }}</span>
-            <p>{{ clinic.access | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('電話番号') }}</span>
-            <p>{{ clinic.phone_number | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('営業時間') }}</span>
-            <p>{{ clinic.working_time | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('クレジットカード') }}</span>
-            <p>{{ clinic.credit_card | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('休業日') }}</span>
-            <p>{{ clinic.holidays | emptyValue }}</p>
-          </div>
-          <div>
-            <span>{{ $t('駐車場') }}</span>
-            <p>{{ clinic.parking | emptyValue }}</p>
-          </div>
+        <div class="company-img">
+          <!-- <img :src="clinic.photo" /> -->
+          <img src="/img/email_mark.png">
         </div>
-        <div class="company-profile-imgs">
-          <p class="payment-ttl">{{ $t('会社プロフィール画像') }}</p>
-          <div class="company-profile-img-list">
-            <div v-for="(attachment, index) in clinic.images" :key="index">
-              <img :src="attachment.path" />
+        
+        <div class="company-info row">
+          <div class="col-6">
+            <div>
+              <span>{{ $t('クリニック名') }}</span>
+              <p>{{ clinic.name | emptyValue }}</p>
+            </div>
+            <div>
+              <span>{{ $t('住所') }}</span>
+              <p>{{ address | emptyValue }}</p>
+            </div>
+            <div>
+              <span>{{ $t('最寄駅') }}</span>
+              <p>{{ clinic.nearest_station | emptyValue }}</p>
+            </div>
+            <div>
+              <span>{{ $t('アクセス') }}</span>
+              <p>{{ clinic.access | emptyValue }}</p>
+            </div>
+            <div>
+              <span>{{ $t('休業日') }}</span>
+              <p>{{ clinic.holidays | emptyValue }}</p>
+            </div>
+            <div>
+              <span>{{ $t('公式サイト') }}</span>
+              <p>{{ clinic.site | emptyValue }}</p>
+            </div>
+            <div>
+              <span>{{ $t('電話番号') }}</span>
+              <p>{{ clinic.phone_number | emptyValue }}</p>
+            </div>
+
+          </div>
+          <div class="col-6">
+            <div>
+              <span>{{ $t('クレジットカード') }}</span>
+              <p>{{ clinic.credit_card | emptyValue }}</p>
+            </div>
+            <div>
+              <span>{{ $t('駐車場') }}</span>
+              <p>{{ clinic.parking | emptyValue }}</p>
+            </div>
+            <!-- <div>
+              <span>{{ $t('ネット予約') }}</span>
+              <p>{{ clinic.net_reservation | emptyValue }}</p>
+            </div> -->
+            <div>
+              <span>{{ $t('営業時間') }}</span>
+            <!-- <p>{{ clinic.working_time | emptyValue }}</p> -->
+              <div class="work-time">
+                <p>月曜日</p>
+                <p>10:00 ~ 14:00</p>
+              </div>
+              <div class="work-time">
+                <p>火曜日</p>
+                <p>10:00 ~ 20:00</p>
+              </div>
+              <div class="work-time">
+                <p>水曜日</p>
+                <p>定休日</p>
+              </div>
+              <div class="work-time">
+                <p>木曜日</p>
+                <p>10:00 ~ 14:00</p>
+              </div>
+              <div class="work-time">
+                <p>金曜日</p>
+                <p>10:00 ~ 14:00</p>
+              </div>
+              <div class="work-time">
+                <p>土曜日</p>
+                <p>定休日</p>
+              </div>
+              <div class="work-time">
+                <p>日曜日</p>
+                <p>10:00 ~ 14:00</p>
+              </div>
+              <div class="work-time">
+                <p>祝日</p>
+                <p>10:00 ~ 20:00</p>
+              </div>
             </div>
           </div>
         </div>
-        <div class="company-about">
+        <div class="company-profile-imgs">
+          <span class="payment-ttl">{{ $t('クリニック紹介写真') }}</span>
+          <div class="company-profile-img-list">
+            <!-- <div v-for="(attachment, index) in clinic.images" :key="index">
+              <img :src="attachment.path" />
+            </div> -->
+            <div>
+              <img src="/img/dummy-01.png">
+            </div>
+            <div>
+              <img src="/img/dummy-01.png">
+            </div>
+            <div>
+              <img src="/img/dummy-01.png">
+            </div>
+            <div>
+              <img src="/img/dummy-01.png">
+            </div>
+            <div>
+              <img src="/img/dummy-01.png">
+            </div>
+          </div>
+        </div>
+        <!-- <div class="company-about">
           <p class="payment-ttl">{{ $t('会社紹介') }}</p>
           <div class="company-ttl">
             <span>{{ $t('タイトル') }}</span>
@@ -69,10 +126,17 @@
             <span>{{ $t('会社紹介文') }}</span>
             <p>{{ clinic.company_profile }}</p>
           </div>
-        </div>
-        <div class="btn-wrapper"><button class="btn btn-primary " @click="handleEditProfile">{{ $t('プロフィールを編集') }}</button></div>
+        </div> -->
+        <!-- <div class="btn-wrapper"><button class="btn btn-primary " @click="handleEditProfile">{{ $t('プロフィールを編集') }}</button></div> -->
+        <div class="btn-wrapper"><button class="btn btn-primary " @click="handleNewMenu">{{ $t('プロフィールを編集') }}</button></div>
       </div>
-      <div v-if="isEditing && form" class="company-content companu-content--edit">
+    <form-modal
+      ref="modal"
+      id="menu-modal"
+      :title="modalInfo.title"
+      @cancel="handleModalClose"
+      >
+      <!-- <div v-if="isEditing && form" class="company-content companu-content--edit">
         <div class="company-img">
           <file-upload
             ref="fileUploadComponent"
@@ -194,7 +258,918 @@
           <button class="btn btn-primary" @click="isEditing = false">キャンセル</button>
           <button class="btn btn-primary" @click="handleUpdate">プロフィールを保存</button>
         </div>
-      </div>
+      </div> -->
+      <div class="scroll-modal-body clinic">
+        <div v-if="form" class="create-menu-content">
+          <div class="form-group row companu-content--edit menu-file-upload">
+            <div class="col-md-12">
+              <small>{{ $t('クリニックロゴ') }}</small>
+              <file-upload
+                ref="fileUploadComponent"
+                uploadUrl="/api/clinic/stuffs/photoupload"
+                :avatar="true"
+                @file-upload-success="handleFileSaved"
+                @file-removed="hanleFileRemove"
+                @file-added="handleFileAdded"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+              <small>{{ $t('クリニック名') }}</small>
+              <input type="text" placeholder="例：ABCクリニック" :class="{'is-invalid' : errors && errors['clinic.name'] }">
+              <div v-if="errors && errors['clinic.name']" class="error invalid-feedback">{{ errors['clinic.name'][0] }}</div>
+          </div>
+          <div class="form-group">
+            <div>
+              <small>{{ $t('住所') }}</small>
+              <div class="clinic-info--address-block">
+                <select>
+                  <option>北海道</option>
+                  <option>青森県</option>
+                  <option>岩手県</option>
+                  <option>宮城県</option>
+                  <option>秋田県</option>
+                  <option>山形県</option>
+                  <option>福島県</option>
+                  <option>茨城県</option>
+                  <option>栃木県</option>
+                  <option>群馬県</option>
+                  <option>埼玉県</option>
+                  <option>千葉県</option>
+                  <option>東京都</option>
+                  <option>神奈川県</option>
+                </select>
+                <i class="bi bi-chevron-left"></i>
+                <select>
+                  <option></option>
+                  <option></option>
+                </select>
+                <i class="bi bi-chevron-left"></i>
+                <select >
+                  <option></option>
+                  <option></option>
+                </select>
+              </div>
+              <div><input placeholder="例：ABCビル 3階" type="text" :class="{'is-invalid' : errors && errors['clinic.department'] }"></div>
+              <div v-if="errors && errors['clinic.department']" class="error invalid-feedback">{{ errors['clinic.department'][0] }}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <small>{{ $t('最寄駅') }}</small>
+            <input type="text" :class="{'is-invalid' : errors && errors['clinic.nearest_station'] }">
+            <div v-if="errors && errors['clinic.nearest_station']" class="error invalid-feedback">{{ errors['clinic.nearest_station'][0] }}</div>
+          </div>
+          <div class="form-group">
+            <small>{{ $t('アクセス') }}</small>
+            <input type="text" :class="{'is-invalid' : errors && errors['clinic.access'] }">
+            <div v-if="errors && errors['clinic.access']" class="error invalid-feedback">{{ errors['clinic.access'][0] }}</div>
+          </div>
+          <div>
+            <small>営業時間</small>
+          </div>
+          <div class="form-group clinic-time">
+            <div><p>月曜日</p></div>
+            <div>
+              <span>営業ステータス</span>
+              <select>
+                <option>営業日</option>
+                <option>定休日</option>
+              </select>
+            </div>
+            <div>
+              <span>開始時間</span>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+            <span class="p-t-20">~</span>
+            <div>
+              <span>終了時間</span>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group clinic-time">
+            <div><p>火曜日</p></div>
+            <div>
+              <select>
+                <option>営業日</option>
+                <option>定休日</option>
+              </select>
+            </div>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+            <span>~</span>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group clinic-time">
+            <div><p>火曜日</p></div>
+            <div>
+              <select>
+                <option>営業日</option>
+                <option>定休日</option>
+              </select>
+            </div>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+            <span>~</span>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group clinic-time">
+            <div><p>木曜日</p></div>
+            <div>
+              <select>
+                <option>営業日</option>
+                <option>定休日</option>
+              </select>
+            </div>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+            <span>~</span>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group clinic-time">
+            <div><p>金曜日</p></div>
+            <div>
+              <select>
+                <option>営業日</option>
+                <option>定休日</option>
+              </select>
+            </div>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+            <span>~</span>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group clinic-time">
+            <div><p>土曜日</p></div>
+            <div>
+              <select>
+                <option>営業日</option>
+                <option>定休日</option>
+              </select>
+            </div>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+            <span>~</span>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group clinic-time">
+            <div><p>日曜日</p></div>
+            <div>
+              <select>
+                <option>営業日</option>
+                <option>定休日</option>
+              </select>
+            </div>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+            <span>~</span>
+            <div>
+              <select>
+                <option></option>
+                <option>0:00</option>
+                <option>0:30</option>
+                <option>1:00</option>
+                <option>1:30</option>
+                <option>2:00</option>
+                <option>2:30</option>
+                <option>3:00</option>
+                <option>3:30</option>
+                <option>4:00</option>
+                <option>4:30</option>
+                <option>5:00</option>
+                <option>5:30</option>
+                <option>6:00</option>
+                <option>6:30</option>
+                <option>7:00</option>
+                <option>7:30</option>
+                <option>8:00</option>
+                <option>8:30</option>
+                <option>9:00</option>
+                <option>9:30</option>
+                <option>10:00</option>
+                <option>10:30</option>
+                <option>11:00</option>
+                <option>12:30</option>
+                <option>13:00</option>
+                <option>13:30</option>
+                <option>14:00</option>
+                <option>14:30</option>
+                <option>15:00</option>
+                <option>15:30</option>
+                <option>16:00</option>
+                <option>16:30</option>
+                <option>17:00</option>
+                <option>17:30</option>
+                <option>18:00</option>
+                <option>18:30</option>
+                <option>19:00</option>
+                <option>19:30</option>
+                <option>20:00</option>
+                <option>20:30</option>
+                <option>21:00</option>
+                <option>21:30</option>
+                <option>22:00</option>
+                <option>22:30</option>
+                <option>23:00</option>
+                <option>23:30</option>
+              </select>
+            </div>
+          </div>  
+          <div class="form-group">
+            <small>{{ $t('公式サイト') }}</small>
+            <input type="text" placeholder="例：abc.com" :class="{'is-invalid' : errors && errors['clinic.nearest_station'] }">
+            <div v-if="errors && errors['clinic.nearest_station']" class="error invalid-feedback">{{ errors['clinic.nearest_station'][0] }}</div>
+          </div>
+          <div class="form-group">
+            <small>{{ $t('電話番号(ハイフンなし)') }}</small>
+            <input type="text" placeholder="例：012001234" :class="{'is-invalid' : errors && errors['clinic.nearest_station'] }">
+            <div v-if="errors && errors['clinic.nearest_station']" class="error invalid-feedback">{{ errors['clinic.nearest_station'][0] }}</div>
+          </div>
+          <div class="form-group">
+            <small>{{ $t('対応クレジットカード') }}</small>
+            <input type="text" placeholder="例：Visa、Master、Amex" :class="{'is-invalid' : errors && errors['clinic.nearest_station'] }">
+            <div v-if="errors && errors['clinic.nearest_station']" class="error invalid-feedback">{{ errors['clinic.nearest_station'][0] }}</div>
+          </div>
+          <div class="form-group">
+            <small>{{ $t('駐車場') }}</small>
+            <input type="text" placeholder="例：専用駐車場あり、近くに有料パーキングあり、など" :class="{'is-invalid' : errors && errors['clinic.nearest_station'] }">
+            <div v-if="errors && errors['clinic.nearest_station']" class="error invalid-feedback">{{ errors['clinic.nearest_station'][0] }}</div>
+          </div>
+          <div class="form-group row companu-content--edit menu-file-upload">
+            <div class="col-md-12">
+              <small>{{ $t('クリニック紹介画像') }}</small>
+              <file-upload
+                ref="multiFilesUploadComponent"
+                uploadUrl="/api/clinic/menus/photoupload"
+                :maxFiles="10"
+                :autoStatus="true"
+                name="menu-images"
+                @file-upload-success="handleMultiFileSaved"
+                @file-removed="hanleMultiFileRemove"
+                @file-added="handleMultiFileAdded"
+                @queue-complete="handleMultiFilesQueueComplete"
+              />
+              <div v-if="form.menuPhotos.length" class="company-profile-img-list">
+                <div v-for="(img, index) in form.menuPhotos" class="company-image--edit" :key="index">
+                  <div class="over-hidden">
+                    <img :src="img" />
+                  </div>
+                  <span class="remove-btn" @click="handleRemoveFile(index)">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="6" cy="6" r="6" fill="#5F6377"/>
+                      <path d="M8 4L4 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M4 4L8 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <template v-slot:footer>
+        <button type="button" class="btn btn-primary btn-modal-footer">{{ modalInfo.confirmBtnTitle }}</button>
+      </template>
+    </form-modal>
     </div>
   </div>
 </template>
@@ -217,6 +1192,10 @@ export default {
         companyPhotoFileChanged: false,
         clinic: undefined,
         companyPhotos: []
+      },
+      modalInfo: {
+        title: '',
+        confirmBtnTitle: '',
       },
       cities: [],
       towns: [],
@@ -286,7 +1265,20 @@ export default {
         this.handleSaveClinic()
       }
     },
-
+    handleNewMenu() {
+      this.form = {
+        ...this.tmp,
+        menus: { ...this.tmp.menus }
+      }
+      this.modalInfo = {
+        title: 'プロフィールを編集する',
+        confirmBtnTitle: 'クリニック情報を追加'
+      }
+      this.form.menuPhotos = [];
+      this.selected_categories = [];
+      this.errors = undefined;
+      this.$refs.modal.show();
+    },
     handleSaveClinic() {
       this.$store.dispatch('state/setIsLoading')
       axios.put(`/api/clinic/${this.user.id}`, this.form)
@@ -379,4 +1371,14 @@ export default {
 </script>
 
 <style scoped>
+  div.create-menu-content{
+    padding: 0;
+    margin-top: 45px;
+  }
+  .form-modal-wrapper{
+    top: 40%;
+  }
+  .btn-modal-footer{
+    margin-right: 15px;
+  }
 </style>
