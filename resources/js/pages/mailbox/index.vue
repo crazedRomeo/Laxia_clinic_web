@@ -476,7 +476,7 @@ export default {
     handleConfirmRsv() {
       this.$store.dispatch('state/setIsLoading')
       this.reservation_form.reservations.start_time = this.reservation_form.reservations.start_time.HH + ':' + this.reservation_form.reservations.start_time.mm;
-      this.reservation_form.reservations.visit_date = this.reservation_form.reservations.visit_date.toISOString().substring(0, 10);
+      this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
 
       axios.put(`/api/clinic/reservations/${this.reservation.id}`, this.reservation_form)
         .then(res => {
