@@ -78,4 +78,43 @@ class DoctorService
   public function getDoctorsByClinic($clinic_id) {
     return Doctor::where('clinic_id', $clinic_id)->get();
   }
+
+  public function getDoctorsCountByClinic($clinic_id, $request = array()) {
+    $query = Doctor::where('clinic_id', $clinic_id);
+
+    if(isset($request['q'])) {
+      $query->where(function($query) use ($request) {
+        $query->where('kata_name', 'LIKE', "%{$request['q']}%")
+              ->orWhere('hira_name', 'LIKE', "%{$request['q']}%");
+      });
+    }
+
+    return $query->count();
+  }
+
+  public function setClinic($doctor_id, $clinic_id) {
+    $doctor = Doctor::find($doctor_id);
+    
+    $doctor->clinic_id = $clinic_id;
+    $doctor->save();
+
+    return $doctor;
+  }
+
+  public function deleteClinic($doctor_id) {
+    $doctor = Doctor::find($doctor_id);
+    
+    $doctor->clinic_id = null;
+    $doctor->save();
+
+    return $doctor;
+  }
+
+  public function search($request) {
+    $doctors = Doctor::where('kata_name', 'LIKE', "%{$request['q']}%")
+                  ->orWhere('hira_name', 'LIKE', "%{$request['q']}%")
+                  ->get();
+
+    return $doctors;
+  }
 }

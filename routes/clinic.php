@@ -91,8 +91,6 @@ Route::group(['middleware' => ['auth.clinic']], function() {
   
   Route::get('logout', 'Auth\LoginController@logout');
 
-  Route::post('/search/doctor', 'SearchDoctorController@search');
-
   Route::get('profile', 'ProfileController@get');
   Route::put('profile', 'ProfileController@update');
   Route::get('profile/{id}', 'ProfileController@getProfile');
@@ -100,7 +98,8 @@ Route::group(['middleware' => ['auth.clinic']], function() {
   Route::post('update/email', 'ProfileController@updateEmail');
   Route::post('update/password', 'ProfileController@updatePassword');
 
-  Route::get('doctors', 'ClinicDoctorsRelationController@get');
-  Route::post('doctors', 'ClinicDoctorsRelationController@add');
-  Route::delete('doctors/{id}', 'ClinicDoctorsRelationController@delete');
+  Route::get('doctors', 'DoctorController@get');
+  Route::post('doctors', 'DoctorController@addClinic');
+  Route::delete('doctors/{id}', 'DoctorController@deleteClinic');
+  Route::post('/search/doctor', 'DoctorController@search');
 });

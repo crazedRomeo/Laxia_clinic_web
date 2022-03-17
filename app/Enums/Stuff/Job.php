@@ -5,8 +5,8 @@ use App\Enums\BaseEnum;
 
 final class Job extends BaseEnum
 {
-    const DOCTOR = 5;
-    const STUFF = 10;
+    const DOCTOR = 1;
+    const STUFF = 2;
 
     public static function asList(): array {
         return [

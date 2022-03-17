@@ -2978,6 +2978,20 @@ i.i-login-valid{
 
 .main-modal{
 //   padding: 0 70px;
+	.doctor-result-con {
+
+		&.clinic-search-con {
+			display: block !important;
+			margin-bottom: 40px;
+	
+			.search-doctor_item {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 10px;
+			}
+		}
+	}
 }
 
 .label-title{

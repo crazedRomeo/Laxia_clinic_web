@@ -47,7 +47,7 @@
               <td>{{ item.price | currency }}</td>
               <td>{{ item.tax }}%</td>
               <td>{{ item.system_fee | currency }}</td>
-              <td>{{ $t('30000') }}</td>
+              <td>{{ 0 }}</td>
               <td>{{ (item.price * item.tax / 100 + item.system_fee) | currency }}</td>
               <td><a href="" download>{{ $t('ダウンロード') }}</a></td>
             </tr>

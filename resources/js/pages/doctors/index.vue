@@ -16,7 +16,7 @@
         <input type="text" class="search-input" placeholder="メンバーの名前を検索" @keyup='add_todo_keyup' />
       </div>
       <div class="staff-list">
-        <div v-if="doctors.length && (query.status == 0 || query.status == 1)" v-for="(item, index) in doctors" :key="'doctor'+index" class="staff-one" @click="handleShowDoctor(item.doctor_id)">
+        <div v-if="doctors.length && (query.status == 0 || query.status == 1)" v-for="(item, index) in doctors" :key="'doctor'+index" class="staff-one" @click="handleShowDoctor(item.id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
               <img :src="item.photo" />
@@ -30,7 +30,7 @@
           </div>
           <div class="job-item">
             <!-- <p class="staff-hira">{{ item.hira_name }} {{ item.kata_name }}</p> -->
-            <p class="staff-hira">{{ item.hira_name }}</p>
+            <p class="staff-hira">{{ item.kata_name }}</p>
             <p class="staff-name">{{ item.job && item.job_name }}{{ $t('ドクター') }}</p>
           </div>
         </div>
@@ -49,7 +49,7 @@
           </div>
           <div class="job-item">
             <!-- <p class="staff-hira">{{ item.name }} {{ item.kana }}</p> -->
-            <p class="staff-hira">{{ item.name }}</p>
+            <p class="staff-hira">{{ item.kana }}</p>
             <p class="staff-name">{{ item.job && item.job_name }}</p>
           </div>
         </div>
@@ -61,7 +61,7 @@
         :click-handler="handlePaginate" /> -->
     </div>
     <form-modal
-      ref="modal"
+      ref="staffAddmodal"
       id="stuff-modal"
       :title="modalInfo.title"
       @cancel="handleModalClose"
@@ -137,10 +137,9 @@
       ref="inviteDoctor"
       id="invite-doctor-modal"
       :title="modalInfo.title"
-      @cancel="handleModalClose"
     >
       <div v-if="isInviteDoctor" class="main-modal">
-        <div class="label">{{ $t('招待したいドクターのIDを入力してください') }}</div>
+        <div class="label">{{ $t('招待したいドクターの氏名を入力してください') }}</div>
         <div class="find-con">
           <div class="find-con-input">
             <input class="form-control" type="text" v-model="doctorId" placeholder="IDを入力してください"/>
@@ -149,21 +148,22 @@
         </div>
 
         <div v-if="failSearchResult" class="find-doctor-warning-msg">
-          このIDは存在しないかID名が間違っています<br>
-          正しいID名を入力してください
+          この氏名は存在しないか氏名が間違っています<br>
+          正しい氏名を入力してください
         </div>
 
-        <div v-if="isEnableDoctor" class="doctor-result-con">
-          <div class="d-flex align-items-center">
-            <img v-if="doctor.photo" class="sm-doctor-avatar-img" :src="doctor.photo" />
-            <svg v-else width="50" height="50" viewBox="0 0 145 145" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="72.5" cy="72.5" r="72.5" fill="#F5F5F5"/>
-            <path opacity="0.3" d="M99.1381 78.2378C97.3863 74.8907 95.3706 71.8751 93.3869 69.7364C95.8451 66.04 97.2864 61.6093 97.2864 56.8293C97.2829 43.9258 86.8115 33.464 73.8963 33.4604C60.981 33.464 50.5096 43.9258 50.5096 56.8293C50.5096 61.6022 51.951 66.04 54.4092 69.7364C52.422 71.8751 50.4097 74.8943 48.658 78.2378C46.8991 81.6276 45.4399 85.2598 44.8869 88.6782C44.7049 89.8153 44.6193 90.9238 44.6193 91.9968C44.605 95.5684 45.6361 98.7943 47.4449 101.396C50.1564 105.324 54.345 107.805 58.9688 109.352C63.6104 110.892 68.7908 111.534 73.8963 111.537C80.7071 111.52 87.6428 110.422 93.262 107.474C96.0663 105.995 98.553 104.013 100.351 101.396C102.153 98.7943 103.184 95.572 103.177 91.9968C103.177 90.9203 103.091 89.8153 102.906 88.6782C102.356 85.2598 100.897 81.6312 99.1381 78.2378ZM61.905 44.849C64.984 41.7729 69.2011 39.8837 73.8963 39.8837C78.5879 39.8837 82.8121 41.7729 85.8875 44.849C88.9593 47.9252 90.8573 52.142 90.8573 56.8293C90.8538 61.5167 88.9629 65.7299 85.8875 68.8097C82.8085 71.8787 78.5879 73.7714 73.8927 73.7714C69.2011 73.7679 64.9804 71.8787 61.9015 68.8097C58.8261 65.7335 56.9316 61.5202 56.9316 56.8293C56.9352 52.142 58.8296 47.9252 61.905 44.849ZM95.0495 97.7713C93.4511 100.113 90.5719 102.006 86.7865 103.264C83.019 104.522 78.4558 105.121 73.8927 105.114C67.8168 105.132 61.7267 104.034 57.531 101.796C55.4296 100.691 53.817 99.3325 52.7431 97.7641C51.6727 96.1886 51.0555 94.3921 51.0448 92.0003C51.0448 91.2874 51.1055 90.5104 51.2339 89.6798C51.5871 87.3843 52.8108 84.1549 54.3557 81.2106C55.7364 78.5514 57.3883 76.1062 58.7155 74.5842C62.8005 78.0774 68.0987 80.1982 73.8963 80.1982C79.6974 80.1982 84.992 78.0774 89.0806 74.5877C90.4042 76.1098 92.0597 78.5514 93.4404 81.2141C94.9852 84.1584 96.209 87.3879 96.5586 89.6834C96.6906 90.5139 96.7513 91.2839 96.7513 92.0039C96.737 94.3921 96.1234 96.1886 95.0495 97.7713Z" fill="#666E6E"/>
-            </svg>
-            <!-- <p>{{doctor.hira_name}}{{ doctor.kata_name }}</p> -->
-            <p>{{doctor.hira_name}}</p>
+        <div v-if="isEnableDoctor" class="doctor-result-con clinic-search-con">
+          <div v-for="doctor in search_doctors" :key="doctor.id" class="search-doctor_item">
+            <div class="d-flex align-items-center">
+              <img v-if="doctor.photo" class="sm-doctor-avatar-img" :src="doctor.photo" />
+              <svg v-else width="50" height="50" viewBox="0 0 145 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="72.5" cy="72.5" r="72.5" fill="#F5F5F5"/>
+              <path opacity="0.3" d="M99.1381 78.2378C97.3863 74.8907 95.3706 71.8751 93.3869 69.7364C95.8451 66.04 97.2864 61.6093 97.2864 56.8293C97.2829 43.9258 86.8115 33.464 73.8963 33.4604C60.981 33.464 50.5096 43.9258 50.5096 56.8293C50.5096 61.6022 51.951 66.04 54.4092 69.7364C52.422 71.8751 50.4097 74.8943 48.658 78.2378C46.8991 81.6276 45.4399 85.2598 44.8869 88.6782C44.7049 89.8153 44.6193 90.9238 44.6193 91.9968C44.605 95.5684 45.6361 98.7943 47.4449 101.396C50.1564 105.324 54.345 107.805 58.9688 109.352C63.6104 110.892 68.7908 111.534 73.8963 111.537C80.7071 111.52 87.6428 110.422 93.262 107.474C96.0663 105.995 98.553 104.013 100.351 101.396C102.153 98.7943 103.184 95.572 103.177 91.9968C103.177 90.9203 103.091 89.8153 102.906 88.6782C102.356 85.2598 100.897 81.6312 99.1381 78.2378ZM61.905 44.849C64.984 41.7729 69.2011 39.8837 73.8963 39.8837C78.5879 39.8837 82.8121 41.7729 85.8875 44.849C88.9593 47.9252 90.8573 52.142 90.8573 56.8293C90.8538 61.5167 88.9629 65.7299 85.8875 68.8097C82.8085 71.8787 78.5879 73.7714 73.8927 73.7714C69.2011 73.7679 64.9804 71.8787 61.9015 68.8097C58.8261 65.7335 56.9316 61.5202 56.9316 56.8293C56.9352 52.142 58.8296 47.9252 61.905 44.849ZM95.0495 97.7713C93.4511 100.113 90.5719 102.006 86.7865 103.264C83.019 104.522 78.4558 105.121 73.8927 105.114C67.8168 105.132 61.7267 104.034 57.531 101.796C55.4296 100.691 53.817 99.3325 52.7431 97.7641C51.6727 96.1886 51.0555 94.3921 51.0448 92.0003C51.0448 91.2874 51.1055 90.5104 51.2339 89.6798C51.5871 87.3843 52.8108 84.1549 54.3557 81.2106C55.7364 78.5514 57.3883 76.1062 58.7155 74.5842C62.8005 78.0774 68.0987 80.1982 73.8963 80.1982C79.6974 80.1982 84.992 78.0774 89.0806 74.5877C90.4042 76.1098 92.0597 78.5514 93.4404 81.2141C94.9852 84.1584 96.209 87.3879 96.5586 89.6834C96.6906 90.5139 96.7513 91.2839 96.7513 92.0039C96.737 94.3921 96.1234 96.1886 95.0495 97.7713Z" fill="#666E6E"/>
+              </svg>
+              <p>{{doctor.kata_name}}</p>
+            </div>
+            <button type="button" class="bootstrap-btn btn btn-primary btn-primary-2" @click="handleAddDoctor(doctor.id)">招待</button>
           </div>
-          <button type="button" class="bootstrap-btn btn btn-primary btn-primary-2" @click="handleAddDoctor(doctor.doctor_id)">招待</button>
         </div>
       </div>
     </form-modal>
@@ -172,7 +172,6 @@
       ref="doctorDetailModal"
       id="doctor-detail-modal"
       :title="modalInfo.title"
-      @cancel="handleModalClose"
     >
       <div v-if="isDoctorDetail" class="main-modal">
         <div class="row mb-5">
@@ -260,7 +259,6 @@
             </div>
             <div class="btn-grp">
               <button type="button" class="btn btn-cancel" @click="cancelModal()">{{ delModalInfo.confirmBtnTitle}}</button>
-              <!-- <button type="button" class="btn btn-danger" @click="handleDeleteDoctor(doctorItem.doctor_id)">{{ modalInfo.delBtnTitle }}</button> -->
               <button type="button" class="btn btn-danger" @click="handleDelete">{{ delModalInfo.delBtnTitle }}</button>
             </div>
           </div>
@@ -288,7 +286,7 @@ export default {
       stuffItem: undefined,
       errors: undefined,
       doctorId:'',
-      doctor: undefined,
+      search_doctors: [],
       isEnableDoctor: false,
       failSearchResult: false,
       isCreateProfile: false,
@@ -302,7 +300,7 @@ export default {
           name: '',
           kana: '',
           duty: '',
-          job_id: 2,
+          job_id: 2, //Job::STUFF
           experience_year: '',
           career: '',
           profile: '',
@@ -360,19 +358,6 @@ export default {
     getData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
-      // axios.get(`/api/clinic/doctors?${qs}`)
-      //   .then(res => {
-      //     this.doctors = res.data.data;
-      //     this.doctor_cnt = res.data.cnt_mh;
-      //     this.staff_cnt = res.data.cnt_mg;
-      //     // this.pageInfo = {
-      //     //   last_page: res.data.stuffs.last_page,
-      //     // }
-      //     this.$store.dispatch('state/removeIsLoading')
-      //   })
-      //   .catch(error => {
-      //     this.$store.dispatch('state/removeIsLoading')
-      //   })
 
       Promise.all([
         axios.get(`/api/clinic/doctors?${qs}`),
@@ -401,8 +386,9 @@ export default {
       let url = '/api/clinic/search/doctor'
       axios.post(url, { q: this.doctorId })
         .then(res => {
-          this.doctor = {...res.data.data}
-          if(this.doctor.name === undefined){
+          this.search_doctors = res.data.data
+
+          if(this.search_doctors.length < 1){
             this.failSearchResult = true;
             this.isEnableDoctor = false
           }else{
@@ -420,21 +406,22 @@ export default {
       let url = '/api/clinic/doctors'
       axios.post(url, { doctor_id: doctorId })
         .then(res => {
-          this.doctor = undefined;
+          this.search_doctors = [];
           this.doctorId = '';
           this.isEnableDoctor = false;
           this.failSearchResult = false;
 
+          this.$refs.inviteDoctor.hide();
           this.getData();
         })
         .catch(error => {
+          this.$refs.inviteDoctor.hide();
           this.$store.dispatch('state/removeIsLoading')
         })
-      this.$refs.inviteDoctor.hide();
     },
 
     handleShowDoctor(id) {
-      let selected = this.doctors.find(el => el.doctor_id == id);
+      let selected = this.doctors.find(el => el.id == id);
       this.doctorItem = {
          ...selected
       }
@@ -478,11 +465,11 @@ export default {
       }
       this.isEditing = true;
       this.$refs.stuffViewModal.hide();
-      this.$refs.modal.show();
+      this.$refs.staffAddmodal.show();
     },
 
     handleUpdateDoctor(){
-      this.$refs.modal.hide()
+      this.$refs.staffAddmodal.hide()
       // this.$refs.stuffViewModal.show()
       // this.modalInfo = {
       //   title: 'スタッフの詳細',
@@ -510,7 +497,7 @@ export default {
       if(this.cancel_status == 0)
         this.handleDeleteStuff(this.form.stuffs.id);
       else
-        this.handleDeleteDoctor(this.doctorItem.doctor_id);
+        this.handleDeleteDoctor(this.doctorItem.id);
 
       this.$refs.delConfirmModal.hide()
     },
@@ -543,7 +530,7 @@ export default {
       axios.delete(url)
         .then(res => {
           this.doctors = this.doctors.filter(function (ele){
-            return ele.doctor_id !== doctorId;
+            return ele.id !== doctorId;
           })
           this.doctorDetailModal = false;
           this.$refs.doctorDetailModal.hide();
@@ -593,21 +580,16 @@ export default {
       }
       this.isEditing = true
       // this.isCreateProfile = true
-      this.$refs.stuffViewModal.hide();
-      this.$refs.modal.show();
+      // this.$refs.stuffViewModal.hide();
+      this.$refs.staffAddmodal.show();
     },
 
     handleUpdateStuff() {
-      // if (!this.isEditing) {
-      //   this.isEditing = true
-      //   return
-      // }
       if (this.form.fileChanged) {
         this.$refs.fileUploadComponent.processQueue();
       } else {
         this.handleSaveStuff();
       }
-      // this.handleSaveStuff();
     },
 
     handleSaveStuff() {
@@ -625,7 +607,7 @@ export default {
           this.$store.dispatch('state/removeIsLoading')
           this.$store.dispatch('data/addStuff', {stuff: stuff})
           this.errors = undefined
-          this.$refs.modal.hide()
+          this.$refs.staffAddmodal.hide()
           this.$swal({
             toast: true,
             position: 'top-end',
