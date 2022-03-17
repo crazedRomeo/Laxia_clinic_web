@@ -438,7 +438,17 @@ export default {
         .then(res => {
           this.isEditing = false;
           this.$refs.rsvModal.hide()
-          let rsv = res.data.reservation
+          let rsv = res.data.reservation;
+
+          if(!res.data.reservation.payments) {
+            rsv.payments = {
+              total_price: '',
+              except_item: '',
+              except_price: '',
+              treat_price: 0,
+            };
+          }
+console.log(rsv);
           this.reservations = this.reservations.map(el => {
             if (el.id == rsv.id) {
               return rsv
