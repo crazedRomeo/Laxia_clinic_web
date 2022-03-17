@@ -528,7 +528,7 @@ export default {
           risk: '',
           guarantee: '',
           treat_time: '',
-          required_time: '',
+          // required_time: '',
           masui: '',
           hospital_visit: '',
           hare: '',
