@@ -448,7 +448,7 @@ export default {
               treat_price: 0,
             };
           }
-console.log(rsv);
+
           this.reservations = this.reservations.map(el => {
             if (el.id == rsv.id) {
               return rsv

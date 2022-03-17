@@ -24,7 +24,7 @@
               </td>
               <td>{{ payment.reservation.visit_date | formatDateWithDay }}
                   <br>
-                 <!-- {{ payment.reservation.end_time | formatTime }} -->
+                 {{ payment.reservation.start_time | formatTime }}
               </td>
               <td>{{ payment.reservation.hope_treat ? hope_treat_types[payment.reservation.hope_treat] : '' }}</td>
               <td>{{ payment.reservation.doctor ? payment.reservation.doctor.kata_name : '' }}</td>

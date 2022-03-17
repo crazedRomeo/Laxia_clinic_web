@@ -28,7 +28,8 @@ class WithdrawService
       $query->whereNotNull('paid_at');
     }
 
-    $query->orderby('created_at', 'desc');
+    // $query->orderby('created_at', 'desc');
+    $query->orderby('month', 'desc');
 
     return $query->paginate($per_page);
   }

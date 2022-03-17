@@ -4,40 +4,13 @@
       <div v-if="current" class="payment">
         <div>
           <div>
-            <p class="payment-ttl">12月請求金額</p>
-              <!-- <div class="payment-calc">
-                <div>
-                  <span>{{ $t('売上') }}</span>
-                  {{ current.price | currency }}
-                </div>
-                <div class="text-center">
-                  <span></span>
-                  ×
-                </div>
-                <div>
-                  <span>{{ $t('手数料') }}</span>
-                  {{ current.tax + "%" }}
-                </div>
-                <div class="text-center">
-                  <span></span>
-                  +
-                </div>
-                <div>
-                  <span>{{ $t('システム利用料') }}</span>
-                  {{ current.system_fee | currency }}
-                </div>
-                <div class="text-center">
-                  <span></span>
-                  =
-                </div>
-              </div> -->
+            <p class="payment-ttl">{{ past_month }}月請求金額</p>
               <div>
-                <!-- <span>{{ $t('支払い金額') }}</span> -->
                 <strong>{{ current.total | currency }}</strong>
               </div>
           </div>
           <div>
-            <p class="payment-ttl">12月払い戻し金額</p>
+            <p class="payment-ttl">{{ past_month }}月払い戻し金額</p>
             <div class="refund-calc">
               <strong>30000円</strong>
             </div>
@@ -69,7 +42,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in withdraws">
+            <tr v-for="item in withdraws" :key="item.id">
               <td>{{ item.month | formatDateWithOutDay }}</td>
               <td>{{ item.price | currency }}</td>
               <td>{{ item.tax }}%</td>
@@ -105,10 +78,12 @@ export default {
         page: 1
       },
       pageInfo: undefined,
+      past_month: undefined,
     }
   },
 
   mounted() {
+    this.past_month = this.$moment().subtract(1,'months').endOf('month').format('M');
     this.initData();
   },
 
@@ -116,7 +91,7 @@ export default {
     initData() {
       this.$store.dispatch('state/setIsLoading')
       const qs = this.$utils.getQueryString(this.query)
-      const ym = this.$moment().format('YYYY-MM')
+      const ym = this.$moment().subtract(1,'months').endOf('month').format('YYYY-MM');
       return Promise.all([
         axios.get(`/api/clinic/withdarws?${qs}`),
         axios.get(`/api/clinic/withdarws/${ym}`)
