@@ -7,7 +7,7 @@
         </div>
         <div class="company-img">
           <!-- <img :src="clinic.photo" /> -->
-          <img src="/img/email_mark.png">
+          <img src="/img/dummy-01.png">
         </div>
         
         <div class="company-info row">
