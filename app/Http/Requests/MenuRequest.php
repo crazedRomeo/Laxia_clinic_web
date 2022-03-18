@@ -59,7 +59,8 @@ class MenuRequest extends FormRequest
         return [
             'menus.name' => 'メニュー名',
             'categories' => 'カテゴリー',
-            'menus.category_id' => 'カテゴリー',
+            // 'menus.category_id' => 'カテゴリー',
+            'menus.categories' => 'カテゴリー',
             'menus.price' => '料金',
             'menus.description' => 'メニューの説明',
             'menus.risk' => '副作用・リスク',

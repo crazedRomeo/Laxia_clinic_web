@@ -461,9 +461,9 @@ export default {
 
   methods: {
     handleMenuChange(e){
-      let menuOpts = e.target.children;
-      this.form.cases.menu_id = menuOpts[0].value;
-      console.log(this.form.cases.menu_id);
+      // let menuOpts = e.target.children;
+      // this.form.cases.menu_id = menuOpts[0].value;
+
       this.menu_details.forEach(item => {
         if(item.id == e.target.value){
           this.selected_menu_details.push({
@@ -473,6 +473,7 @@ export default {
           })
         }
       })
+
       this.$store.dispatch('data/addMenuDetails', { data : this.selected_menu_details })
     },
     handleCateChange(option){
@@ -496,9 +497,8 @@ export default {
       this.selected_categories.splice(idx, 1);
     },
     inputValid(e){
-      console.log(e.target.id);
-      this.errors['cases.name'] = '';
-      this.showstatus = false;
+      // this.errors['cases.name'] = '';
+      // this.showstatus = false;
       // const objName = document.querySelector('#case_name');
       // objName.classList.remove('is-valid');
     },
@@ -525,6 +525,7 @@ export default {
         cases: { ...selected },
         // beforePhotos : selected.images.map(el => el.path),
       }
+
       this.selected_categories = []
       let opt_groud_name;
       this.category_options.forEach(item => {

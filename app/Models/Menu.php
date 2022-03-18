@@ -22,7 +22,6 @@ class Menu extends Model
   protected $fillable = [
     'clinic_id',
     'name',
-    'category_id',
     'price',
     'description',
     'risk',
@@ -56,11 +55,6 @@ class Menu extends Model
   public function cases()
   {
     return $this->hasMany(TreatCase::class);
-  }
-
-  public function category()
-  {
-    return $this->belongsTo(Category::class, 'category_id', 'id');
   }
 
   public function categories()

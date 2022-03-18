@@ -22,16 +22,12 @@ class TreatCase extends Model
      */
     protected $fillable = [
       'clinic_id',
-      'menu_id',
-      'stuff_id',
       'name',
       'patient_age',
       'patient_gender',
       'case_description',
       'doctor_opinion',
       'treat_risk',
-      'before_photo',
-      'after_photo',
     ];
 
     protected $appends = [
@@ -44,11 +40,6 @@ class TreatCase extends Model
     public function clinic()
     {
         return $this->belongsTo(Clinic::class);
-    }
-
-    public function menu()
-    {
-        return $this->belongsTo(Menu::class);
     }
 
     public function categories()
@@ -64,11 +55,6 @@ class TreatCase extends Model
     public function images()
     {
         return $this->morphMany(Attachment::class, 'attachable');
-    }
-
-    public function stuff()
-    {
-        return $this->belongsTo(Stuff::class);
     }
 
     public function viewers()

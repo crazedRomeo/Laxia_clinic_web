@@ -30,16 +30,12 @@ class CaseRequest extends FormRequest
     {
         return [
             'cases' => ['required', 'array'],
-            // 'cases.menu_id' => 'required|integer|exists:menus,id',
-            // 'cases.stuff_id' => 'required|integer|exists:stuffs,id',
             'cases.name' => 'required',
             'cases.patient_age' => 'required|integer',
             'cases.patient_gender' => 'required',
             'cases.case_description' => 'required',
             'cases.doctor_opinion' => 'nullable',
             'cases.treat_risk' => 'required',
-            'cases.before_photo' => 'nullable|string|max:255',
-            'cases.after_photo' => 'nullable|string|max:255',
             'categories' => ['required', 'array'],
         ];
     }
@@ -53,16 +49,12 @@ class CaseRequest extends FormRequest
     {
         return [
             'cases.menu_id' => 'メニュー名',
-            'cases.speciality_id' => 'カテゴリー',
-            'cases.stuff_id' => '担当者',
             'cases.name' => 'タイトル',
             'cases.patient_age' => '施術者の年齢',
             'cases.patient_gender' => '施術者の性別',
             'cases.case_description' => '施術者の解説',
             'cases.doctor_opinion' => '施術者の解説',
             'cases.treat_risk' => '施術者の解説',
-            'cases.before_photo' => 'beforeの写真',
-            'cases.after_photo' => 'afterの写真',
             'categories' => 'カテゴリー',
         ];
     }

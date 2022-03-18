@@ -38,7 +38,7 @@ class Stuff extends Model
     'job_name',
     'diaries_count',
     'counseling_count',
-    'cases_count',
+    // 'cases_count',
     'likes_count',
     'is_like',
     // 'favoriters_count',
@@ -61,15 +61,15 @@ class Stuff extends Model
     return $this->belongsToMany(Speciality::class, 'stuff_specialities', 'stuff_id', 'speciality_id');
   }
 
-  public function cases()
-  {
-    return $this->hasMany(TreatCase::class);
-  }
+  // public function cases()
+  // {
+  //   return $this->hasMany(TreatCase::class);
+  // }
 
-  public function getCasesCountAttribute()
-  {
-    return $this->cases()->count();
-  }
+  // public function getCasesCountAttribute()
+  // {
+  //   return $this->cases()->count();
+  // }
 
   public function diaries()
   {

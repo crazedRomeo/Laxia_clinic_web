@@ -85,7 +85,7 @@ class MenuService
   {
     return Menu::with([
       'images',
-      'category'
+      'categories'
     ])
     ->findOrFail($id);
   }
@@ -126,7 +126,7 @@ class MenuService
 
     $categoryAttrs = Arr::get($attributes, 'categories');
     $menu->categories()->sync($categoryAttrs);
-    // $menu->images()->sync($menuPhotos);
+
     return $menu;
   }
 }
