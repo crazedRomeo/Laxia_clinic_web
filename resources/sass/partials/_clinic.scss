@@ -241,7 +241,7 @@ button:focus {
 }
 .menu ul li a.active{
 	// color: #5CA3F6;
-	background: #E1E9F1;
+	background: #D3E7FF;
 }
 .menu ul li a svg path{
 	stroke: #5F6377;	
@@ -658,28 +658,42 @@ button:focus {
 }
 .nav-tabs{
 	font-weight: 500;
-	border-bottom: 2px solid #E1E1F1;
+	border-bottom: 2px solid #E1E9F1;
 }
 .tab-content{
 	margin-top: 10px;
 }
-.task-list th, .task-list td{
-	padding: 8px 0;
-	font-weight: normal;
-	text-align: center;
-}
-.task-list th{
-	color: #757296;
-}
-.task-list th:nth-child(4){
-	min-width: 160px;
-}
-.task-list tr{
-	border-bottom: 1px solid #E1E1F1;
-}
-.task-list tr td:nth-child(6) img{
-	margin-top: -3px;
-	margin-right: 10px;
+
+.task-list {
+	th {
+		padding: 8px 0;
+		font-weight: normal;
+		text-align: center;
+		color: #757296;
+
+		&:nth-child(4){
+			min-width: 160px;
+		}
+	}
+	td {
+		padding: 8px 0;
+		font-weight: normal;
+		text-align: center;
+	}
+	tr {
+		border-bottom: 1px solid #E1E9F1;
+
+		&:hover {
+			background: rgba(162, 162, 162, 0.3);
+		}
+		td {
+
+			&:nth-child(6) img{
+				margin-top: -3px;
+				margin-right: 10px;
+			}
+		}
+	}
 }
 .normal-btn {
 	display: inline-block;
@@ -875,9 +889,15 @@ button:focus {
 		flex-wrap: wrap;
 		margin: 0 -10px;
 		> div {
-			flex: 33.33%;
-			max-width: 33.33%;
+			flex: 40%;
+			max-width: 40%;
 			padding: 0 10px;
+
+			&:nth-child(3){
+				flex: 20%;
+				max-width: 20%;
+			}
+
 			&.half {
 				display: flex !important;
 				justify-content: space-between;
@@ -923,6 +943,15 @@ button:focus {
 		}
 		input{
 			width: 100%;
+			border-radius: 5px;
+			border: 1px solid #C9D6DF;
+			outline: none;
+			&:hover{
+				border: 1px solid #8C9FAB;
+			}
+			&:focus{
+				border: 1px solid #8C9FAB;
+			}
 		}
 		select{
 			-webkit-appearance: none;
@@ -939,6 +968,7 @@ button:focus {
 		height: initial !important;
 		> input.display-time{
 			width: 100% !important;
+			outline: none !important;
 		}
 	}
 	>.vue__time-picker .controls .char{
@@ -949,9 +979,26 @@ button:focus {
 	}
 }
 
-.vue__time-picker{
+.vue__time-picker {
+	input {
+		&.display-time {
+			border: 1px solid #C9D6DF !important;
+			padding: 3px 8px !important;
+		}
+		
+		&:focus-visible {
+			border: 1px solid #5CA3F6 !important;
+
+		}
+
+		&:hover {
+			border: 1px solid #8C9FAB !important;
+		}
+	}
+	
 	.dropdown{
 		width: 100% !important;
+		outline: none !important;
 		>.select-list{
 			width: 100% !important;
 		}
@@ -1124,7 +1171,7 @@ button:focus {
 	align-items: center;
 	position: relative;
 	padding-bottom: 18px;
-	border-bottom: 2px solid #E1E1F1;
+	border-bottom: 2px solid #E1E9F1;
 
 	.price{
 		position: absolute;
@@ -1301,7 +1348,7 @@ button:focus {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 20px;
-	border-bottom: 1px solid #E9E9E9;
+	border-bottom: 1px solid #E1E9F1;
 }
 .staff-header p{
 	margin-bottom: -2px;
@@ -2513,6 +2560,7 @@ i.i-login-valid{
 	position: absolute;
 	background-color: #F5F5F5;
 	bottom: 85px;
+	display: none;
 }
 .multi-files-uploader.dropzone{
 	min-height: 190px !important;

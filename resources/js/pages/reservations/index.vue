@@ -44,13 +44,16 @@
                 <td>
                     <div class="rsv-status-select"><h4 :class="rsv.status == 5 ? 'not-supported' : 'in-progress'">{{ rsv_status_types[rsv.status] }}</h4></div>
                 </td>
-                <td v-if="rsv.last_chat_time">{{ rsv.last_chat_time.created_at | formatDateWithTime}}</td>
+                <td v-if="rsv.last_chat_time">{{ rsv.last_chat_time.created_at | formatDateWithDay}}
+                  <br>
+                  {{ rsv.last_chat_time.created_at | formatTime12}}
+                </td>
                 <td v-else></td>
                 <td>
                   <small>{{ rsv.patient.kana }}</small>
                 </td>
                 <td>{{ gender_types[rsv.patient.gender] }}</td>
-                <td>{{ rsv.patient.phone_only_number }}</td>
+                <td>{{ rsv.patient.phone_only_number | formatTelephone }}</td>
                 <td>
                   <div v-if="rsv.type == 5" class="source-info"><img src="/img/msg.svg">{{ $t('チャット') }}</div>
                   <div v-if="rsv.type == 10" class="source-info"><img src="/img/tel.svg">{{ $t('電話予約') }}</div>

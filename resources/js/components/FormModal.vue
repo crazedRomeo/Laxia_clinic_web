@@ -67,7 +67,7 @@ export default {
 	z-index: 1000;
 	position: absolute;
 	left: calc(50% - 425px);
-	height: 100vh;
+	// height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;

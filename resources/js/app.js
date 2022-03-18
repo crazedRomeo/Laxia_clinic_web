@@ -70,6 +70,9 @@ Vue.filter('formatDateWithTime', function(value) {
 Vue.filter('formatTime', function(value) {
   return value.substr(0, 5);
 });
+Vue.filter('formatTelephone', function(value) {
+  return value.substr(value.length - 11);
+});
 Vue.filter('formatTime12', function(value) {
   if (value) {
     return moment(String(value)).format('HH:mm')

@@ -316,12 +316,12 @@
           </div>
           <div class="form-group">
             <small>{{ $t('最寄駅') }}</small>
-            <input type="text" :class="{'is-invalid' : errors && errors['clinic.nearest_station'] }">
+            <input type="text" placeholder="例：渋谷駅、代官山駅" :class="{'is-invalid' : errors && errors['clinic.nearest_station'] }">
             <div v-if="errors && errors['clinic.nearest_station']" class="error invalid-feedback">{{ errors['clinic.nearest_station'][0] }}</div>
           </div>
           <div class="form-group">
             <small>{{ $t('アクセス') }}</small>
-            <input type="text" :class="{'is-invalid' : errors && errors['clinic.access'] }">
+            <input type="text" placeholder="例：渋谷駅から徒歩5分" :class="{'is-invalid' : errors && errors['clinic.access'] }">
             <div v-if="errors && errors['clinic.access']" class="error invalid-feedback">{{ errors['clinic.access'][0] }}</div>
           </div>
           <div>
@@ -1378,9 +1378,6 @@ export default {
   div.create-menu-content{
     padding: 0;
     margin-top: 45px;
-  }
-  .form-modal-wrapper{
-    top: 40%;
   }
   .btn-modal-footer{
     margin-right: 15px;
