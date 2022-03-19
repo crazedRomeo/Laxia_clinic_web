@@ -38,7 +38,7 @@
               </tr>
             </thead>
             <tbody v-if="reservations.length > 0">
-              <tr v-for="rsv in reservations" :key="rsv.id">
+              <tr v-for="rsv in reservations" :key="rsv.id" @click="toMailbox(rsv.id)">
                 <td>{{ rsv.id }}</td>
                 <td>
                     <div class="rsv-status-select"><h4 :class="rsv.status == 5 ? 'not-supported' : 'in-progress'">{{ rsv_status_types[rsv.status] }}</h4></div>
@@ -328,6 +328,10 @@ export default {
         page: pageNum,
       }
       this.getData()
+    },
+
+    toMailbox(rsv_id) {
+      this.$router.push({name: 'mailbox', params: {'id': rsv_id}});
     },
   },
 
