@@ -34,7 +34,6 @@
                 <th>{{ $t('電話番号') }}</th>
                 <th>{{ $t('予約方法') }}</th>
                 <th>{{ $t('予約内容') }}</th>
-                <th>{{ $t('チャット') }}</th>
                 <th>{{ $t('確定日') }}</th>
               </tr>
             </thead>
@@ -59,9 +58,9 @@
                   <div v-if="rsv.type == 10" class="source-info"><img src="/img/tel.svg">{{ $t('電話予約') }}</div>
                 </td>
                 <td>{{ hope_treat_types[rsv.hope_treat] }}</td>
-                <td>
+                <!-- <td>
                   <router-link :to="{ name: 'mailbox', params: { id: rsv.id }}" class="btn-primary normal-btn">チャット</router-link>
-                </td>
+                </td> -->
                 <td>
                   <button v-if="rsv.status == 5" type="button" class="btn-primary normal-btn" @click="showRsvModal(rsv.id)">{{ $t('日時') }}</button>
                 </td>

@@ -695,6 +695,7 @@ button:focus {
 
 		&:hover {
 			background: rgba(162, 162, 162, 0.3);
+			cursor: pointer;
 		}
 		td {
 
@@ -2976,13 +2977,28 @@ i.i-login-valid{
 		min-height: 52px;
 		padding-top: 4px;
 		padding-bottom: 0;
+		border: 1px solid #C9D6DF;
 		.multiselect__tag {
 			margin-bottom: 0;
 			background-color: #E2F0FF;
 			color: #5CA3F6;
-			border-radius: 3px;
+			border-radius: 5px;
 			margin-top: 3px;
 			padding: 6px 26px 4px 10px;
+		}
+		&:hover{
+			border: 1px solid #8C9FAB;
+		}
+		&:focus{
+			outline: none;
+			border: 1px solid #5CA3F6;
+		}
+		&:active{
+			outline: none;
+			border: 1px solid #5CA3F6;
+		}
+		&:focus-within{
+			border: 1px solid #5CA3F6;
 		}
 	}
 	.multiselect__option {
