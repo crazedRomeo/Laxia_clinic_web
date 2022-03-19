@@ -62,7 +62,7 @@
                   <router-link :to="{ name: 'mailbox', params: { id: rsv.id }}" class="btn-primary normal-btn">チャット</router-link>
                 </td> -->
                 <td>
-                  <button v-if="rsv.status == 5" type="button" class="btn-primary normal-btn" @click="showRsvModal(rsv.id)">{{ $t('日時') }}</button>
+                  <button v-if="rsv.status == 5" type="button" class="btn-primary normal-btn" v-on:click.stop="showRsvModal(rsv.id)">{{ $t('日時') }}</button>
                 </td>
               </tr>
             </tbody>
