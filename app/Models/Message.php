@@ -27,7 +27,8 @@ class Message extends Model
 
   protected $appends = [
     'is_mine',
-    'file_thumb_url'
+    'file_thumb_url',
+    'display_time_lable',
   ];
 
   public function getIsMineAttribute()
@@ -42,6 +43,10 @@ class Message extends Model
       return "/storage" . $this->message;
     }
     return '';
+  }
+
+  public function getDisplayTimeLableAttribute() {
+    return date('H:i', strtotime($this->created_at));
   }
 
   public function mailbox()

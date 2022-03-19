@@ -3,7 +3,7 @@
     <div class="chat">
       <div class="chat-content">
         <div class="chat-main--wrapper">
-          <div class="chat-main" id="chat-main">
+          <div class="chat-main" id="chat-main" :set="tmp_time = ''">
             <template v-for="(msg, index) in messages">
               <div v-if="!index || getDateString(messages[index-1].created_at) != getDateString(msg.created_at)" class="chat-date">{{ msg.created_at | formatDateWithDay }}</div>
               <div :class="{'other': !msg.is_mine, 'me': msg.is_mine }">
@@ -11,7 +11,8 @@
                 <div>
                   <div>
                     <p v-if="!msg.is_file" class="message">{{ msg.message }}
-                      <span v-if="!index || getUnixTimestamp(msg.created_at) - getUnixTimestamp(messages[index-1].created_at) > 60" class="chat-time">{{ msg.created_at | formatTime12 }}</span></p>
+                      <!-- <span v-if="!index || getUnixTimestamp(msg.created_at) - getUnixTimestamp(messages[index-1].created_at) > 60" class="chat-time">{{ msg.created_at | formatTime12 }}</span></p> -->
+                      <span v-if="tmp_time != msg.display_time_lable" :set="tmp_time = msg.display_time_lable" class="chat-time">{{ tmp_time }}</span></p>
                     <div v-else class="message--file">
                       <img :src="msg.message" @click="handleShowImageFullscreen(msg.message.replace('/thumbs', ''))" />
                       <span v-if="!index || getUnixTimestamp(msg.created_at) - getUnixTimestamp(messages[index-1].created_at) > 60" class="chat-time">{{ msg.created_at | formatTime12 }}</span>
