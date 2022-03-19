@@ -11,7 +11,8 @@
                 <div>
                   <div>
                     <p v-if="!msg.is_file" class="message">{{ msg.message }}
-                      <span v-if="(index + 1) < messages.length && msg.display_time_lable != messages[index+1].display_time_lable" class="chat-time">{{ msg.display_time_lable }}</span>
+                      <span v-if="messages.length == 1" class="chat-time">{{ msg.display_time_lable }}</span>
+                      <span v-else-if="(index + 1) < messages.length && msg.display_time_lable != messages[index+1].display_time_lable" class="chat-time">{{ msg.display_time_lable }}</span>
                       <span v-else-if="(index) == (messages.length-1) && msg.display_time_lable != messages[index-1].display_time_lable" class="chat-time">{{ msg.display_time_lable }}</span>
                     </p>
                     <div v-else class="message--file">
