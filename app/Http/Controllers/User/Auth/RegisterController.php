@@ -143,6 +143,7 @@ class RegisterController extends Controller
                 'email' => $params['users']['email'],
                 'provider' => $params['users']['provider'],
                 'provider_id' => $params['users']['provider_id'],
+                'role' => UserType::USER,
                 'is_active' => 1,
             ]);
         }
