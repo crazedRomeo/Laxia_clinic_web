@@ -42,7 +42,8 @@ class Clinic extends Model
     'firebase_key',
     'menus_count',
     'stuffs_count',
-    // 'is_favorite',
+    'favoriters_count',
+    'is_favorite',
     'address',
     'addr01',
     'user_name',
@@ -84,21 +85,21 @@ class Clinic extends Model
     return $this->users()->first()->role;
   }
 
-  // public function getFavoritersCountAttribute()
-  // {
-  //   return $this->favoriters()->count();
-  // }
+  public function getFavoritersCountAttribute()
+  {
+    return $this->favoriters()->count();
+  }
 
-  // public function getIsFavoriteAttribute()
-  // {
-  //   $currentUser = auth()->guard('patient')->user();
-  //   if (!$currentUser || !($currentUser->patient)) return false;
-  //   $favoriterIds = $this->favoriters()
-  //     ->get()
-  //     ->pluck('id')
-  //     ->toArray();
-  //   return in_array($currentUser->patient->id, $favoriterIds);
-  // }
+  public function getIsFavoriteAttribute()
+  {
+    $currentUser = auth()->guard('patient')->user();
+    if (!$currentUser || !($currentUser->patient)) return false;
+    $favoriterIds = $this->favoriters()
+      ->get()
+      ->pluck('id')
+      ->toArray();
+    return in_array($currentUser->patient->id, $favoriterIds);
+  }
 
   public function getAddressAttribute()
   {
@@ -199,8 +200,8 @@ class Clinic extends Model
   //     ->limit(4);
   // }
 
-  // public function favoriters()
-  // {
-  //   return $this->morphToMany(Patient::class, 'favoriable', 'favorites');
-  // }
+  public function favoriters()
+  {
+    return $this->morphToMany(Patient::class, 'favoriable', 'favorites');
+  }
 }
