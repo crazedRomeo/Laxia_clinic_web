@@ -40,9 +40,9 @@ class DoctorService
       $query->where('pref_id', $search['pref_id']);
     }
 
-    if (isset($search['city'])) {
-      $query->where('addr01', 'LIKE', "%{$search['city']}%");
-    }
+    // if (isset($search['city'])) {
+    //   $query->where('addr01', 'LIKE', "%{$search['city']}%");
+    // }
 
     if (isset($search['orderby'])) {
       $orderby = $search['orderby'];

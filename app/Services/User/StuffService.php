@@ -43,12 +43,12 @@ class StuffService
       });
     }
     
-    if (isset($search['city'])) {
-      $city = $search['city'];
-      $query->whereHas('clinic', function($subquery) use ($city) {
-        $subquery->where('addr01', "LIKE", "%{$city}%");
-      });
-    }
+    // if (isset($search['city'])) {
+    //   $city = $search['city'];
+    //   $query->whereHas('clinic', function($subquery) use ($city) {
+    //     $subquery->where('addr01', "LIKE", "%{$city}%");
+    //   });
+    // }
 
     if (isset($search['q'])) {
       $q = $search['q'];

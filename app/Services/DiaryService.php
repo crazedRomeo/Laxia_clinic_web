@@ -59,12 +59,12 @@ class DiaryService
       });
     }
     
-    if (isset($search['city'])) {
-      $city = $search['city'];
-      $query->whereHas('clinic', function($subquery) use ($city) {
-        $subquery->where('addr01', "LIKE", "%{$city}%");
-      });
-    }
+    // if (isset($search['city'])) {
+    //   $city = $search['city'];
+    //   $query->whereHas('clinic', function($subquery) use ($city) {
+    //     $subquery->where('addr01', "LIKE", "%{$city}%");
+    //   });
+    // }
 
     if (isset($search['price_min'])) {
       $query->where('price', '>=', $search['price_min']);
