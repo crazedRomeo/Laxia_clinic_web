@@ -40,6 +40,8 @@ class Clinic extends Model
 
   protected $appends = [
     'firebase_key',
+    'diaries_count',
+    'counselings_count',
     'menus_count',
     'stuffs_count',
     'favoriters_count',
@@ -58,6 +60,16 @@ class Clinic extends Model
       return $this->user()->first()->firebase_key;
     }
     return null;
+  }
+
+  public function getDiariesCountAttribute()
+  {
+    return $this->diaries()->count();
+  }
+
+  public function getCounselingsCountAttribute()
+  {
+    return $this->counselings()->count();
   }
 
   public function getMenusCountAttribute()
@@ -203,5 +215,25 @@ class Clinic extends Model
   public function favoriters()
   {
     return $this->morphToMany(Patient::class, 'favoriable', 'favorites');
+  }
+
+  public function diaries() {
+    return $this->hasMany(Diary::class);
+  }
+
+  public function diaries_limit2() {
+    return $this->hasMany(Diary::class)
+      ->orderby('diaries.updated_at', 'desc')
+      ->limit(2);
+  }
+
+  public function counselings() {
+    return $this->hasMany(CounselingReport::class);
+  }
+
+  public function counselings_limit2() {
+    return $this->hasMany(CounselingReport::class)
+      ->orderby('counseling_reports.updated_at', 'desc')
+      ->limit(2);
   }
 }

@@ -24,8 +24,8 @@ class Diary extends Model
   protected $fillable = [
     'patient_id',
     'clinic_id',
-    'treat_date',
     'doctor_id',
+    'treat_date',
     'price',
     'rate_01',
     'rate_02',
@@ -162,7 +162,7 @@ class Diary extends Model
 
   public function doctor()
   {
-    return $this->belongsTo(Stuff::class, 'doctor_id');
+    return $this->belongsTo(Doctor::class, 'doctor_id');
   }
 
   public function categories()

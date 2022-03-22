@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Master\Pref;
 use App\Models\Master\Job;
 use App\Models\Master\Speciality;
+use App\Models\Diary;
 
 class Doctor extends Model
 {
@@ -151,5 +152,9 @@ class Doctor extends Model
     $parent_name = empty($parent) ? '' : $parent->name . ' / ';
 
     return $speciality ? $parent_name . $speciality->name : null;
+  }
+
+  public function diaries() {
+    return $this->hasMany(Diary::class);
   }
 }

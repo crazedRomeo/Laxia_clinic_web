@@ -30,8 +30,14 @@ class ProgressController extends Controller
         $this->commentService = $commentService;
     }
 
-    public function get(TreatProgress $progress)
+    public function get($progress_id)
     {
+        $progress = TreatProgress::find($progress_id);
+        if(empty($progress))
+            return response()->json([
+                'progress' => []
+            ], 200);
+
         return response()->json([
             'progress' => $progress->load([
                 'diary',
@@ -42,8 +48,16 @@ class ProgressController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, TreatProgress $progress)
+    public function update(Request $request, $progress_id)
     {
+        $progress = TreatProgress::find($progress_id);
+        if(empty($progress))
+            return response()->json([
+                'status' => 0,
+                'message' => 'エラーが発生しました。',
+                'errors' => ''
+            ]);
+
         $this->authorize($progress);
         $validator = Validator::make($request->all(), [
             'progresses' => 'required|array',
@@ -83,16 +97,31 @@ class ProgressController extends Controller
         ], 200);
     }
 
-    public function indexComments(Request $request, TreatProgress $progress)
+    public function indexComments(Request $request, $progress_id)
     {
+        $progress = TreatProgress::find($progress_id);
+        if(empty($progress))
+            return response()->json([
+                'status' => 0,
+                'data' => '',
+            ]);
+
         return response()->json([
             'status' => 1,
             'data' => $this->commentService->paginate($request->all(), $progress),
         ]);
     }
     
-    public function storeComment(Request $request, TreatProgress $progress)
+    public function storeComment(Request $request, $progress_id)
     {
+        $progress = TreatProgress::find($progress_id);
+        if(empty($progress))
+            return response()->json([
+                'status' => 0,
+                'message' => 'エラーが発生しました。',
+                'errors' => ''
+            ]);
+
         $validator = Validator::make($request->all(), [
             'comments' => 'required|array',
             'comments.parent_id' => 'nullable|integer|exists:comments,id',

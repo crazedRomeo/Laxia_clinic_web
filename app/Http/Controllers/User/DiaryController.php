@@ -67,8 +67,15 @@ class DiaryController extends Controller
         ], 200);
     }
 
-    public function get(Request $request, Diary $diary)
+    public function get(Request $request, $diary_id)
     {
+        $diary = Diary::find($diary_id);
+        if(empty($diary))
+            return response()->json([
+                'status' => 0,
+                'data' => [],
+            ]);
+
         $currentUser = auth()->guard('patient')->user();
         $patient = $currentUser->patient;
         if ($patient->id != $diary->patient_id) {
@@ -99,7 +106,7 @@ class DiaryController extends Controller
             'diaries' => 'required|array',
             'diaries.clinic_id' => 'required|integer|exists:clinics,id',
             'diaries.treat_date' => 'required|date',
-            'diaries.doctor_id' => 'required|integer|exists:stuffs,id',
+            'diaries.doctor_id' => 'required|integer|exists:doctors,id',
             'categories' => 'required|array',
             'medias' => 'nullable|array',
             'diary_tqs' => 'required|array',
@@ -143,14 +150,22 @@ class DiaryController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, Diary $diary)
+    public function update(Request $request, $diary_id)
     {
+        $diary = Diary::find($diary_id);
+        if(empty($diary))
+            return response()->json([
+                'status' => 0,
+                'message' => 'エラーが発生しました。',
+                'errors' => ''
+            ]);
+
         $this->authorize($diary);
         $validator = Validator::make($request->all(), [
             'diaries' => 'required|array',
             'diaries.clinic_id' => 'required|integer|exists:clinics,id',
             'diaries.treat_date' => 'required|date',
-            'diaries.doctor_id' => 'required|integer|exists:s,id',
+            'diaries.doctor_id' => 'required|integer|exists:doctors,id',
             'categories' => 'required|array',
             'medias' => 'nullable|array',
             'diary_tqs' => 'required|array',
@@ -288,8 +303,15 @@ class DiaryController extends Controller
         ], 200);
     }
 
-    public function toggleLike(Diary $diary)
+    public function toggleLike($diary_id)
     {
+        $diary = Diary::find($diary_id);
+        if(empty($diary))
+            return response()->json([
+                'status' => 0,
+                'data' => []
+            ], 200);
+
         $patient = auth()->guard('patient')->user()->patient;
         $result = $diary->likers()->toggle($patient->id);
         return response()->json([
@@ -298,8 +320,15 @@ class DiaryController extends Controller
         ], 200);
     }
 
-    public function toggleFavorite(Diary $diary)
+    public function toggleFavorite($diary_id)
     {
+        $diary = Diary::find($diary_id);
+        if(empty($diary))
+            return response()->json([
+                'status' => 0,
+                'data' => []
+            ], 200);
+
         $patient = auth()->guard('patient')->user()->patient;
         $result = $diary->favoriters()->toggle($patient->id);
         return response()->json([
