@@ -208,7 +208,7 @@
                 <small>{{ $t('年齢') }}</small>
                 <select v-model="form.cases.patient_age" class="form-control" :class="{'is-invalid' : errors && errors['cases.patient_age'] }">
                   <option></option>
-                  <option v-for="i in 7" :key="i" :value="i * 10">{{ i * 10 }}{{ $t('才') }}</option>
+                  <option v-for="i in 7" :key="i" :value="i * 10">{{ i * 10 }}{{ $t('代') }}</option>
                 </select>
                 <div v-if="errors && errors['cases.patient_age']" class="error invalid-feedback">{{ errors['cases.patient_age'][0] }}</div>
             </div>

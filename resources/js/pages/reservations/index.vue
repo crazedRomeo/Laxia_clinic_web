@@ -49,7 +49,7 @@
                 </td>
                 <td v-else></td>
                 <td>
-                  <small>{{ rsv.patient.kana }}</small>
+                  {{ rsv.patient.kana }}
                 </td>
                 <td>{{ gender_types[rsv.patient.gender] }}</td>
                 <td>{{ rsv.patient.phone_only_number | formatTelephone }}</td>
@@ -129,7 +129,12 @@
               </div>
               <div class="time-picker-content">
                 <span>{{ $t('診断時間') }}</span>
-                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15"></vue-timepicker>
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15">
+                  <template v-slot:dropdownButton>
+                    <img src="/img/polygon.svg" /> 
+                  </template>
+                </vue-timepicker>
+
                 <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
               </div>
             </div>
@@ -199,7 +204,10 @@ export default {
       attrs: [
         {
           key: 'today',
-          highlight: true,
+          highlight: {
+            color: 'gray',
+            fillMode: 'light',
+          },
           dates: new Date(),
         },
       ],

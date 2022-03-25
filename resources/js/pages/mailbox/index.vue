@@ -87,7 +87,7 @@
           </div>
         <div class="item-center">
             <button class="btn btn-chat-confirm" @click="showRsvModal()">日時を確定</button>
-            <button class="btn btn-danger" @click="cancelReservation()">予約をキャンセル</button>
+            <button class="btn btn-danger" @click="showDelModal()">予約をキャンセル</button>
         </div>
       </div>
     </div>
@@ -183,6 +183,31 @@
         <button type="button" class="btn btn-primary" @click="handleConfirmRsv">{{ $t('予約を確定する') }}</button>
       </div>
     </form-modal>
+    <form-modal
+        ref="delModal"
+        id="del-modal"
+        :title="delModalInfo.title"
+        >
+          <div class="main-modal">
+            <div class="auth--wrapper">
+              <div class="auth-form">
+                <h2 class="auth-title" >
+                  {{ $t('予約情報を削除しますか？') }}
+                </h2>
+                <div class="auth-title-tip">
+                  <template>
+                    予約情報を削除してよろしいでしょうか？<br>
+                    削除すると復元することはできません。
+                  </template>
+                </div>
+              </div>
+              <div class="btn-grp">
+                <button type="button" class="btn btn-cancel" @click="cancelModal()">キャンセル</button>
+                <button type="button" class="btn btn-danger" @click="cancelReservation()">削除する</button>
+              </div>
+            </div>
+          </div>
+      </form-modal>
   </div>
 </template>
 
@@ -218,10 +243,17 @@ export default {
         attrs: [
           {
             key: 'today',
-            highlight: true,
+            highlight: {
+              color: 'gray',
+              fillMode: 'light',
+            },
             dates: new Date(),
           },
         ],
+        delModalInfo: {
+        title: '',
+        confirmBtnTitle: '',
+      },
     }
   },
 
@@ -272,6 +304,13 @@ export default {
       this.$refs.modal.show()
     },
 
+    showDelModal() {
+      this.$refs.delModal.show()
+    },
+
+    cancelModal(){
+      this.$refs.delModal.hide()
+    },
     scrollToEnd() {
       setTimeout(() => {
         var container = this.$el.querySelector("#chat-main");
@@ -526,4 +565,17 @@ export default {
 </script>
 
 <style scoped>
+  * >>> #del-modal .form-modal-header{
+    display: none !important;
+    
+  }
+  * >>> #del-modal.form-modal-wrapper{
+    top: 130px;
+    left: 25vw;
+    width: 50vw;
+    align-items: center;
+  }
+  #del-modal .main-modal{
+    padding: 0;
+  }
 </style>

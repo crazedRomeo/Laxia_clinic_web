@@ -665,7 +665,7 @@ export default {
     
   }
   * >>> #del-confirm-modal.form-modal-wrapper{
-    top: 0px;
+    top: 130px;
     left: 25vw;
     width: 50vw;
     align-items: center;

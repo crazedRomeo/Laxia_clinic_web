@@ -690,6 +690,14 @@ button:focus {
 		font-weight: normal;
 		text-align: center;
 	}
+	thead{
+		tr{
+			&:hover{
+				background-color: white;
+				cursor: default;
+			}
+		}
+	}
 	tr {
 		border-bottom: 1px solid #E1E9F1;
 
@@ -704,6 +712,12 @@ button:focus {
 				margin-right: 10px;
 			}
 		}
+	}
+}
+.history-list{
+	&:hover{
+		background-color: white !important;
+		cursor: default !important;
 	}
 }
 .normal-btn {
@@ -968,7 +982,7 @@ button:focus {
 			-webkit-appearance: none;
     		background: url(/img/polygon.svg) no-repeat right #fff;
     		background-position: calc(100% - 10px) 1em, calc(100% - 16px) calc(1em + 2px), 100% 0;
-    		background-size: 11px 10px, 3px 1px, 2.5em 2.5em;
+    		// background-size: 11px 10px, 3px 1px, 2.5em 2.5em;
 		}
 	}
 }
@@ -982,8 +996,11 @@ button:focus {
 			outline: none !important;
 		}
 	}
+	.clear-btn{
+		padding-top: 5px !important;
+	}
 	>.vue__time-picker .controls .char{
-		font-size: 2em !important;
+		font-size: 20px !important;
 	}
 	>.is-invalid input{
 		border-color: red !important;
@@ -2469,6 +2486,9 @@ input::placeholder, textarea::placeholder {
 	padding-bottom: 5px;
 }
 
+.dropdown-btn{
+	padding-right: 11px !important;
+}
 .noti-dropdown-btn {
 	position: relative;
 
@@ -2719,7 +2739,9 @@ i.i-login-valid{
 		width: 28%;
 	}
 	div:first-child{
-		width: initial;
+		width: 10%;
+		text-align: center;
+		margin-top: 25px;
 	}
 	div:nth-child(2){
 		margin-right: 10px;
@@ -3321,7 +3343,7 @@ input[type=number] {
 	.staff-one > div.job-item {
 		padding-top: 1.5rem;
 	}
-	#del-confirm-modal.form-modal-wrapper{
+	#del-confirm-modal.form-modal-wrapper, #del-modal.form-modal-wrapper{
 		left: 0 !important;
    		width: 100vw !important;
 	}

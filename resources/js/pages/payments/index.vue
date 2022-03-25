@@ -25,7 +25,7 @@
               <td>{{ item.visit_date | formatDateWithDay }}</td>
               <td>{{ item.start_time_without_sec }}</td>
               <td>
-                <small>{{ item.patient.kana }}</small>
+              {{ item.patient.kana }}
               </td>
               <td>{{ item.patient.gender && gender_types[item.patient.gender] }}</td>
               <td>{{ item.doctor ? item.doctor.name : '' }}</td>
@@ -319,7 +319,10 @@ export default {
       attrs: [
         {
           key: 'today',
-          highlight: true,
+          highlight: {
+            color: 'gray',
+            fillMode: 'light',
+          },
           dates: new Date(),
         },
       ],

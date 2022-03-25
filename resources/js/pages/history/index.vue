@@ -18,9 +18,9 @@
             </tr>
           </thead>
           <tbody v-if="payments.length > 0">
-            <tr v-for="payment in payments" :key="payment.id">
+            <tr class="history-list" v-for="payment in payments" :key="payment.id">
               <td>
-                <small>{{ payment.reservation.patient.kana }}</small>
+              {{ payment.reservation.patient.kana }}
               </td>
               <td>{{ payment.reservation.visit_date | formatDateWithDay }}
                   <br>
