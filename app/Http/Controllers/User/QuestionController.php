@@ -44,7 +44,7 @@ class QuestionController extends Controller
     {
         $params = $request->all();
         $questions = $this->service->paginate($params);
-        
+
         return response()->json([
             'status' => 1,
             'data' => [
@@ -104,7 +104,7 @@ class QuestionController extends Controller
             \Log::error($e->getMessage());
 
             return response()->json([
-                'message' => 'メニューを登録できません。'
+                'message' => '質問を登録できません。'
             ], 500);
         }
         return response()->json([

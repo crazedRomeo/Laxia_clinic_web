@@ -80,4 +80,25 @@ class QuestionService
   public function deleteAnswers($attributes, $where)
   {
   }
+
+  public function store($attributes, $addtional = [])
+  {
+    $questionAttrs = Arr::get($attributes, 'questions');
+    $cateArr = Arr::get($attributes, 'categories');
+    $mediaArr = Arr::get($attributes, 'medias');
+
+    $data = array_merge($questionAttrs, $addtional);
+    $question = Question::create($data);
+
+    $question->categories()->sync($cateArr);
+
+    foreach ($mediaArr as $id)
+    {
+      $media = Media::find($id);
+      if (!$media) continue;
+      $question->medias()->save($media);
+    }
+
+    return $question;
+  }
 }
