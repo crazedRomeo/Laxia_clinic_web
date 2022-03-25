@@ -33,7 +33,7 @@ class CaseController extends Controller
     {
         return response()->json([
             'case' => $case->load([
-                'menu'
+                'clinic', 'categories', 'menus', 'doctor'
             ])
         ], 200);
     }

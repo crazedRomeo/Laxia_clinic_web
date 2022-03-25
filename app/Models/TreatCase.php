@@ -22,6 +22,7 @@ class TreatCase extends Model
      */
     protected $fillable = [
       'clinic_id',
+      'doctor_id',
       'name',
       'patient_age',
       'patient_gender',
@@ -42,6 +43,11 @@ class TreatCase extends Model
         return $this->belongsTo(Clinic::class);
     }
 
+    public function doctor()
+    {
+      return $this->belongsTo(Doctor::class);
+    }
+  
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'case_categories', 'case_id', 'category_id');

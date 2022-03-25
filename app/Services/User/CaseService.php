@@ -17,14 +17,14 @@ class CaseService
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = TreatCase::query()
-      ->with(['clinic', 'category', 'menu', 'stuff']);
+      ->with(['clinic', 'categories', 'menus', 'doctor']);
 
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
     }
 
-    if (isset($search['stuff_id']) && $search['stuff_id'] != '-1') {
-      $query->where('stuff_id', $search['stuff_id']);
+    if (isset($search['doctor_id']) && $search['doctor_id'] != '-1') {
+      $query->where('doctor_id', $search['doctor_id']);
     }
 
     if (isset($search['category_id']) && $search['category_id'] != '-1') {
