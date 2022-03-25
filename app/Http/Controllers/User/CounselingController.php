@@ -57,7 +57,7 @@ class CounselingController extends Controller
                     'medias',
                     'questions',
                     'clinic',
-                    'stuff',
+                    'doctor',
                 ])
             ]
         ], 200);
@@ -70,7 +70,7 @@ class CounselingController extends Controller
         $validator = Validator::make($request->all(), [
             'counselings' => 'required|array',
             'counselings.clinic_id' => 'required|integer|exists:clinics,id',
-            'counselings.stuff_id' => 'required|integer|exists:stuffs,id',
+            'counselings.doctor_id' => 'required|integer|exists:doctors,id',
             'counselings.counseling_date' => 'required|date',
             'counselings.content' => 'required|string',
             'counselings.reason' => 'nullable|string',

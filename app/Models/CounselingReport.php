@@ -22,7 +22,7 @@ class CounselingReport extends Model
   protected $fillable = [
     'patient_id',
     'clinic_id',
-    'stuff_id',
+    'doctor_id',
     'counseling_date',
     'content',
     'reason',
@@ -39,7 +39,7 @@ class CounselingReport extends Model
     'clinic_name',
     'patient_nickname',
     'patient_photo',
-    'stuff_name',
+    'doctor_name',
     // 'favoriters_count',
     'is_favorite',
   ];
@@ -68,10 +68,10 @@ class CounselingReport extends Model
     return null;
   }
 
-  public function getStuffNameAttribute()
+  public function getDoctorNameAttribute()
   {
-    if ($this->stuff()->count()) {
-      return $this->stuff()->first()->name;
+    if ($this->doctor()->count()) {
+      return $this->doctor()->first()->name;
     }
     return null;
   }
@@ -158,9 +158,9 @@ class CounselingReport extends Model
     return $this->belongsToMany(Category::class, 'counseling_categories', 'counseling_id', 'category_id');
   }
 
-  public function stuff()
+  public function doctor()
   {
-    return $this->belongsTo(Stuff::class);
+    return $this->belongsTo(doctor::class);
   }
 
   public function favoriters()
