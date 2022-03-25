@@ -49,6 +49,11 @@ class Doctor extends Model
     'name',
     'email',
     'role',
+    'likes_count',
+    'is_like',
+    'favoriters_count',
+    'is_favorite',
+    'views_count',
   ];
 
   protected $hidden = [
@@ -161,5 +166,52 @@ class Doctor extends Model
   public function viewers()
   {
     return $this->morphToMany(Patient::class, 'viewable', 'viewables','viewable_id', 'patient_id');
+  }
+
+  public function likers()
+  {
+      return $this->morphToMany(Patient::class, 'likeable');
+  }
+
+  public function getLikesCountAttribute()
+  {
+      return $this->likers()->count();
+  }
+
+  public function getIsLikeAttribute()
+  {
+      $currentUser = auth()->guard('patient')->user();
+      if (!$currentUser || !isset($currentUser->patient)) return false;
+      $likerIds = $this->likers()
+        ->get()
+        ->pluck('id')
+        ->toArray();
+      return in_array($currentUser->patient->id, $likerIds);
+  }
+  
+  public function favoriters()
+  {
+    return $this->morphToMany(Patient::class, 'favoriable', 'favorites');
+  }
+
+  public function getFavoritersCountAttribute()
+  {
+    return $this->favoriters()->count();
+  }
+
+  public function getIsFavoriteAttribute()
+  {
+    $currentUser = auth()->guard('patient')->user();
+    if (!$currentUser || !($currentUser->patient)) return false;
+    $favoriterIds = $this->favoriters()
+      ->get()
+      ->pluck('id')
+      ->toArray();
+    return in_array($currentUser->patient->id, $favoriterIds);
+  }
+  
+  public function getViewsCountAttribute()
+  {
+    return $this->viewers()->count();
   }
 }
