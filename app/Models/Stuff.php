@@ -37,7 +37,7 @@ class Stuff extends Model
     'clinic_name',
     'job_name',
     'diaries_count',
-    'counseling_count',
+    // 'counseling_count',
     // 'cases_count',
     'likes_count',
     'is_like',
@@ -81,15 +81,15 @@ class Stuff extends Model
     return $this->diaries()->count();
   }
 
-  public function counseling()
-  {
-    return $this->hasMany(CounselingReport::class);
-  }
+  // public function counseling()
+  // {
+  //   return $this->hasMany(CounselingReport::class);
+  // }
 
-  public function getCounselingCountAttribute()
-  {
-    return $this->counseling()->count();
-  }
+  // public function getCounselingCountAttribute()
+  // {
+  //   return $this->counseling()->count();
+  // }
 
   // いいめ
   public function likers()

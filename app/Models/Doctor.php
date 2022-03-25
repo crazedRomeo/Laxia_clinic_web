@@ -157,4 +157,9 @@ class Doctor extends Model
   public function diaries() {
     return $this->hasMany(Diary::class);
   }
+
+  public function viewers()
+  {
+    return $this->morphToMany(Patient::class, 'viewable', 'viewables','viewable_id', 'patient_id');
+  }
 }
