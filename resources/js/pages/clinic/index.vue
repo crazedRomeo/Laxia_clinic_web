@@ -240,19 +240,38 @@
             <div>
               <small>{{ $t('住所') }}</small>
               <div class="clinic-info--address-block">
-                <select v-model="form.clinic.pref_id">
+                <!-- <select v-model="form.clinic.pref_id">
                   <option>北海道</option>
-                </select>
+                </select> -->
+                <c-select
+                  :options="addressOptions"
+                  :textkey="'text'"
+                  :valkey="'val'"
+                  :emptyable="true"
+                  class="select"
+                  ref="address"
+                  @change="selectedAdress"
+              />
                 <i class="bi bi-chevron-left"></i>
-                <select v-model="form.clinic.city_id">
-                  <option></option>
-                  <option></option>
-                </select>
+                <c-select
+                  :options="addressOptions"
+                  :textkey="'text'"
+                  :valkey="'val'"
+                  :emptyable="true"
+                  class="select"
+                  ref="address"
+                  @change="selectedAdress"
+              />
                 <i class="bi bi-chevron-left"></i>
-                <select v-model="form.clinic.town_id">
-                  <option></option>
-                  <option></option>
-                </select>
+                <c-select
+                  :options="addressOptions"
+                  :textkey="'text'"
+                  :valkey="'val'"
+                  :emptyable="true"
+                  class="select"
+                  ref="address"
+                  @change="selectedAdress"
+              />
               </div>
               <div><input type="text" v-model="form.clinic.addr02" placeholder="例：ABCビル 3階" :class="{'is-invalid' : errors && errors['clinic.addr02'] }"></div>
               <div v-if="errors && errors['clinic.addr02']" class="error invalid-feedback">{{ errors['clinic.addr02'][0] }}</div>
@@ -291,18 +310,36 @@
             </div>
             <div>
               <span>開始時間</span>
-              <select>
+              <!-- <select>
                 <option></option>
                 <option>0:00</option>
-              </select>
+              </select> -->
+              <c-select
+                  :options="startTimeOptions"
+                  :textkey="'text'"
+                  :valkey="'val'"
+                  :emptyable="true"
+                  class="select"
+                  ref="startTime"
+                  @change="selectedStartTime"
+              />
             </div>
             <span class="p-t-20">~</span>
             <div>
               <span>終了時間</span>
-              <select>
+              <!-- <select>
                 <option></option>
                 <option>0:00</option>
-              </select>
+              </select> -->
+              <c-select
+                  :options="startTimeOptions"
+                  :textkey="'text'"
+                  :valkey="'val'"
+                  :emptyable="true"
+                  class="select"
+                  ref="endTime"
+                  @change="selectedEndTime"
+              />
             </div>
           </div>
           <div class="form-group">
@@ -391,6 +428,27 @@ export default {
       statusOptions: [
         {'val': 0, 'text': '営業日'},
         {'val': 1, 'text': '定休日'},
+      ],
+      addressOptions: [
+        {'val': 0, 'text': '北海道'},
+      ],
+      startTimeOptions: [
+        {'val': 0, 'text': '0:00'},
+        {'val': 1, 'text': '0:30'},
+        {'val': 2, 'text': '1:00'},
+        {'val': 3, 'text': '1:30'},
+        {'val': 4, 'text': '2:00'},
+        {'val': 5, 'text': '2:30'},
+        {'val': 6, 'text': '3:00'},
+        {'val': 7, 'text': '3:30'},
+        {'val': 8, 'text': '4:00'},
+        {'val': 9, 'text': '5:30'},
+        {'val': 10, 'text': '6:00'},
+        {'val': 11, 'text': '7:00'},
+        {'val': 12, 'text': '7:30'},
+        {'val': 13, 'text': '8:00'},
+        {'val': 14, 'text': '8:30'},
+        {'val': 15, 'text': '9:00'},
       ]
     }
   },
@@ -561,7 +619,19 @@ export default {
 
     selectedStatus01(selected_option) {
       console.log(selected_option);
-    }
+    },
+
+    selectedAdress(selected_option) {
+      console.log(selected_option);
+    },
+
+    selectedStartTime(selected_option) {
+      console.log(selected_option);
+    },
+
+    selectedEndTime(selected_option) {
+      console.log(selected_option);
+    },
   }
 }
 </script>

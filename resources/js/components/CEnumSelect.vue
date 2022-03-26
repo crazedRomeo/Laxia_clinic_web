@@ -17,9 +17,9 @@
         v-for="(name, id) in options"
         :key="id"
         @click="
-          selected = parseInt(id);
+          selected = (id);
           open = false;
-          $emit('change', parseInt(id));
+          $emit('change', (id));
         "
       >
         {{ name }}
@@ -36,7 +36,7 @@ export default {
       required: true,
     },
     default: {
-      type: Number,
+      type: [String, Number],
       required: false,
       default: null,
     },

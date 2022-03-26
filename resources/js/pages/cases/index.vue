@@ -206,22 +206,37 @@
           <div class="form-group row">
             <div class="col-6">
                 <small>{{ $t('年齢') }}</small>
-                <select v-model="form.cases.patient_age" class="form-control" :class="{'is-invalid' : errors && errors['cases.patient_age'] }">
+                <!-- <select v-model="form.cases.patient_age" class="form-control" :class="{'is-invalid' : errors && errors['cases.patient_age'] }">
                   <option></option>
                   <option v-for="i in 7" :key="i" :value="i * 10">{{ i * 10 }}{{ $t('代') }}</option>
-                </select>
+                </select> -->
+                <c-select
+                  :options="ageOptions"
+                  :textkey="'text'"
+                  :valkey="'val'"
+                  :emptyable="true"
+                  class="select"
+                  ref="ageSelect"
+                  @change="selectedAge"
+              />
                 <div v-if="errors && errors['cases.patient_age']" class="error invalid-feedback">{{ errors['cases.patient_age'][0] }}</div>
             </div>
             <div class="col-6">
               <small>{{ $t('性別') }}</small>
-              <select v-model="form.cases.patient_gender" class="form-control" :class="{'is-invalid' : errors && errors['cases.patient_gender'] }">
-                <!-- <option></option> -->
+              <!-- <select v-model="form.cases.patient_gender" class="form-control" :class="{'is-invalid' : errors && errors['cases.patient_gender'] }">
                 <option v-for="(name, id) in genders" :key="id" :value="id">{{ name }}</option>
-              </select>
+              </select> -->
+              <c-enum-select
+                  :options="genders"
+                  :emptyable="true"
+                  :default="form.cases.patient_gender"
+                  class="select"
+                  ref="genderSelect"
+                  @change="selectedGender"
+                />
               <div v-if="errors && errors['cases.patient_gender']" class="error invalid-feedback">{{ errors['cases.patient_gender'][0] }}</div>
             </div>
           </div>
-
           <div class="create-case-text">
             <small>{{ $t('施術の解説') }}</small>
             <textarea v-model="form.cases.case_description" class="form-control" :class="{'is-invalid' : errors && errors['cases.case_description'] }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
@@ -409,7 +424,16 @@ export default {
         suppressScrollY: false,
         suppressScrollX: true,
         wheelPropagation: false
-      }
+      },
+      ageOptions: [
+        {'val': 10, 'text': '10代'},
+        {'val': 20, 'text': '20代'},
+        {'val': 30, 'text': '30代'},
+        {'val': 40, 'text': '40代'},
+        {'val': 50, 'text': '50代'},
+        {'val': 60, 'text': '60代'},
+        {'val': 70, 'text': '70代'},
+      ]
     }
   },
 
@@ -595,6 +619,9 @@ export default {
         title: '症例を追加する',
         confirmBtnTitle: '症例を追加する'
       }      
+
+      if(this.$refs.genderSelect) this.$refs.genderSelect.set(this.form.cases.patient_gender);
+      if(this.$refs.ageSelect) this.$refs.ageSelect.set(this.form.cases.patient_age);
       this.$refs.modal.show();
     },
 
@@ -785,6 +812,14 @@ export default {
     scrollHanle(evt) {
       // console.log(evt)
     },
+
+    selectedAge(selected_option) {
+      this.form.cases.patient_age = selected_option ? selected_option.val : null;
+    },
+
+    selectedGender(selected_option) {
+      this.form.cases.patient_gender = selected_option;
+    }
   }
 }
 </script>
