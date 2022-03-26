@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Services\User\RsvService;
 use App\Services\PatientInfoService;
+use App\Services\PatientService;
 use App\Models\Reservation;
 use App\Models\PatientInfo;
 use App\Http\Resources\User\Reservation as ReservationResource;
@@ -18,12 +19,24 @@ class ReservationController extends Controller
      */
     protected $service;
 
+    /**
+     * @var PatientInfoService
+     */
+    protected $patientInfoService;
+
+    /**
+     * @var PatientService
+     */
+    protected $patientService;
+
     public function __construct(
         RsvService $service,
-        PatientInfoService $patientInfoService
+        PatientInfoService $patientInfoService,
+        PatientService $patientService
     ) {
         $this->service = $service;
         $this->patientInfoService = $patientInfoService;
+        $this->patientService = $patientService;
     }
 
     public function index(Request $request)
@@ -49,7 +62,8 @@ class ReservationController extends Controller
         if (!$currentUser || !($currentUser->patient)) return null;
         return response()->json([
             'status' => 1,
-            'data' => $currentUser->patient->info
+            // 'data' => $currentUser->patient->info
+            'data' => $currentUser->patient
         ]);
     }
 
@@ -61,20 +75,20 @@ class ReservationController extends Controller
         $validator = Validator::make($request->all(), [
             'rsv' => 'required|array',
             'rsv.clinic_id' => 'required|integer|exists:clinics,id',
-            'rsv.stuff_id' => 'nullable|integer|exists:stuffs,id',
-            'rsv.source' => 'required|integer',
+            'rsv.doctor_id' => 'nullable|integer|exists:doctors,id',
+            'rsv.type' => 'required|integer',
             'rsv.hope_treat' => 'required|integer',
-            'rsv.is_visited' => 'required|integer',
+            // 'rsv.is_visited' => 'required|integer',
             'rsv.note' => 'nullable|string',
             'rsv.use_point' => "nullable|integer|max:{$patient->point}",
-            'categories' => 'required|array',
+            // 'categories' => 'required|array',
             'time' => 'required|array',
             'time.*.date' => 'nullable|date',
             'time.*.start_time' => 'nullable|date_format:H:i',
             'time.*.end_time' => 'nullable|date_format:H:i',
             'info' => 'required|array',
-            'info.name01' => 'required|string',
-            'info.name02' => 'required|string',
+            // 'info.name01' => 'required|string',
+            // 'info.name02' => 'required|string',
             'info.kana01' => 'required|string',
             'info.kana02' => 'required|string',
             'info.gender' => 'required|string',
@@ -92,8 +106,8 @@ class ReservationController extends Controller
 
         \DB::beginTransaction();
         try {
-            $patientInfo = $this->patientInfoService->store($request->all(), ['patient_id' => $patient->id]);
-            $rsv = $this->service->store($request->all(), ['patient_info_id' => $patientInfo->id]);
+            $patient = $this->patientService->update($request->all(), ['id' => $patient->id]);
+            $rsv = $this->service->store($request->all(), ['patient_id' => $patient->id]);
 
             \DB::commit();
         } catch (\Throwable $e) {
@@ -109,7 +123,7 @@ class ReservationController extends Controller
             'status' => 1,
             'data' => $rsv->load([
                 'hopeTimes',
-                'hopeCategories',
+                // 'hopeCategories',
             ])
         ], 200);
     }

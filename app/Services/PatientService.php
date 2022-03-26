@@ -61,4 +61,15 @@ class PatientService
           ->where('follow_id', $patientId);
       })->paginate($per_page);
   }
+
+  public function update($attributes, $where) {
+    $infoAttrs = Arr::get($attributes, 'info');
+    $data = array_merge($infoAttrs, $where);
+    
+    $data['kana'] = $data['kana01'] . $data['kana02'];
+    unset($data['kana01']);
+    unset($data['kana02']);
+
+    return Patient::updateOrCreate($where, $data);
+  }
 }

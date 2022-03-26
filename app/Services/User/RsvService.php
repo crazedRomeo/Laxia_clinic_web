@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\User;
 
+use App\Enums\Reservation\Status;
 use Illuminate\Support\Arr;
 use App\Models\Reservation;
 use App\Models\Payment;
@@ -96,12 +97,12 @@ class RsvService
   {
     $rsvAttrs = Arr::get($attributes, 'rsv');
     
-    $addtional['status'] = 5;
+    $addtional['status'] = Status::NOTSUPPORTED;
     $data = array_merge($rsvAttrs, $addtional);
     $rsv = Reservation::create($data);
 
-    $categoryAttrs = Arr::get($attributes, 'categories');
-    $rsv->hopeCategories()->sync($categoryAttrs);
+    // $categoryAttrs = Arr::get($attributes, 'categories');
+    // $rsv->hopeCategories()->sync($categoryAttrs);
 
     $timeAttrs = Arr::get($attributes, 'time');
     foreach ($timeAttrs as $item)

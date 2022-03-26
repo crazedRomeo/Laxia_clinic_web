@@ -74,4 +74,9 @@ class Reservation extends Model
   {
     return $this->hasOne(Mailbox::class);
   }
+
+  // public function hopeCategories()
+  // {
+  //   return $this->belongsToMany(TreatCategory::class, 'reservation_categories', 'reservation_id', 'category_id');
+  // }
 }

@@ -76,8 +76,8 @@ class RsvService
     $data = array_merge($rsvAttrs, $addtional);
     $rsv = Reservation::create($data);
 
-    $categoryAttrs = Arr::get($attributes, 'categories');
-    $rsv->hopeCategories()->sync($categoryAttrs);
+    // $categoryAttrs = Arr::get($attributes, 'categories');
+    // $rsv->hopeCategories()->sync($categoryAttrs);
 
     $timeAttrs = Arr::get($attributes, 'time');
     foreach ($timeAttrs as $item)
