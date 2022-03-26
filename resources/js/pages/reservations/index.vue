@@ -82,6 +82,7 @@
     <form-modal
       ref="modal"
       :title="$t('予約内容')"
+      @cancel="clearRsvModal"
       >
       <div v-if="form && selected" class="reserve-content">
         <ul>
@@ -156,7 +157,11 @@
                   :options="doctors"
                   :textkey="'kata_name'"
                   :valkey="'id'"
+                  :emptyable="true"
+                  :default="form.reservations.doctor_id"
                   class="select"
+                  ref="doctorSelect"
+                  @change="selectedDoctor"
                 />
                 <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
               </div>
@@ -301,7 +306,12 @@ export default {
           hope_treat: this.selected.hope_treat,
         }
       }
-      this.$refs.modal.show()
+
+      this.$refs.modal.show();
+    },
+
+    clearRsvModal() {
+      this.$refs.doctorSelect.clear();
     },
 
     handleConfirmRsv() {
@@ -358,6 +368,10 @@ export default {
 
     getDate(date_str) {
       return moment(String(date_str)).format('YYYY-MM-DD');
+    },
+
+    selectedDoctor(selected_option) {
+      this.form.reservations.doctor_id = selected_option ? selected_option.id : null;
     }
   },
 

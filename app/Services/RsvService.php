@@ -64,7 +64,7 @@ class RsvService
 
   public function get($id)
   {
-    return Reservation::with(['patient', 'doctor', 'clinic', 'payments'])
+    return Reservation::with(['patient', 'doctor', 'clinic', 'payments', 'mailbox'])
       ->findOrFail($id);
   }
 
@@ -101,7 +101,7 @@ class RsvService
     $rsv->fill($rsvAttrs);
     $rsv->save();
 
-    return $rsv->load(['patient', 'doctor', 'clinic', 'payments']);
+    return $rsv->load(['patient', 'doctor', 'clinic', 'payments', 'mailbox']);
   }
 
   public function updateStatus($id, $status)
@@ -110,7 +110,7 @@ class RsvService
     $rsv->status = $status;
     $rsv->save();
 
-    return $rsv->load(['patient', 'doctor', 'clinic', 'payments']);
+    return $rsv->load(['patient', 'doctor', 'clinic', 'payments', 'mailbox']);
   }
 
   public function updatePayment($attrs, $where)
@@ -122,7 +122,7 @@ class RsvService
       $payAttrs
     );
 
-    return $rsv->load(['patient', 'doctor', 'clinic', 'payments']);
+    return $rsv->load(['patient', 'doctor', 'clinic', 'payments', 'mailbox']);
   }
 
   public function getPatientInfo($patient_id)

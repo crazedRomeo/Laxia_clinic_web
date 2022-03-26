@@ -1,16 +1,25 @@
 <template>
   <div class="custom-select" :tabindex="tabindex" @blur="open = false">
     <div class="selected" :class="{ open: open }" @click="open = !open">
-      {{ selected[textkey] }}
+      {{ selected == null? '': selected[textkey] }}
     </div>
     <div class="items" :class="{ selectHide: !open }">
+      <div
+        v-if="emptyable"
+        @click="
+          selected = null;
+          open = false;
+          $emit('change', null);
+        "
+        class="empty-item"
+        ></div>
       <div
         v-for="(option) of options"
         :key="option[valkey]"
         @click="
           selected = option;
           open = false;
-          $emit('input', option);
+          $emit('change', option);
         "
       >
         {{ option[textkey] }}
@@ -27,7 +36,7 @@ export default {
       required: true,
     },
     default: {
-      type: String,
+      type: Number,
       required: false,
       default: null,
     },
@@ -43,20 +52,28 @@ export default {
     textkey: {
       type: String,
       required: true,
+    },
+    emptyable: {
+      type: Boolean,
+      required: false,
+      default: true,
     }
   },
   data() {
     return {
       selected: this.default
-        ? this.default
-        : this.options.length > 0
-        ? this.options[0]
+        ? this.options.find(el => el.id == this.default)
         : null,
       open: false,
     };
   },
   mounted() {
-    this.$emit("input", this.selected);
+    this.$emit("change", this.selected);
+  },
+  methods: {
+    clear() {
+      if(this.emptyable) this.selected = null;
+    },
   },
 };
 </script>
@@ -114,6 +131,10 @@ export default {
   padding: 5px 0px 5px 8px;
   cursor: pointer;
   user-select: none;
+}
+
+.custom-select .items div.empty-item {
+  min-height: 35px;
 }
 
 .custom-select .items div:hover {
