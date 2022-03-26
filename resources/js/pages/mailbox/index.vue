@@ -550,7 +550,8 @@ export default {
 
     handleConfirmRsv() {
       this.$store.dispatch('state/setIsLoading')
-      this.reservation_form.reservations.start_time = this.reservation_form.reservations.start_time.HH + ':' + this.reservation_form.reservations.start_time.mm;
+
+      this.reservation_form.reservations.start_time = this.getTime(this.reservation_form.reservations.start_time);
       this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
 
       axios.put(`/api/clinic/reservations/${this.reservation.id}`, this.reservation_form)
@@ -571,7 +572,7 @@ export default {
         .catch(error => {
           this.errors = { ...error.response.data.errors }
           this.$store.dispatch('state/removeIsLoading')
-        })
+        });
     },
 
     cancelReservation() {
@@ -592,7 +593,14 @@ export default {
       .catch(error => {
         this.$store.dispatch('state/removeIsLoading')
       })
-    }
+    },
+
+    getTime(time_obj) {
+      if(time_obj.HH)
+        return time_obj.HH + ':' + time_obj.mm;
+      else
+        return time_obj;
+    },
   },
 }
 </script>
