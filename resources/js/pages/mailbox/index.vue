@@ -102,6 +102,7 @@
     <form-modal
       ref="modal"
       :title="$t('予約内容')"
+      @cancel="clearRsvModal"
       >
       <div v-if="reservation_form && reservation" class="reserve-content">
         <ul>
@@ -162,10 +163,20 @@
             <div class="rsv-main-content2">
               <div>
                 <span>{{ $t('医師') }}</span>
-                <select v-model="reservation_form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
+                <!-- <select v-model="reservation_form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
                   <option></option>
                   <option v-for="(doctor) in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.kata_name }}</option>
-                </select>
+                </select> -->
+                <c-select
+                  :options="doctors"
+                  :textkey="'kata_name'"
+                  :valkey="'id'"
+                  :emptyable="true"
+                  :default="reservation_form.reservations.doctor_id"
+                  class="select"
+                  ref="doctorSelect"
+                  @change="selectedDoctor"
+                />
                 <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
               </div>
               <div>
@@ -301,12 +312,17 @@ export default {
           hope_treat: this.reservation.hope_treat,
         }
       }
-
+      console.log('test');
+      console.log('doctor_id==>', this.reservation.doctor_id);
       this.$refs.modal.show()
     },
 
     showDelModal() {
       this.$refs.delModal.show()
+    },
+
+    clearRsvModal() {
+      this.$refs.doctorSelect.clear();
     },
 
     cancelModal(){
@@ -514,6 +530,10 @@ export default {
 
     handleHideImageFullscreen() {
         this.fullscreen = false
+    },
+
+    selectedDoctor(selected_option) {
+      this.reservation_form.reservations.doctor_id = selected_option ? selected_option.id : null;
     },
     
     handleConfirmRsv() {
