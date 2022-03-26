@@ -181,10 +181,18 @@
               </div>
               <div>
                 <span>{{ $t('予約内容') }}</span>
-                <select v-model="reservation_form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
+                <!-- <select v-model="reservation_form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
                   <option></option>
                   <option v-for="(name, id) in hope_treat_types" :key="id" :value="id">{{ name }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="hope_treat_types"
+                  :emptyable="true"
+                  :default="reservation_form.reservations.hope_treat"
+                  class="select"
+                  ref="hopeTreatSelect"
+                  @change="selectedHopeTreat"
+                />
                 <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
               </div>
             </div>
@@ -312,8 +320,8 @@ export default {
           hope_treat: this.reservation.hope_treat,
         }
       }
-      console.log('test');
-      console.log('doctor_id==>', this.reservation.doctor_id);
+      
+      if(this.$refs.doctorSelect) this.$refs.doctorSelect.set(this.reservation_form.reservations.doctor_id);
       this.$refs.modal.show()
     },
 
@@ -322,7 +330,7 @@ export default {
     },
 
     clearRsvModal() {
-      this.$refs.doctorSelect.clear();
+      // this.$refs.doctorSelect.clear();
     },
 
     cancelModal(){
@@ -536,6 +544,10 @@ export default {
       this.reservation_form.reservations.doctor_id = selected_option ? selected_option.id : null;
     },
     
+    selectedHopeTreat(selected_option) {
+      this.reservation_form.reservations.hope_treat = selected_option;
+    },
+
     handleConfirmRsv() {
       this.$store.dispatch('state/setIsLoading')
       this.reservation_form.reservations.start_time = this.reservation_form.reservations.start_time.HH + ':' + this.reservation_form.reservations.start_time.mm;

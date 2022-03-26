@@ -387,7 +387,6 @@ export default {
 
     selectedHopeTreat(selected_option) {
       this.form.reservations.hope_treat = selected_option;
-      console.log(selected_option);
     }
   },
 
