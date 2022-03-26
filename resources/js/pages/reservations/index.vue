@@ -148,10 +148,16 @@
             <div class="rsv-main-content2">
               <div>
                 <span>{{ $t('医師') }}</span>
-                <select v-model="form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
+                <!-- <select v-model="form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
                   <option></option>
                   <option v-for="(doctor) in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.kata_name }}</option>
-                </select>
+                </select> -->
+                <c-select
+                  :options="doctors"
+                  :textkey="'kata_name'"
+                  :valkey="'id'"
+                  class="select"
+                />
                 <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
               </div>
               <div>
