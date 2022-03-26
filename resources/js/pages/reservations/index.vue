@@ -167,10 +167,18 @@
               </div>
               <div>
                 <span>{{ $t('予約内容') }}</span>
-                <select v-model="form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
+                <!-- <select v-model="form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
                   <option></option>
                   <option v-for="(name, id) in hope_treat_types" :key="id" :value="id">{{ name }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="hope_treat_types"
+                  :emptyable="true"
+                  :default="form.reservations.hope_treat"
+                  class="select"
+                  ref="hopeTreatSelect"
+                  @change="selectedHopeTreat"
+                />
                 <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
               </div>
             </div>
@@ -307,11 +315,14 @@ export default {
         }
       }
 
+      if(this.$refs.doctorSelect) this.$refs.doctorSelect.set(this.form.reservations.doctor_id);
+      if(this.$refs.hopeTreatSelect) this.$refs.hopeTreatSelect.set(this.form.reservations.hope_treat);
       this.$refs.modal.show();
     },
 
     clearRsvModal() {
-      this.$refs.doctorSelect.clear();
+      // this.$refs.doctorSelect.clear();
+      // this.$refs.hopeTreatSelect.clear();
     },
 
     handleConfirmRsv() {
@@ -372,6 +383,11 @@ export default {
 
     selectedDoctor(selected_option) {
       this.form.reservations.doctor_id = selected_option ? selected_option.id : null;
+    },
+
+    selectedHopeTreat(selected_option) {
+      this.form.reservations.hope_treat = selected_option;
+      console.log(selected_option);
     }
   },
 

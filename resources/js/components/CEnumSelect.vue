@@ -1,7 +1,7 @@
 <template>
   <div class="custom-select" :tabindex="tabindex" @blur="open = false">
     <div class="selected" :class="{ open: open }" @click="open = !open">
-      {{ selected == null? '': selected[textkey] }}
+      {{ selected == null? '': options[selected] }}
     </div>
     <div class="items" :class="{ selectHide: !open }">
       <div
@@ -14,15 +14,15 @@
         class="empty-item"
         ></div>
       <div
-        v-for="(option) of options"
-        :key="option[valkey]"
+        v-for="(name, id) in options"
+        :key="id"
         @click="
-          selected = option;
+          selected = parseInt(id);
           open = false;
-          $emit('change', option);
+          $emit('change', parseInt(id));
         "
       >
-        {{ option[textkey] }}
+        {{ name }}
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
 export default {
   props: {
     options: {
-      type: Array,
+      type: Object,
       required: true,
     },
     default: {
@@ -45,14 +45,6 @@ export default {
       required: false,
       default: 0,
     },
-    valkey: {
-      type: String,
-      required: true,
-    },
-    textkey: {
-      type: String,
-      required: true,
-    },
     emptyable: {
       type: Boolean,
       required: false,
@@ -62,7 +54,7 @@ export default {
   data() {
     return {
       selected: this.default
-        ? this.options.find(el => el.id == this.default)
+        ? this.default
         : null,
       open: false,
     };
@@ -75,7 +67,7 @@ export default {
       if(this.emptyable) this.selected = null;
     },
     set(selected) {
-        this.selected = this.options.find(el => el.id == selected);
+        this.selected = selected;
     }
   },
 };

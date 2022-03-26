@@ -13,6 +13,7 @@ import VCalendar from 'v-calendar';
 import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 import CSelect from "./components/CSelect";
+import CEnumSelect from "./components/CEnumSelect";
 
 require("./firebase_info")
 
@@ -20,6 +21,7 @@ Vue.use(VueLazyLoad)
 Vue.use(ToggleButton)
 Vue.component('multiselect', Multiselect);
 Vue.component('c-select', CSelect);
+Vue.component('c-enum-select', CEnumSelect);
 Vue.component('vue-timepicker', VueTimepicker);
 Vue.use(VCalendar);
 const moment = require('moment')
