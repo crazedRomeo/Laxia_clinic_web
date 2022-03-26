@@ -38,12 +38,16 @@
               </tr>
             </thead>
             <tbody v-if="reservations.length > 0">
-              <tr v-for="rsv in reservations" :key="rsv.id" @click="toMailbox(rsv.id)">
+              <tr v-for="rsv in reservations" :key="rsv.id" @click="toMailbox(rsv.mailbox.id)">
                 <td>{{ rsv.id }}</td>
                 <td>
                     <div class="rsv-status-select"><h4 :class="rsv.status == 5 ? 'not-supported' : 'in-progress'">{{ rsv_status_types[rsv.status] }}</h4></div>
                 </td>
-                <td v-if="rsv.last_chat_time">{{ rsv.last_chat_time.created_at | formatDateWithDay}}
+                <td v-if="rsv.last_chat_time && getDate(rsv.last_chat_time.created_at) == getDate(new Date())">
+                  {{ rsv.last_chat_time.created_at | formatTime12}}
+                </td>
+                <td v-else-if="rsv.last_chat_time">
+                  {{ rsv.last_chat_time.created_at | formatDateWithDay }}
                   <br>
                   {{ rsv.last_chat_time.created_at | formatTime12}}
                 </td>
@@ -173,6 +177,10 @@
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 import RsvStatusSelect from '~/components/RsvStatusSelect'
+
+const moment = require('moment')
+require('moment/locale/ja')
+Vue.use(require('vue-moment'), { moment })
 
 export default {
   middleware: 'auth',
@@ -338,9 +346,13 @@ export default {
       this.getData()
     },
 
-    toMailbox(rsv_id) {
-      this.$router.push({name: 'mailbox', params: {'id': rsv_id}});
+    toMailbox(mailbox_id) {
+      this.$router.push({name: 'mailbox', params: {'id': mailbox_id}});
     },
+
+    getDate(date_str) {
+      return moment(String(date_str)).format('YYYY-MM-DD');
+    }
   },
 
   // filters: {
