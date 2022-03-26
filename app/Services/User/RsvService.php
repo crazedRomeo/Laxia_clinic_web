@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\User;
 
+use App\Enums\Reservation\ApiStatus;
 use App\Enums\Reservation\Status;
 use Illuminate\Support\Arr;
 use App\Models\Reservation;
@@ -9,6 +10,7 @@ use App\Models\Patient;
 use App\Models\RsvHopeTime;
 use DB;
 use Auth;
+use NunoMaduro\Collision\Adapters\Phpunit\State;
 use Throwable;
 
 /**
@@ -29,19 +31,20 @@ class RsvService
     
     if (isset($search['status'])) {
       $status = $search['status'];
-      if ($status == 1) {
-        $query->whereIn('status', [5, 10]);
-      } else if ($status == 2) {
-        $query->where('status', '20');
-      } else if ($status == 3) {
-        $query->where('status', '25');
-      } else if ($status == 4) {
-        $query->where('status', '30');
+      if ($status == ApiStatus::ADJUSTING) {
+        $query->where('status', Status::NOTSUPPORTED);
+      } else if ($status == ApiStatus::RESERVED) {
+        $query->where('status', Status::INPROGRESS);
+      } else if ($status == ApiStatus::VISITED) {
+        // $query->where('status', Status::INPROGRESS);
+        $query->whereNotNull('visit_date');
+      } else if ($status == ApiStatus::HISTORY) {
+
       }
     }
 
     if (isset($search['patient_id'])) {
-      $query->where('patien_id', $search['patient_id']);
+      $query->where('patient_id', $search['patient_id']);
     }
 
     // 決済一覧
