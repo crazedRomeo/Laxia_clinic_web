@@ -272,13 +272,22 @@
             <small>営業時間</small>
           </div>
           <div class="form-group clinic-time" v-for="(item, index) in form.clinic.work_times" :key="index">
-            <div><p>{{ item.weekday }}</p></div>
+            <div class="clinic-weekday_lbl"><p>{{ item.weekday }}</p></div>
             <div>
               <span>営業ステータス</span>
-              <select>
+              <!-- <select>
                 <option>営業日</option>
                 <option>定休日</option>
-              </select>
+              </select> -->
+              <c-select
+                  :options="statusOptions"
+                  :textkey="'text'"
+                  :valkey="'val'"
+                  :emptyable="true"
+                  class="select"
+                  ref="status01"
+                  @change="selectedStatus01"
+              />
             </div>
             <div>
               <span>開始時間</span>
@@ -379,6 +388,10 @@ export default {
       },
       cities: [],
       towns: [],
+      statusOptions: [
+        {'val': 0, 'text': '営業日'},
+        {'val': 1, 'text': '定休日'},
+      ]
     }
   },
 
@@ -545,6 +558,10 @@ export default {
     handleModalClose() {
 
     },
+
+    selectedStatus01(selected_option) {
+      console.log(selected_option);
+    }
   }
 }
 </script>

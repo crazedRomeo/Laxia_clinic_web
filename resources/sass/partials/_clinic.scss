@@ -2735,16 +2735,18 @@ i.i-login-valid{
 		font-size: 18px;
 		color: #000000;
 	}
-	div{
+	> div{
 		width: 28%;
-	}
-	div:first-child{
-		width: 10%;
-		text-align: center;
-		margin-top: 25px;
-	}
-	div:nth-child(2){
-		margin-right: 10px;
+
+		&.clinic-weekday_lbl {
+			width: 10%;
+			text-align: center;
+			margin-top: 25px;
+		}
+
+		&:nth-child(2){
+			margin-right: 10px;
+		}
 	}
 }
 .p-t-20{
