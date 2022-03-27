@@ -189,7 +189,7 @@
                   :options="required_time"
                   :emptyable="true"
                   class="select"
-                  ref="requireTimeSelect"
+                  ref="requireTimeSelects"
                   @change="selectedRequireTime"
                 />
             </div>
@@ -777,7 +777,11 @@ export default {
       this.form.menuPhotos = [];
       this.selected_categories = [];
       this.errors = undefined;
-      if(this.$refs.requireTimeSelect) this.$refs.requireTimeSelect.clear();
+
+      this.inputGroups.forEach((val, i) => {
+        if(this.$refs.requireTimeSelects && this.$refs.requireTimeSelects[i]) this.$refs.requireTimeSelects[i].clear();
+      });
+      
       this.$refs.modal.show();
     },   
 
