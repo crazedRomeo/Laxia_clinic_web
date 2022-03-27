@@ -181,10 +181,17 @@
               </div>
             </div>
             <div class="col-3">
-              <select class="form-control" :class="{'fulled-status' : form.menus.treat_time ? 'fulled-input': ''}" :key="ind" >
+              <!-- <select class="form-control" :class="{'fulled-status' : form.menus.treat_time ? 'fulled-input': ''}" :key="ind" >
                 <option></option>
                   <option v-for="(item, key) in required_time" :key="key" :value="key">{{ item }}</option>
-              </select>
+              </select> -->
+              <c-enum-select
+                  :options="required_time"
+                  :emptyable="true"
+                  class="select"
+                  ref="requireTimeSelect"
+                  @change="selectedRequireTime"
+                />
             </div>
           </div>
           <div class="create-menu-flow-increase">
@@ -770,8 +777,13 @@ export default {
       this.form.menuPhotos = [];
       this.selected_categories = [];
       this.errors = undefined;
+      if(this.$refs.requireTimeSelect) this.$refs.requireTimeSelect.clear();
       this.$refs.modal.show();
     },   
+
+    selectedRequireTime(selected_option) {
+      console.log(selected_option);
+    },
 
     handleUpdateMenu() { //pstar
       let flg = false;
