@@ -328,7 +328,7 @@
         <div class="form-group row">
           <div class="col-6">
             <small>{{ $t('年齢') }}</small>
-            <p>{{form.cases.patient_age}}{{ $t('才') }}</p>
+            <p>{{form.cases.patient_age}}{{ $t('代') }}</p>
           </div>
           <div class="col-6">
             <small>{{ $t('性別') }}</small>

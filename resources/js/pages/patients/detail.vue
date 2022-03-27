@@ -18,7 +18,7 @@
             </div>
             <div>
               <small></small><br>
-              {{ patientInfo.age }}{{ $t('才') }}/{{ gender_types[patientInfo.gender] }}
+              {{ patientInfo.age }}{{ $t('代') }}/{{ gender_types[patientInfo.gender] }}
             </div>
             <div>
               <small>{{ $t('電話番号') }}</small><br>
