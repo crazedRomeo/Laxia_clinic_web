@@ -174,6 +174,9 @@
                       :hour-range="[[6, 23]]" 
                       :minute-interval="15"
                     >
+                    <template v-slot:dropdownButton>
+                      <img src="/img/polygon.svg" /> 
+                    </template>
                     </vue-timepicker>
                     <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
                 </div>
@@ -184,16 +187,34 @@
               <div class="rsv-main-content2">
                 <div>
                   <span>{{ $t('医師・スタッフ') }}</span>
-                  <select v-model="rsv_form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
+                  <!-- <select v-model="rsv_form.reservations.doctor_id" :class="{'is-invalid' : errors && errors['reservations.doctor_id'] }">
                     <option v-for="(doctor) in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.kata_name }}</option>
-                  </select>
+                  </select> -->
+                  <c-select
+                  :options="doctors"
+                  :textkey="'kata_name'"
+                  :valkey="'id'"
+                  :emptyable="true"
+                  :default="rsv_form.reservations.doctor_id"
+                  class="select"
+                  ref="doctorSelect"
+                  @change="selectedDoctor"
+                />
                   <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
                 </div>
                 <div>
                   <span>{{ $t('予約内容') }}</span>
-                  <select v-model="rsv_form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
+                  <!-- <select v-model="rsv_form.reservations.hope_treat" :class="{'is-invalid' : errors && errors['reservations.hope_treat'] }">
                     <option v-for="(name, id) in hope_treat_types" :key="id" :value="id">{{ name }}</option>
-                  </select>
+                  </select> -->
+                  <c-enum-select
+                  :options="hope_treat_types"
+                  :emptyable="true"
+                  :default="rsv_form.reservations.hope_treat"
+                  class="select"
+                  ref="hopeTreatSelect"
+                  @change="selectedHopeTreat"
+                />
                   <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
                 </div>
               </div>
@@ -428,6 +449,9 @@ export default {
           hope_treat: this.selectedRsv.hope_treat,
         }
       }
+      this.isEditing = false;
+      if(this.$refs.doctorSelect) this.$refs.doctorSelect.set(this.rsv_form.reservations.doctor_id);
+      if(this.$refs.hopeTreatSelect) this.$refs.hopeTreatSelect.set(this.rsv_form.reservations.hope_treat);
       this.$refs.rsvModal.show()
     },
 
@@ -493,6 +517,15 @@ export default {
       this.isEditing = false
       this.errors = undefined
     },
+
+    
+  selectedDoctor(selected_option) {
+    this.rsv_form.reservations.doctor_id = selected_option ? selected_option.id : null;
+  },
+
+  selectedHopeTreat(selected_option) {
+    this.rsv_form.reservations.hope_treat = selected_option;
+  },
 
     handleCancelRsv() {
       this.$store.dispatch('state/setIsLoading')

@@ -200,97 +200,193 @@
           <div class="form-group row m-row">
             <div class="col-6">
                 <small>{{ $t('施術時間') }}</small>
-                <select v-model="form.menus.treat_time" class="form-control" :class="{'fulled-status' : form.menus.treat_time ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.treat_time" class="form-control" :class="{'fulled-status' : form.menus.treat_time ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in treat_time" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="treat_time"
+                  :emptyable="true"
+                  :default="form.menus.treat_time"
+                  class="select"
+                  ref="timeTreatSelect"
+                  @change="selectedTimeTreat"
+                />
             </div>
             <div class="col-6">
                 <small>{{ $t('抜糸') }}</small>
-                <select v-model="form.menus.basshi" class="form-control" :class="{'fulled-status' : form.menus.basshi ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.basshi" class="form-control" :class="{'fulled-status' : form.menus.basshi ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in basshi" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="basshi"
+                  :emptyable="true"
+                  :default="form.menus.basshi"
+                  class="select"
+                  ref="basshiSelect"
+                  @change="selectedBasshi"
+                />
             </div>
           </div>
           <div class="form-group row m-row">
             <div class="col-6">
                 <small>{{ $t('施術後の通院') }}</small>
-                <select v-model="form.menus.hospital_visit" class="form-control" :class="{'fulled-status' : form.menus.hospital_visit ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.hospital_visit" class="form-control" :class="{'fulled-status' : form.menus.hospital_visit ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in hospital_visit" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="hospital_visit"
+                  :emptyable="true"
+                  :default="form.menus.hospital_visit"
+                  class="select"
+                  ref="hospitalVisitSelect"
+                  @change="selectedHospitalVisit"
+                />
             </div>
             <div class="col-6">
                 <small>{{ $t('腫れ') }}</small>
-                <select v-model="form.menus.hare" class="form-control" :class="{'fulled-status' : form.menus.hare ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.hare" class="form-control" :class="{'fulled-status' : form.menus.hare ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in hare" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="hare"
+                  :emptyable="true"
+                  :default="form.menus.hare"
+                  class="select"
+                  ref="hareSelect"
+                  @change="selectedHare"
+                />
             </div>
           </div>
           <div class="form-group row m-row">
             <div class="col-6">
                 <small>{{ $t('痛み') }}</small>
-                <select v-model="form.menus.pain" class="form-control" :class="{'fulled-status' : form.menus.pain ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.pain" class="form-control" :class="{'fulled-status' : form.menus.pain ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in pain" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="pain"
+                  :emptyable="true"
+                  :default="form.menus.pain"
+                  class="select"
+                  ref="painSelect"
+                  @change="selectedPain"
+                />
             </div>
             <div class="col-6">
                 <small>{{ $t('内出血') }}</small>
-                <select v-model="form.menus.bleeding" class="form-control" :class="{'fulled-status' : form.menus.bleeding ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.bleeding" class="form-control" :class="{'fulled-status' : form.menus.bleeding ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in bleeding" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="bleeding"
+                  :emptyable="true"
+                  :default="form.menus.bleeding"
+                  class="select"
+                  ref="bleedingSelect"
+                  @change="selectedBleeding"
+                />
             </div>
           </div>
           <div class="form-group row m-row">
             <div class="col-6">
                 <small>{{ $t('入院の必要性') }}</small>
-                <select v-model="form.menus.hospital_need" class="form-control" :class="{'fulled-status' : form.menus.hospital_need ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.hospital_need" class="form-control" :class="{'fulled-status' : form.menus.hospital_need ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in hospital_need" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="hospital_need"
+                  :emptyable="true"
+                  :default="form.menus.hospital_need"
+                  class="select"
+                  ref="hospitalNeedSelect"
+                  @change="selectedHospitalNeed"
+                />
             </div>
             <div class="col-6">
                 <small>{{ $t('麻酔') }}</small>
-                <select v-model="form.menus.masui" class="form-control" :class="{'fulled-status' : form.menus.masui ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.masui" class="form-control" :class="{'fulled-status' : form.menus.masui ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in masui" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="masui"
+                  :emptyable="true"
+                  :default="form.menus.masui"
+                  class="select"
+                  ref="masuiSelect"
+                  @change="selectedMasui"
+                />
             </div>
           </div>
           <div class="form-group row m-row">
             <div class="col-6">
                 <small>{{ $t('メイク/洗顔') }}</small>
-                <select v-model="form.menus.makeup" class="form-control" :class="{'fulled-status' : form.menus.makeup ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.makeup" class="form-control" :class="{'fulled-status' : form.menus.makeup ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in makeup" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="makeup"
+                  :emptyable="true"
+                  :default="form.menus.makeup"
+                  class="select"
+                  ref="makeupSelect"
+                  @change="selectedMakeup"
+                />
             </div>
             <div class="col-6">
                 <small>{{ $t('シャワー/洗髪/入浴') }}</small>
-                <select v-model="form.menus.shower" class="form-control" :class="{'fulled-status' : form.menus.shower ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.shower" class="form-control" :class="{'fulled-status' : form.menus.shower ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in shower" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="shower"
+                  :emptyable="true"
+                  :default="form.menus.shower"
+                  class="select"
+                  ref="showerSelect"
+                  @change="selectedShower"
+                />
             </div>
           </div>
           <div class="form-group row m-row">
             <div class="col-6">
                 <small>{{ $t('施術部のマッサージ') }}</small>
-                <select v-model="form.menus.massage" class="form-control" :class="{'fulled-status' : form.menus.massage ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.massage" class="form-control" :class="{'fulled-status' : form.menus.massage ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in massage" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="massage"
+                  :emptyable="true"
+                  :default="form.menus.massage"
+                  class="select"
+                  ref="massageSelect"
+                  @change="selectedMassage"
+                />
             </div>
             <div class="col-6">
                 <small>{{ $t('激しいスポーツ') }}</small>
-                <select v-model="form.menus.sport_impossible" class="form-control" :class="{'fulled-status' : form.menus.sport_impossible ? 'fulled-input': ''}">
+                <!-- <select v-model="form.menus.sport_impossible" class="form-control" :class="{'fulled-status' : form.menus.sport_impossible ? 'fulled-input': ''}">
                   <option></option>
                   <option v-for="(item, key) in sport_impossible" :key="key" :value="key">{{ item }}</option>
-                </select>
+                </select> -->
+                <c-enum-select
+                  :options="sport_impossible"
+                  :emptyable="true"
+                  :default="form.menus.sport_impossible"
+                  class="select"
+                  ref="sportImpossibleSelect"
+                  @change="selectedSportImpossible"
+                />
             </div>
           </div>       
         </div>
@@ -762,6 +858,18 @@ export default {
         confirmBtnTitle: 'メニューの編集を完了'
       }
       this.$refs.viewModal.hide();
+      if(this.$refs.timeTreatSelect) this.$refs.timeTreatSelect.set(this.form.menus.treat_time);
+      if(this.$refs.basshiSelect) this.$refs.basshiSelect.set(this.form.menus.basshi);
+      if(this.$refs.hospitalVisitSelect) this.$refs.hospitalVisitSelect.set(this.form.menus.hospital_visit);
+      if(this.$refs.hareSelect) this.$refs.hareSelect.set(this.form.menus.hare);
+      if(this.$refs.painSelect) this.$refs.painSelect.set(this.form.menus.pain);
+      if(this.$refs.bleedingSelect) this.$refs.bleedingSelect.set(this.form.menus.bleeding);
+      if(this.$refs.hospitalNeedSelect) this.$refs.hospitalNeedSelect.set(this.form.menus.hospital_need);
+      if(this.$refs.masuiSelect) this.$refs.masuiSelect.set(this.form.menus.masui);
+      if(this.$refs.makeupSelect) this.$refs.makeupSelect.set(this.form.menus.makeup);
+      if(this.$refs.showerSelect) this.$refs.showerSelect.set(this.form.menus.shower);
+      if(this.$refs.massageSelect) this.$refs.massageSelect.set(this.form.menus.massage);
+      if(this.$refs.sportImpossibleSelect) this.$refs.sportImpossibleSelect.set(this.form.menus.sport_impossible);
       this.$refs.modal.show();
     },
 
@@ -782,11 +890,72 @@ export default {
         if(this.$refs.requireTimeSelects && this.$refs.requireTimeSelects[i]) this.$refs.requireTimeSelects[i].clear();
       });
       
+      if(this.$refs.timeTreatSelect) this.$refs.timeTreatSelect.set(this.form.menus.treat_time);
+      if(this.$refs.basshiSelect) this.$refs.basshiSelect.set(this.form.menus.basshi);
+      if(this.$refs.hospitalVisitSelect) this.$refs.hospitalVisitSelect.set(this.form.menus.hospital_visit);
+      if(this.$refs.hareSelect) this.$refs.hareSelect.set(this.form.menus.hare);
+      if(this.$refs.painSelect) this.$refs.painSelect.set(this.form.menus.pain);
+      if(this.$refs.bleedingSelect) this.$refs.bleedingSelect.set(this.form.menus.bleeding);
+      if(this.$refs.hospitalNeedSelect) this.$refs.hospitalNeedSelect.set(this.form.menus.hospital_need);
+      if(this.$refs.masuiSelect) this.$refs.masuiSelect.set(this.form.menus.masui);
+      if(this.$refs.makeupSelect) this.$refs.makeupSelect.set(this.form.menus.makeup);
+      if(this.$refs.showerSelect) this.$refs.showerSelect.set(this.form.menus.shower);
+      if(this.$refs.massageSelect) this.$refs.massageSelect.set(this.form.menus.massage);
+      if(this.$refs.sportImpossibleSelect) this.$refs.sportImpossibleSelect.set(this.form.menus.sport_impossible);
       this.$refs.modal.show();
+      
     },   
 
     selectedRequireTime(selected_option) {
       console.log(selected_option);
+    },
+
+    selectedTimeTreat(selected_option) {
+      this.form.menus.treat_time = selected_option;
+    },
+
+    selectedBasshi(selected_option) {
+      this.form.menus.basshi = selected_option;
+    },
+
+    selectedHospitalVisit(selected_option) {
+      this.form.menus.hospital_visit = selected_option;
+    },
+
+    selectedHare(selected_option) {
+      this.form.menus.hare = selected_option;
+    },
+
+    selectedPain(selected_option) {
+      this.form.menus.pain = selected_option;
+    },
+
+    selectedBleeding(selected_option) {
+      this.form.menus.bleeding = selected_option;
+    },
+
+    selectedHospitalNeed(selected_option) {
+      this.form.menus.hospital_need = selected_option;
+    },
+
+    selectedMasui(selected_option) {
+      this.form.menus.masui = selected_option;
+    },
+
+    selectedMakeup(selected_option) {
+      this.form.menus.makeup = selected_option;
+    },
+
+    selectedShower(selected_option) {
+      this.form.menus.shower = selected_option;
+    },
+
+    selectedMassage(selected_option) {
+      this.form.menus.shower = selected_option;
+    },
+
+    selectedSportImpossible(selected_option) {
+      this.form.menus.sport_impossible = selected_option;
     },
 
     handleUpdateMenu() { //pstar

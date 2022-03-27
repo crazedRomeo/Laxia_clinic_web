@@ -77,12 +77,14 @@ export default {
 .custom-select {
   position: relative;
   width: 100%;
-  min-height: 40px;
+  height: 50px;
   padding: 0;
   border: none;
   border-radius: 5px;
   background:url(/img/polygon.svg) no-repeat right #fff;
-  background-position: calc(100% - 10px) 1em, calc(100% - 16px) calc(1em + 2px), 100% 0;
+  background-position-x: calc(100% - 15px);
+  background-position-y: 50%;
+  background-size: 10px;
 }
 .custom-select:focus,.custom-select:focus-within{
     box-shadow: none;
@@ -98,8 +100,8 @@ export default {
   cursor: pointer;
   border: 1px solid #C9D6DF;
   user-select: none;
-  padding: 3px 8px;
-  min-height: 40px;
+  padding: 12px 10px;
+  height: 50px;
   line-height: 28px;
 }
 

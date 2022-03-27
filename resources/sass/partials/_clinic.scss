@@ -117,6 +117,7 @@ textarea:active{
 	width: 100%;
 	// border: 1px solid #8C9FAB;
 	font-size: 18px;
+	height: 50px;
 	color: #131340;
 	letter-spacing: 0.1em;
 }
@@ -968,6 +969,7 @@ button:focus {
 		}
 		input{
 			width: 100%;
+			height: 50px;
 			border-radius: 5px !important;
 			border: 1px solid #C9D6DF !important;
 			outline: none;
@@ -990,7 +992,7 @@ button:focus {
 .time-picker-content{
 	>.vue__time-picker{
 		width: 100%;
-		height: initial !important;
+		height: 50px !important;
 		> input.display-time{
 			width: 100% !important;
 			outline: none !important;
@@ -1021,6 +1023,9 @@ button:focus {
 
 		&:hover {
 			border: 1px solid #8C9FAB !important;
+		}
+		&.display-time{
+			height: 50px !important;
 		}
 	}
 	
@@ -1198,10 +1203,16 @@ button:focus {
 	border-bottom-right-radius: 0;
 }
 
-.vue__time-picker .controls .char{
-	font-size: 2em;
-	-webkit-margin-before: 0.8em;
-}
+.vue__time-picker .controls{
+	&.char{
+		font-size: 2em;
+		-webkit-margin-before: 0.8em;
+	}
+	& img{
+		max-width: 10px;
+		width: 10px !important;
+	}
+} 
 
 .date-pick{
 	display: flex;
@@ -2487,7 +2498,7 @@ input::placeholder, textarea::placeholder {
 }
 
 .dropdown-btn{
-	padding-right: 11px !important;
+	padding-right: 15px !important;
 }
 .noti-dropdown-btn {
 	position: relative;
@@ -2998,7 +3009,7 @@ i.i-login-valid{
 .multiselect {
 	min-height: 32px;
 	.multiselect__tags {
-		min-height: 52px;
+		min-height: 50px;
 		padding-top: 4px;
 		padding-bottom: 0;
 		border: 1px solid #C9D6DF;
@@ -3047,7 +3058,7 @@ i.i-login-valid{
 	}
 	.multiselect__select {
     	width: 40px;
-		height: 52px;
+		height: 50px;
 	}
 	.multiselect__option:after {
 		line-height: 30px;
@@ -3215,7 +3226,7 @@ i.i-login-valid{
 }
 .gray-ph-input{
 	width: 470px;
-	height: 52px;
+	height: 50px;
 	border-radius: 5px;
 }
 
