@@ -129,6 +129,7 @@ export default {
   right: 0;
   z-index: 1;
   box-shadow: 0 1px 6px rgb(0 0 0 / 15%);
+  border-radius: 5px;
 }
 
 .custom-select .items div {

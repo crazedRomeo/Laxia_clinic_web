@@ -1009,6 +1009,14 @@ button:focus {
 	}
 }
 
+#tab-content1 {
+	tbody{
+		tr {
+			height: 66px;
+		}	
+	}
+}
+
 .vue__time-picker {
 	input {
 		&.display-time {
@@ -1032,6 +1040,8 @@ button:focus {
 	.dropdown{
 		width: 100% !important;
 		outline: none !important;
+		border-radius: 5px !important;
+		top: 50px !important;
 		>.select-list{
 			width: 100% !important;
 		}
