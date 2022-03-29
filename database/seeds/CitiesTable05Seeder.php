@@ -19,6 +19,22 @@ class CitiesTable05Seeder extends Seeder
                 'pref_id' => 5,
                 'name' => '秋田市',
             ],
+            [
+                'pref_id' => 5,
+                'name' => '能代市',
+            ],
+            [
+                'pref_id' => 5,
+                'name' => '横手市',
+            ],
+            [
+                'pref_id' => 5,
+                'name' => '大館市',
+            ],
+            [
+                'pref_id' => 5,
+                'name' => '男鹿市',
+            ],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');

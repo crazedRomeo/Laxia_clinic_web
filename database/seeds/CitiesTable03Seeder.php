@@ -19,6 +19,22 @@ class CitiesTable03Seeder extends Seeder
                 'pref_id' => 3,
                 'name' => '盛岡市',
             ],
+            [
+                'pref_id' => 3,
+                'name' => '宮古市',
+            ],
+            [
+                'pref_id' => 3,
+                'name' => '大船渡市',
+            ],
+            [
+                'pref_id' => 3,
+                'name' => '花巻市',
+            ],
+            [
+                'pref_id' => 3,
+                'name' => '北上市',
+            ],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');

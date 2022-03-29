@@ -19,6 +19,22 @@ class CitiesTable04Seeder extends Seeder
                 'pref_id' => 4,
                 'name' => '仙台市青葉区',
             ],
+            [
+                'pref_id' => 4,
+                'name' => '仙台市宮城野区',
+            ],
+            [
+                'pref_id' => 4,
+                'name' => '仙台市若林区',
+            ],
+            [
+                'pref_id' => 4,
+                'name' => '仙台市太白区',
+            ],
+            [
+                'pref_id' => 4,
+                'name' => '仙台市泉区',
+            ],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');

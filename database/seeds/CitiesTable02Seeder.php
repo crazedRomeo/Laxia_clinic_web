@@ -19,6 +19,22 @@ class CitiesTable02Seeder extends Seeder
                 'pref_id' => 2,
                 'name' => '青森市',
             ],
+            [
+                'pref_id' => 2,
+                'name' => '弘前市',
+            ],
+            [
+                'pref_id' => 2,
+                'name' => '八戸市',
+            ],
+            [
+                'pref_id' => 2,
+                'name' => '八戸市',
+            ],
+            [
+                'pref_id' => 2,
+                'name' => '五所川原市',
+            ],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
