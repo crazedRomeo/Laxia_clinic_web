@@ -19,6 +19,22 @@ class CitiesTable10Seeder extends Seeder
                 'pref_id' => 10,
                 'name' => '前橋市',
             ],
+            [
+                'pref_id' => 10,
+                'name' => '高崎市',
+            ],
+            [
+                'pref_id' => 10,
+                'name' => '桐生市',
+            ],
+            [
+                'pref_id' => 10,
+                'name' => '伊勢崎市',
+            ],
+            [
+                'pref_id' => 10,
+                'name' => '太田市',
+            ],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');

@@ -19,6 +19,22 @@ class CitiesTable08Seeder extends Seeder
                 'pref_id' => 8,
                 'name' => '水戸市',
             ],
+            [
+                'pref_id' => 8,
+                'name' => '日立市',
+            ],
+            [
+                'pref_id' => 8,
+                'name' => '土浦市',
+            ],
+            [
+                'pref_id' => 8,
+                'name' => '古河市',
+            ],
+            [
+                'pref_id' => 8,
+                'name' => '石岡市',
+            ],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');

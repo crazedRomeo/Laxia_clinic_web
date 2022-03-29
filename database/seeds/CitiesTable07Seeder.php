@@ -19,6 +19,22 @@ class CitiesTable07Seeder extends Seeder
                 'pref_id' => 7,
                 'name' => '福島市',
             ],
+            [
+                'pref_id' => 7,
+                'name' => '会津若松市',
+            ],
+            [
+                'pref_id' => 7,
+                'name' => '郡山市',
+            ],
+            [
+                'pref_id' => 7,
+                'name' => 'いわき市',
+            ],
+            [
+                'pref_id' => 7,
+                'name' => '白河市',
+            ],
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
