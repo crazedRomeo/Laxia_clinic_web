@@ -214,4 +214,16 @@ class Doctor extends Model
   {
     return $this->viewers()->count();
   }
+
+  public function clinic() {
+    return $this->belongsTo(Clinic::class); 
+  }
+
+  public function counselings() {
+    return $this->hasMany(CounselingReport::class);
+  }
+
+  public function cases() {
+    return $this->hasMany(TreatCase::class);
+  }
 }

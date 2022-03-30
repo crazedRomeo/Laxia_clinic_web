@@ -44,6 +44,9 @@ class DoctorController extends Controller
         return response()->json([
             'doctor' => $doctor->load([
                 // 'specialities'
+                'clinic',
+                'counselings',
+                'cases',
             ])
         ], 200);
     }

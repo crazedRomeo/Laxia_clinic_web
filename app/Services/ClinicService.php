@@ -64,6 +64,9 @@ class ClinicService
         'images',
         // 'menus_limit2',
         // 'stuffs_limit4',
+        'doctors',
+        'menus',
+        'counselings',
       ])
       ->where('id', $id)
       ->firstOrFail();
@@ -93,6 +96,9 @@ class ClinicService
         'images',
         // 'menus_limit2',
         // 'stuffs_limit4',
+        'doctors',
+        'menus',
+        'counselings',
       ])
       ->where('user_id', $id)
       ->firstOrFail();

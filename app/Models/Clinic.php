@@ -212,6 +212,11 @@ class Clinic extends Model
   //     ->limit(4);
   // }
 
+  public function doctors()
+  {
+    return $this->hasMany(Doctor::class);
+  }
+
   public function favoriters()
   {
     return $this->morphToMany(Patient::class, 'favoriable', 'favorites');
