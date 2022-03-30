@@ -40,19 +40,20 @@ class PrefService
 
   public function getClinicsAreas()
   {
-    $data = Pref::with(['cities' => function($subquery) {
-      $subquery->whereIn('name', function($subquery) {
-        $subquery->select('addr01')
-          ->from(with(new Clinic)->getTable())
-          ->groupBy('addr01');
-      });
-    }])
-      ->whereIn('id', function($subquery) {
-        $subquery->select('pref_id')
-          ->from(with(new Clinic)->getTable())
-          ->groupBy('pref_id');
-      })
-      ->get();
+    // $data = Pref::with(['cities' => function($subquery) {
+    //   $subquery->whereIn('name', function($subquery) {
+    //     $subquery->select('addr01')
+    //       ->from(with(new Clinic)->getTable())
+    //       ->groupBy('addr01');
+    //   });
+    // }])
+    //   ->whereIn('id', function($subquery) {
+    //     $subquery->select('pref_id')
+    //       ->from(with(new Clinic)->getTable())
+    //       ->groupBy('pref_id');
+    //   })
+    //   ->get();
+    $data = Pref::with(['cities'])->get();
 
     return $data;
   }
