@@ -132,7 +132,7 @@ class CitiesTable01Seeder extends Seeder
             ],
             [
                 'pref_id' => 2,
-                'name' => '八戸市',
+                'name' => '黒石市',
             ],
             [
                 'pref_id' => 2,
