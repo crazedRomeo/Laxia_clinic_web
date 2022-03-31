@@ -56,17 +56,21 @@ class TownsTable01Seeder extends Seeder
 
             [
                 'city_id' => 4,
+                'name' => '川北',
+            ],
+            [
+                'city_id' => 4,
                 'name' => '川北一条',
             ],
             [
                 'city_id' => 4,
                 'name' => '川北二条',
             ],
-            [
-                'city_id' => 4,
-                'name' => '川北三条',
-            ],
 
+            [
+                'city_id' => 5,
+                'name' => '旭町',
+            ],
             [
                 'city_id' => 5,
                 'name' => '水車町',
@@ -74,10 +78,6 @@ class TownsTable01Seeder extends Seeder
             [
                 'city_id' => 5,
                 'name' => '月寒中央通',
-            ],
-            [
-                'city_id' => 5,
-                'name' => '月寒西一条',
             ],
 
             [
