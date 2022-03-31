@@ -63,9 +63,9 @@ class MasterDataController extends Controller
      */
     public function loadMasterData(Request $request)
     {
-        // $treatCategories = $this->treatCategoryService->toArray();
         $partCategories = $this->categoryService->toArray();
         // $concenrCategories = $this->concernCategoryService->toArray();
+        // $treatCategories = $this->treatCategoryService->toArray();
 
         return response()->json([
             'status' => 1,
@@ -73,9 +73,9 @@ class MasterDataController extends Controller
             'data' => [
                 // 'treatCategories' => $treatCategories,
                 'treatCategories' => $partCategories,
-                'partCategories' => $partCategories,
+                // 'partCategories' => $partCategories,
                 // 'concernCategories' => $concenrCategories
-                'concernCategories' => $partCategories
+                // 'concernCategories' => $partCategories
             ]
         ], 200);
     }
