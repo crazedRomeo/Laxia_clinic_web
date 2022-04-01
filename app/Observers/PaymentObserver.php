@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\Common\PointType;
 use App\Models\Payment;
 use App\Models\Withdraw;
 use App\Models\PointHistory;
@@ -34,7 +35,7 @@ class PaymentObserver
         $patient = $payment->reservation->patient;
         PointHistory::create([
             'patient_id' => $patient->id,
-            'type' => 'reservation_finished',
+            'type' => PointType::RESERVATION_FINISHED,
             'type_id' => $payment->reservation->id,
             'use_point' => $addPoint
         ]);

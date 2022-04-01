@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\Common\PointType;
 use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Doctor;
@@ -35,7 +36,7 @@ class UserObserver
             ]);
             PointHistory::create([
                 'patient_id' => $patient->id,
-                'type' => 'user_new_registered',
+                'type' => PointType::USER_NEW_REGISTERED,
                 'use_point' => config('constants.user_register_add_point')
             ]);
         }

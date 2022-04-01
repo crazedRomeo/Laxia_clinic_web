@@ -16,6 +16,7 @@ class PointService
   public function paginate($where)
   {
     return PointHistory::where($where)
+      ->where('use_point', '<>', 0)
       ->paginate(25);
   }
 }

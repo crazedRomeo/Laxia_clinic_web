@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Enums\Common\PointType;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\Clinic;
 
@@ -17,16 +18,16 @@ class PointHistory extends JsonResource
     {
         $title = '';
         switch ($this->type) {
-            case 'user_new_registered':
+            case PointType::USER_NEW_REGISTERED:
                 $title = 'ログイン特典ポイント';
                 break;
-            case 'reservation_requested':
+            case PointType::RESERVATION_REQUESTED:
                 $clinic = Clinic::find($this->type_id);
                 if ($clinic) {
                     $title = "{$clinic->name}で利用";
                 }
                 break;
-            case 'reservation_finished':
+            case PointType::RESERVATION_FINISHED:
                 $clinic = Clinic::find($this->type_id);
                 if ($clinic) {
                     $title = "{$clinic->name}で予約";

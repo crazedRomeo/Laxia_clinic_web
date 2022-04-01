@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\Common\PointType;
 use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Admin;
@@ -31,7 +32,7 @@ class RsvObserver
         // ポイント削減
         PointHistory::create([
             'patient_id' => $patient->id,
-            'type' => 'reservation_requested',
+            'type' => PointType::RESERVATION_REQUESTED,
             'type_id' => $rsv->id,
             'use_point' => $rsv->use_point * (-1),
         ]);
