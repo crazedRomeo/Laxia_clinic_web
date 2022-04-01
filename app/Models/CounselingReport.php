@@ -160,7 +160,7 @@ class CounselingReport extends Model
 
   public function doctor()
   {
-    return $this->belongsTo(doctor::class);
+    return $this->belongsTo(Doctor::class);
   }
 
   public function favoriters()
