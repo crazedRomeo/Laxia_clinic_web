@@ -28,4 +28,13 @@ class ProfileService
 
     return $patient;
   }
+
+  public function get($id) {
+    return Patient::with([
+      'diaries',
+      'counselings',
+    ])
+    ->where('id', $id)
+    ->firstOrFail();
+  }
 }

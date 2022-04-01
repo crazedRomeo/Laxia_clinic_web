@@ -9,6 +9,7 @@ use App\Services\User\ProfileService;
 use App\Http\Requests\User\ProfileRequest;
 use App\Traits\MediaUpload;
 use App\Http\Resources\Me as MeResource;
+use App\Models\Patient;
 
 class ProfileController extends Controller
 {
@@ -27,7 +28,8 @@ class ProfileController extends Controller
 
     public function me()
     {
-        return new MeResource(auth()->guard('patient')->user()->patient);
+        return $this->service->get(auth()->guard('patient')->user()->patient->id);
+        // return new MeResource(auth()->guard('patient')->user()->patient);
     }
 
     public function registerDetail(Request $request) {
