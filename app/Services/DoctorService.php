@@ -36,24 +36,28 @@ class DoctorService
       }
     }
 
-    if (isset($search['pref_id'])) {
-      $query->where('pref_id', $search['pref_id']);
+    if (isset($search['clinic_id'])) {
+      $query->where('clinic_id', $search['clinic_id']);
     }
+
+    // if (isset($search['pref_id'])) {
+    //   $query->where('pref_id', $search['pref_id']);
+    // }
 
     // if (isset($search['city'])) {
     //   $query->where('addr01', 'LIKE', "%{$search['city']}%");
     // }
 
-    if (isset($search['orderby'])) {
-      $orderby = $search['orderby'];
-      if ($orderby == 'diaries_count') {
-        $query->withCount('diaries')
-          ->orderBy('diaries_count', 'DESC');
-      }
-      if ($orderby == 'rate') {
-        $query->orderBy('ave_diaries_rate', 'DESC');
-      }
-    }
+    // if (isset($search['orderby'])) {
+    //   $orderby = $search['orderby'];
+    //   if ($orderby == 'diaries_count') {
+    //     $query->withCount('diaries')
+    //       ->orderBy('diaries_count', 'DESC');
+    //   }
+    //   if ($orderby == 'rate') {
+    //     $query->orderBy('ave_diaries_rate', 'DESC');
+    //   }
+    // }
 
     return $query->paginate($per_page);
   }

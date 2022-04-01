@@ -19,6 +19,10 @@ class CaseService
     $query = TreatCase::query()
       ->with(['clinic', 'categories', 'menus', 'doctor']);
 
+    if (isset($search['q'])) {
+      $query->where('name', 'LIKE', "%{$search['q']}%");
+    }
+
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
     }
@@ -27,9 +31,9 @@ class CaseService
       $query->where('doctor_id', $search['doctor_id']);
     }
 
-    if (isset($search['category_id']) && $search['category_id'] != '-1') {
-      $query->where('category_id', $search['category_id']);
-    }
+    // if (isset($search['category_id']) && $search['category_id'] != '-1') {
+    //   $query->where('category_id', $search['category_id']);
+    // }
     
     $query->orderby('created_at', 'desc');
     return $query->paginate($per_page);

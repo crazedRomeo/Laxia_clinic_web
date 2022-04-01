@@ -22,6 +22,7 @@ Route::get('doctors', 'DoctorController@search');
 Route::get('diaries', 'DiaryController@search');
 Route::get('counselings', 'CounselingController@search');
 Route::get('questions', 'QuestionController@search');
+Route::get('cases', 'CaseController@index');
 
 Route::group(['middleware' => 'guest:api'], function () {
   Route::post('login', 'Auth\LoginController@login');
@@ -94,7 +95,6 @@ Route::group(['middleware' => ['auth.patient']], function() {
   Route::post('clinics/{clinic}/toggleFavorite', 'ClinicController@toggleFavorite');
 
   // 症例
-  Route::get('cases', 'CaseController@index');
   Route::get('cases/{case}', 'CaseController@get');
 
   //スタッフ

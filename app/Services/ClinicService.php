@@ -22,27 +22,27 @@ class ClinicService
       $query->where('name', 'LIKE', "%{$search['q']}%");
     }
 
-    // if (isset($search['favorite']) && $search['favorite'] == 1)
-    // {
-    //   $currentUser = auth()->guard('patient')->user();
-    //   if (isset($currentUser) && isset($currentUser->patient)) {
-    //     $patient_id = $currentUser->patient->id;
-    //     $query->whereIn('id', function($subquery) use ($patient_id) {
-    //       $subquery->select('favoriable_id')
-    //         ->from('favorites')
-    //         ->where('favoriable_type', 'App\Models\Clinic')
-    //         ->where('patient_id', $patient_id);
-    //     });
-    //   }
-    // }
+    if (isset($search['favorite']) && $search['favorite'] == 1)
+    {
+      $currentUser = auth()->guard('patient')->user();
+      if (isset($currentUser) && isset($currentUser->patient)) {
+        $patient_id = $currentUser->patient->id;
+        $query->whereIn('id', function($subquery) use ($patient_id) {
+          $subquery->select('favoriable_id')
+            ->from('favorites')
+            ->where('favoriable_type', 'App\Models\Clinic')
+            ->where('patient_id', $patient_id);
+        });
+      }
+    }
 
-    // if (isset($search['pref_id'])) {
-    //   $query->where('pref_id', $search['pref_id']);
-    // }
+    if (isset($search['pref_id'])) {
+      $query->where('pref_id', $search['pref_id']);
+    }
 
-    // if (isset($search['city'])) {
-    //   $query->where('addr01', 'LIKE', "%{$search['city']}%");
-    // }
+    if (isset($search['city_id'])) {
+      $query->where('city_id', $search['city_id']);
+    }
 
     // if (isset($search['orderby'])) {
     //   $orderby = $search['orderby'];

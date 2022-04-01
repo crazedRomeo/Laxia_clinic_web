@@ -25,13 +25,13 @@ class MenuService
       ]);
 
     if (isset($search['clinic_id'])) {
-      $query->where('clinic_id', $search['clinic_id']);
+      $query->where('menus.clinic_id', $search['clinic_id']);
     }
 
     if (isset($search['status'])) {
-      $query->where('status', $search['status']);
+      $query->where('menus.status', $search['status']);
     } else {
-      $query->where('status', '1');
+      $query->where('menus.status', '1');
     }
 
     // if (isset($search['category_id'])) {
@@ -47,9 +47,15 @@ class MenuService
     // }
 
     if (isset($search['category_id']) && $search['category_id'] != '-1') {
-      // $query->where('category_id', $search['category_id']);
       $query->join('menu_categories as mc', 'menus.id', '=', 'mc.menu_id')
             ->where('mc.category_id', $search['category_id']);
+    }
+
+    if(isset($search['q']) && $search['q'] != '') {
+      $query->where(function($query) use ($search) {
+              $query->where('menus.name', 'like', "%{$search['q']}%")
+              ->orWhere('menus.description', 'like', "%{$search['q']}%");
+      });
     }
 
     $query->orderby('created_at', 'desc');
