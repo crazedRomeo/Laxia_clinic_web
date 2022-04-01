@@ -33,6 +33,12 @@ class ProfileService
     return Patient::with([
       'diaries',
       'counselings',
+      'favoriteDiaries',
+      'favoriteQuestions',
+      'favoriteDoctors',
+      'favoriteCounselingReports',
+      'favoriteMenus',
+      'favoriteClinics',
     ])
     ->where('id', $id)
     ->firstOrFail();

@@ -125,6 +125,31 @@ class Patient extends Model
     return $this->morphedByMany(Diary::class, 'favoriable', 'favorites');
   }
 
+  public function favoriteClinics()
+  {
+    return $this->morphedByMany(Clinic::class, 'favoriable', 'favorites');
+  }
+
+  public function favoriteQuestions()
+  {
+    return $this->morphedByMany(Question::class, 'favoriable', 'favorites');
+  }
+
+  public function favoriteDoctors()
+  {
+    return $this->morphedByMany(Doctor::class, 'favoriable', 'favorites');
+  }
+
+  public function favoriteCounselingReports()
+  {
+    return $this->morphedByMany(CounselingReport::class, 'favoriable', 'favorites');
+  }
+  
+  public function favoriteMenus()
+  {
+    return $this->morphedByMany(Menu::class, 'favoriable', 'favorites');
+  }
+
   public function area()
   {
     return $this->belongsTo(Pref::class, 'area_id');
