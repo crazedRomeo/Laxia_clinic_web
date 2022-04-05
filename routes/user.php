@@ -27,7 +27,7 @@ Route::get('cases', 'CaseController@index');
 Route::group(['middleware' => 'guest:api'], function () {
   Route::post('login', 'Auth\LoginController@login');
   Route::post('login/sns', 'Auth\RegisterController@registerWithSocial');
-  Route::post('register/email', 'Auth\RegisterController@register');
+  Route::post('register/email/{unique_id?}', 'Auth\RegisterController@register');
 
   Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
   Route::post('password/reset', 'Auth\ResetPasswordController@reset');

@@ -16,6 +16,10 @@ use App\Services\User\ProfileService;
 use App\Enums\User\Type as UserType;
 use App\Models\User;
 use App\Jobs\UserVerifyEmailJob;
+use App\Models\Patient;
+use App\Models\PointHistory;
+use App\Enums\Common\PointType;
+
 // use App\Mail\User\VerifyEmail;
 
 class RegisterController extends Controller
@@ -93,7 +97,7 @@ class RegisterController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function register(Request $request)
+    public function register(Request $request, $unique_id = null)
     {   
         $validator = $this->validator($request->all());
 
@@ -108,6 +112,18 @@ class RegisterController extends Controller
         $user = $this->create($request->all());
 
         // UserVerifyEmailJob::dispatch($user);
+        if(!empty($unique_id)) {
+            $patient = Patient::where('unique_id', $unique_id)->first();
+
+            if(!empty($patient)) {
+                PointHistory::create([
+                    'patient_id' => $patient->id,
+                    'type' => PointType::USER_INVITATION,
+                    'type_id' => $user->id,
+                    'use_point' => config('constants.user_invitation')
+                ]);
+            }
+        }
 
         return response()->json([
             'status' => 1,
