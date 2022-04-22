@@ -18,8 +18,12 @@ class DoctorService
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
 
     $query = Doctor::query();
-    if (isset($search['q'])) {
-      $query->where('name', 'LIKE', "%{$search['q']}%");
+
+    if(isset($search['q']) && $search['q'] != '') {
+      $query->where(function($query) use ($search) {
+              $query->where('kata_name', 'like', "%{$search['q']}%")
+              ->orWhere('hira_name', 'like', "%{$search['q']}%");
+      });
     }
 
     if (isset($search['favorite']) && $search['favorite'] == 1)

@@ -24,6 +24,9 @@ Route::get('counselings', 'CounselingController@search');
 Route::get('questions', 'QuestionController@search');
 Route::get('cases', 'CaseController@index');
 
+// 検索
+Route::get('search', 'SearchController@search');
+
 Route::group(['middleware' => 'guest:api'], function () {
   Route::post('login', 'Auth\LoginController@login');
   Route::post('login/sns', 'Auth\RegisterController@registerWithSocial');
