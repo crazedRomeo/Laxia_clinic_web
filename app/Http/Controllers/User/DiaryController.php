@@ -169,12 +169,12 @@ class DiaryController extends Controller
             'categories' => 'required|array',
             'medias' => 'nullable|array',
             'diary_tqs' => 'required|array',
-            'menus' => 'required|array',
-            'menus.*.id' => 'required|integer|exists:menus,id',
-            'menus.*.cost' => 'required|integer',
-            'diaries.cost_anesthetic' => 'required|integer',
-            'diaries.cost_drug' => 'required|integer',
-            'diaries.cost_other' => 'required|integer',
+            // 'menus' => 'required|array',
+            // 'menus.*.id' => 'required|integer|exists:menus,id',
+            // 'menus.*.cost' => 'required|integer',
+            // 'diaries.cost_anesthetic' => 'required|integer',
+            // 'diaries.cost_drug' => 'required|integer',
+            // 'diaries.cost_other' => 'required|integer',
             // 'diary_rqs' => 'required|array',
         ]);
 
