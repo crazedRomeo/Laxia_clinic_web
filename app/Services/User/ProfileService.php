@@ -31,10 +31,10 @@ class ProfileService
 
   public function get($id) {
     return Patient::with([
-      'diaries',
-      'counselings',
+      'diaries.medias',
+      'counselings.medias',
       'favoriteDiaries',
-      'favoriteQuestions',
+      'favoriteQuestions.medias',
       'favoriteDoctors',
       'favoriteCounselingReports',
       'favoriteMenus',
