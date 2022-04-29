@@ -17,7 +17,7 @@ class CaseService
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = TreatCase::query()
-      ->with(['clinic', 'categories', 'menus', 'doctor']);
+      ->with(['clinic', 'categories', 'menus', 'doctor', 'images']);
 
     if (isset($search['q'])) {
       $query->where('name', 'LIKE', "%{$search['q']}%");
