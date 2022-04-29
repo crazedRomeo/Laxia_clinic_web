@@ -33,11 +33,11 @@ class ProfileService
     return Patient::with([
       'diaries.medias',
       'counselings.medias',
-      'favoriteDiaries',
+      'favoriteDiaries.medias',
       'favoriteQuestions.medias',
       'favoriteDoctors',
-      'favoriteCounselingReports',
-      'favoriteMenus',
+      'favoriteCounselingReports.medias',
+      'favoriteMenus.images',
       'favoriteClinics',
     ])
     ->where('id', $id)
