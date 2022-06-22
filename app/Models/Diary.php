@@ -149,7 +149,7 @@ class Diary extends Model
     return in_array($currentUser->patient->id, $likerIds);
   }
 
-  // 
+  //
   public function owner()
   {
     return $this->belongsTo(Patient::class, 'patient_id');

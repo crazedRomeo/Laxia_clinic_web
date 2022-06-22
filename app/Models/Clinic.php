@@ -52,6 +52,7 @@ class Clinic extends Model
     'email',
     'role',
     'work_times',
+    'avg_rate'
   ];
 
   public function getFirebaseKeyAttribute()
@@ -66,7 +67,19 @@ class Clinic extends Model
   {
     return $this->diaries()->count();
   }
-
+  public function getAvgRateAttribute()
+  {
+     $avg_rate=0;
+     $diaries=$this->diaries()->get();
+     $count=count($diaries);
+     for($i=0;$i< $count;$i++){
+        $avg_rate+=$diaries[$i]['ave_rate'];
+     }
+     if($count){
+        return $avg_rate/$count;
+     }
+     return 0;
+  }
   public function getCounselingsCountAttribute()
   {
     return $this->counselings()->count();
