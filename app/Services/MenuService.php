@@ -4,6 +4,8 @@ namespace App\Services;
 use Illuminate\Support\Arr;
 use App\Models\Master\Category;
 use App\Models\Menu;
+use App\Models\Clinic;
+
 use DB;
 use Auth;
 use Throwable;
@@ -21,7 +23,8 @@ class MenuService
       ->with([
         'categories',
         'clinic',
-        'images'
+        'images',
+        'diaries',
       ]);
 
     if (isset($search['clinic_id'])) {
@@ -46,20 +49,48 @@ class MenuService
     //   }
     // }
 
-    if (isset($search['category_id']) && $search['category_id'] != '-1') {
-      $query->join('menu_categories as mc', 'menus.id', '=', 'mc.menu_id')
-            ->where('mc.category_id', $search['category_id']);
+    // if (isset($search['category_id']) && $search['category_id'] != '-1') {
+    //   $query->join('menu_categories as mc', 'menus.id', '=', 'mc.menu_id')
+    //         ->where('mc.category_id', $search['category_id']);
+    // }
+    if (isset($search['category_id']))
+    {
+      $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
+    //   $ids = $category->descendantsAndSelf()->pluck('id');
+      $query->whereHas('categories', function($subquery) use ($ids) {
+        $subquery->whereIn('menu_categories.category_id', $ids);
+      });
     }
-
+    if (isset($search['city_id']))
+    {
+    $ids = Clinic::whereIn('id',explode(',',$search['city_id']))->select('id')->get();
+    //   $ids = $category->descendantsAndSelf()->pluck('id');
+      $query->whereHas('clinic', function($subquery) use ($search){
+        $subquery->where('clinic.city_id',$search['city_id']);
+      });
+    }
     if(isset($search['q']) && $search['q'] != '') {
       $query->where(function($query) use ($search) {
               $query->where('menus.name', 'like', "%{$search['q']}%")
               ->orWhere('menus.description', 'like', "%{$search['q']}%");
       });
     }
-
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+        //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        $result=$query->get();
+        return array_slice($result->sortByDesc('diarycount')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }else if(isset($search['filter'])&&$search['filter']==1){
+        $result=$query->get();
+        return array_slice($result->sortBy('diarycount')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }
+    else if(isset($search['filter'])&&$search['filter']==2){
+        $query->orderby('price', 'desc');
+    }
+    else if(isset($search['filter'])&&$search['filter']==3){
+        $query->orderby('price', 'asc');
+    }
     $query->orderby('created_at', 'desc');
-
     return $query->paginate($per_page);
   }
 

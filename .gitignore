@@ -19,3 +19,5 @@ resources/js/firebase_info.js
 .env.dusk.local
 .env.dusk.testing
 yarn.lock
+composer.lock
+package-lock.json

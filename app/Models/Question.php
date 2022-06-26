@@ -34,6 +34,7 @@ class Question extends Model
     // 'favoriters_count',
     'is_favorite',
     'answers',
+    'is_answer'
   ];
 
   public function viewers()
@@ -92,12 +93,12 @@ class Question extends Model
   {
     return $this->belongsTo(Patient::class, 'patient_id', 'id');
 	}
-	
+
 	public function medias()
 	{
 		return $this->morphMany(Media::class, 'mediable');
   }
-  
+
   public function categories()
   {
     return $this->belongsToMany(Category::class, 'question_categories', 'question_id', 'category_id');
@@ -128,7 +129,13 @@ class Question extends Model
   {
     return $this->hasMany(Answers::class, 'question_id', 'id');
   }
-
+  public function getIsAnswerAttribute(){
+    if($this->answer()->count())
+    {
+        return true;
+    }
+    return false;
+  }
   public function getAnswersAttribute()
   {
     return $this->answer()->get();

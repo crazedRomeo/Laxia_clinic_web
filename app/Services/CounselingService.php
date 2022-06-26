@@ -53,7 +53,7 @@ class CounselingService
         $subquery->where('pref_id', $pref_id);
       });
     }
-    
+
     // if (isset($search['city'])) {
     //   $city = $search['city'];
     //   $query->whereHas('clinic', function($subquery) use ($city) {
@@ -66,18 +66,27 @@ class CounselingService
       $query->where('patient_id', $search['patient_id']);
     }
 
-    if (isset($search['orderby'])) {
-      $orderby = $search['orderby'];
-      if ($orderby == 'comments_count') {
-        $query->withCount('comments')
-          ->orderby('comments_count', 'DESC');
-      } else if ($orderby == 'news') {
-        $query->orderby('updated_at', 'DESC');
-      }
-    } else {
-      $query->orderby('updated_at', 'desc');
+    // if (isset($search['orderby'])) {
+    //   $orderby = $search['orderby'];
+    //   if ($orderby == 'comments_count') {
+    //     $query->withCount('comments')
+    //       ->orderby('comments_count', 'DESC');
+    //   } else if ($orderby == 'news') {
+    //     $query->orderby('updated_at', 'DESC');
+    //   }
+    // } else {
+    //   $query->orderby('updated_at', 'desc');
+    // }
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+            //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        $result=$query->get();
+        return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
     }
-
+    else if(isset($search['filter'])&&$search['filter']==1){
+        $query->orderby('updated_at', 'DESC');
+    }
+    $query->orderby('created_at', 'DESC');
     return $query->paginate($per_page);
   }
 
@@ -95,9 +104,9 @@ class CounselingService
 
     $data = array_merge($counselingAttrs, $addtional);
     $counseling = CounselingReport::create($data);
-    
+
     $counseling->categories()->sync($cateArr);
-    
+
     foreach ($mediaArr as $key => $ids)
     {
       foreach ($ids as $id)

@@ -4,6 +4,8 @@ namespace App\Services;
 use Illuminate\Support\Arr;
 use App\Models\Doctor;
 use App\Models\Attachment;
+use App\Models\Master\Category;
+
 use DB;
 use Auth;
 use Throwable;
@@ -18,7 +20,14 @@ class DoctorService
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
 
     $query = Doctor::query();
-
+    if (isset($search['category_id']))
+    {
+      $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
+    //   $ids = $category->descendantsAndSelf()->pluck('id');
+      $query->whereHas('categories', function($subquery) use ($ids) {
+        $subquery->whereIn('doctor_categories.category_id', $ids);
+      });
+    }
     if(isset($search['q']) && $search['q'] != '') {
       $query->where(function($query) use ($search) {
               $query->where('kata_name', 'like', "%{$search['q']}%")
@@ -43,7 +52,15 @@ class DoctorService
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
     }
-
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+        //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        $result=$query->get();
+        return array_slice($result->sortByDesc('avg_rate')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }else if(isset($search['filter'])&&$search['filter']==1){
+        $result=$query->get();
+        return array_slice($result->sortByDesc('diaries_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }
     // if (isset($search['pref_id'])) {
     //   $query->where('pref_id', $search['pref_id']);
     // }
@@ -62,7 +79,15 @@ class DoctorService
     //     $query->orderBy('ave_diaries_rate', 'DESC');
     //   }
     // }
-
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+        //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        $result=$query->get();
+        return array_slice($result->sortByDesc('diaries_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }else if(isset($search['filter'])&&$search['filter']==1){
+        $result=$query->get();
+        return array_slice($result->sortBy('diaries_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }
     return $query->paginate($per_page);
   }
 
@@ -102,7 +127,7 @@ class DoctorService
 
   public function setClinic($doctor_id, $clinic_id) {
     $doctor = Doctor::find($doctor_id);
-    
+
     $doctor->clinic_id = $clinic_id;
     $doctor->save();
 
@@ -111,7 +136,7 @@ class DoctorService
 
   public function deleteClinic($doctor_id) {
     $doctor = Doctor::find($doctor_id);
-    
+
     $doctor->clinic_id = null;
     $doctor->save();
 

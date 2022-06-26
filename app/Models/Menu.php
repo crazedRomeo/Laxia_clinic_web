@@ -42,9 +42,10 @@ class Menu extends Model
     'photo',
     'status'
   ];
-  
+
   protected $appends = [
     'is_favorite',
+    'diarycount'
   ];
 
   public function clinic()
@@ -72,10 +73,12 @@ class Menu extends Model
   {
     return $query->where('status', 1);
   }
-
+  public function getDiarycountAttribute(){
+    return  $this->diaries()->count();
+  }
   public function diaries()
   {
-    return $this->belongsToMany(Diary::class);
+    return $this->belongsToMany(Diary::class,'diary_menu','menu_id','diary_id');
   }
 
   public function favoriters()

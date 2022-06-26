@@ -7,6 +7,7 @@ use App\Models\Master\Pref;
 use App\Models\Master\Job;
 use App\Models\Master\Speciality;
 use App\Models\Diary;
+use App\Models\Master\Category;
 
 class Doctor extends Model
 {
@@ -41,14 +42,14 @@ class Doctor extends Model
   ];
 
   protected $appends = [
-
+    'diaries_count',
+    'avg_rate'
   ];
 
   protected $hidden = [
     'created_at',
-    'updated_at',
+    'updated_at'
   ];
-
   public function getFirebaseKeyAttribute()
   {
     if ($this->user()->count()) {
@@ -232,5 +233,9 @@ class Doctor extends Model
 
   public function cases() {
     return $this->hasMany(TreatCase::class);
+  }
+  public function categories()
+  {
+    return $this->belongsToMany(Category::class, 'doctor_categories', 'doctor_id', 'category_id');
   }
 }

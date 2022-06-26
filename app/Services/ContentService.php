@@ -22,8 +22,7 @@ class ContentService
 {
   public function search($params)
   {
-    $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
-
+    $per_page = isset($params['per_page']) ? $params['per_page'] : 20;
     $cateIds = null;
     if (isset($params['category_id'])) {
       $category = Category::find($params['category_id']);
@@ -42,7 +41,7 @@ class ContentService
       ->select('viewable_id', DB::raw('count(viewable_id) as count'))
       ->where('viewable_type', 'App\Models\Diary')
       ->groupBy('viewable_id');
-    
+
     // 初期画像
     $max_medias = \DB::table('medias')
       ->select('mediable_id', DB::raw('max(medias.id) as max_id'))
@@ -58,7 +57,7 @@ class ContentService
     $first_content_query = \DB::table('diary_text_questions')
       ->select('diary_id', 'answer')
       ->where('question_id', '1');
-    
+
     // 日記_経過
     $progress_medias = \DB::table('medias')
       ->select('mediable_id', DB::raw('max(medias.id) as max_id'))
@@ -102,9 +101,9 @@ class ContentService
         $join->on('diaries.id', '=', 'cate_query.diary_id');
       });
     }
-    
+
     $diaries_query->select(
-        'diaries.id', 
+        'diaries.id',
         'patients.id as patient_id',
         'patients.nickname as nickname',
         'patients.photo as photo',
@@ -142,7 +141,7 @@ class ContentService
       ->joinSub($medias, 'sub_medias', function($join) {
         $join->on('medias.id', '=', 'sub_medias.min_id');
       });
-    
+
 
     $cr_query = \DB::table('counseling_reports')
       ->join('patients', 'patients.id', '=', 'counseling_reports.patient_id')
@@ -156,7 +155,7 @@ class ContentService
       ->leftJoinSub($media_query, 'medias', function ($join) {
         $join->on('counseling_reports.id', '=', 'medias.mediable_id');
       });
-    
+
     if (isset($cateIds)) {
       $cate_subquery = \DB::table('counseling_categories')
         ->select('counseling_id')
@@ -167,7 +166,7 @@ class ContentService
       });
     }
     $cr_query->select(
-        'counseling_reports.id', 
+        'counseling_reports.id',
         'patients.id as patient_id',
         'patients.nickname as nickname',
         'patients.photo as photo',
@@ -215,7 +214,7 @@ class ContentService
       ->leftJoinSub($media_query, 'medias', function ($join) {
         $join->on('questions.id', '=', 'medias.mediable_id');
       });
-    
+
     if (isset($cateIds)) {
       $cate_subquery = \DB::table('question_categories')
         ->select('question_id')
@@ -226,7 +225,7 @@ class ContentService
       });
     }
     $q_query->select(
-        'questions.id', 
+        'questions.id',
         'patients.id as patient_id',
         'patients.nickname as nickname',
         'patients.photo as photo',
@@ -241,11 +240,11 @@ class ContentService
         'questions.updated_at',
         \DB::raw("'question' as type")
       );
-    
+
     $query = $diaries_query->union($cr_query)
       ->union($q_query)
       ->orderby('updated_at', 'desc');
-    
+
     $result = $query->paginate($per_page);
     foreach ($result->items() as $item)
     {

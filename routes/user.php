@@ -25,7 +25,7 @@ Route::get('questions', 'QuestionController@search');
 Route::get('cases', 'CaseController@index');
 
 // 検索
-Route::get('search', 'SearchController@search');
+
 
 Route::group(['middleware' => 'guest:api'], function () {
   Route::post('login', 'Auth\LoginController@login');
@@ -45,6 +45,10 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::group(['middleware' => ['auth.patient']], function() {
   Route::post('register/detail', 'ProfileController@registerDetail');
   Route::get('me', 'ProfileController@me');
+  Route::get('search', 'SearchController@search');
+  Route::get('midsearch', 'SearchController@midsearch');
+  Route::get('globalsearch', 'SearchController@globalsearch');
+  Route::get('recentsearch', 'SearchController@recentsearch');
 
   // ファイル（画像、動画など）
   Route::post('media', 'MediaController@upload');
@@ -84,7 +88,7 @@ Route::group(['middleware' => ['auth.patient']], function() {
 
   //  フォローする
   Route::post('patients/{patient}/toggleFollow', 'PatientController@toggleFollow');
-  
+
   // フォロー・フォロワー
   Route::get('follows', 'PatientController@getFollows');
   Route::get('followers', 'PatientController@getFollowers');

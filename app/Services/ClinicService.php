@@ -54,7 +54,15 @@ class ClinicService
     //     $query->orderBy('ave_diaries_rate', 'DESC');
     //   }
     // }
-
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+        //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        $result=$query->get();
+        return array_slice($result->sortByDesc('avg_rate')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }else if(isset($search['filter'])&&$search['filter']==1){
+        $result=$query->get();
+        return array_slice($result->sortByDesc('diaries_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }
     return $query->paginate($per_page);
   }
 

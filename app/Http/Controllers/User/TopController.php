@@ -27,5 +27,5 @@ class TopController extends Controller
             'contents' => $contents
         ], 200);
     }
-    
+
 }
