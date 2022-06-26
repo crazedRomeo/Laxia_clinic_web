@@ -28,14 +28,15 @@ class MenuController extends Controller
     {
         $params = $request->all();
         $menus = $this->service->paginate($params);
-        
+
         return response()->json([
             'menus' => $menus
         ], 200);
     }
 
-    public function get(Menu $menu)
+    public function get($menu)
     {
+        $menu = $this->service->get($menu);
         return response()->json([
             'status' => 1,
             'data' => $menu
@@ -110,5 +111,5 @@ class MenuController extends Controller
             'data' => $result
         ], 200);
     }
-    
+
 }

@@ -22,7 +22,7 @@ class CounselingService
       ->with([
         'medias',
         'categories'
-      ]);
+      ])->withCount('likers');
 
     if (isset($search['category_id']))
     {
@@ -80,8 +80,9 @@ class CounselingService
     if(isset($search['filter'])&&$search['filter']==0)
     {
             //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
-        $result=$query->get();
-        return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('likers_count', 'DESC');
     }
     else if(isset($search['filter'])&&$search['filter']==1){
         $query->orderby('updated_at', 'DESC');

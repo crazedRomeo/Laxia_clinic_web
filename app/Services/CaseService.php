@@ -17,7 +17,7 @@ class CaseService
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = TreatCase::query()
-      ->with(['categories', 'menus', 'images']);
+      ->with(['categories', 'menus', 'images'])->withCount('likers');
 
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
@@ -34,9 +34,10 @@ class CaseService
     }
     if(isset($search['filter'])&&$search['filter']==0)
     {
-            //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
-        $result=$query->get();
-        return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        //     //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('likers_count', 'DESC');
     }
     else if(isset($search['filter'])&&$search['filter']==1){
         $query->orderby('updated_at', 'DESC');

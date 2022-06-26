@@ -22,15 +22,18 @@ class DiaryService
     $query = Diary::query()
       ->with([
         'categories'
-      ]);
+      ])->withCount('likers');
 
       if (isset($search['category_id']))
       {
-        $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
-      //   $ids = $category->descendantsAndSelf()->pluck('id');
-        $query->whereHas('categories', function($subquery) use ($ids) {
-          $subquery->whereIn('diary_categories.category_id', $ids);
-        });
+    //     $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
+    //   //   $ids = $category->descendantsAndSelf()->pluck('id'); 
+    //     $query->whereHas('categories', function($subquery) use ($ids) {
+    //       $subquery->whereIn('diary_categories.category_id', $ids);
+    //     });
+        $query->whereHas('categories',function($suvquery) use ($search) {
+        $suvquery->whereIn('diary_categories.id',explode(',',$search['category_id']));
+    });
       }
 
     if (isset($search['favorite']) && $search['favorite'] == 1)
@@ -101,8 +104,9 @@ class DiaryService
     if(isset($search['filter'])&&$search['filter']==0)
     {
             //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
-        $result=$query->get();
-        return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('likers_count', 'DESC');
     }
     elseif(isset($search['filter'])&&$search['filter']==1)
     {

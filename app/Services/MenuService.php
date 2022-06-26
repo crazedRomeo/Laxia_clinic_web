@@ -25,7 +25,7 @@ class MenuService
         'clinic',
         'images',
         'diaries',
-      ]);
+      ])->withCount('diaries');
 
     if (isset($search['clinic_id'])) {
       $query->where('menus.clinic_id', $search['clinic_id']);
@@ -48,6 +48,17 @@ class MenuService
     //     $query->whereIn('category_id', $ids);
     //   }
     // }
+    if (isset($search['category_id']))
+    {
+        $query->whereHas('categories',function($suvquery) use ($search) {
+            $suvquery->whereIn('menus_categories.id',explode(',',$search['category_id']));
+        });
+    //   $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
+    // //   $ids = $category->descendantsAndSelf()->pluck('id');
+    //   $query->whereHas('categories', function($subquery) use ($ids) {
+    //     $subquery->whereIn('diary_categories.category_id', $ids);
+    //   });
+    }
 
     // if (isset($search['category_id']) && $search['category_id'] != '-1') {
     //   $query->join('menu_categories as mc', 'menus.id', '=', 'mc.menu_id')
@@ -78,11 +89,13 @@ class MenuService
     if(isset($search['filter'])&&$search['filter']==0)
     {
         //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
-        $result=$query->get();
-        return array_slice($result->sortByDesc('diarycount')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('diarycount')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('diaries_count', 'desc');
     }else if(isset($search['filter'])&&$search['filter']==1){
-        $result=$query->get();
-        return array_slice($result->sortBy('diarycount')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        // $result=$query->get();
+        // return array_slice($result->sortBy('diarycount')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('diaries_count', 'asc');
     }
     else if(isset($search['filter'])&&$search['filter']==2){
         $query->orderby('price', 'desc');
@@ -122,7 +135,9 @@ class MenuService
   {
     return Menu::with([
       'images',
-      'categories'
+      'categories',
+      'diaries',
+      'process'
     ])
     ->findOrFail($id);
   }

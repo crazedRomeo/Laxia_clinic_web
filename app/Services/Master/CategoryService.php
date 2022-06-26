@@ -19,4 +19,10 @@ class CategoryService
       ->with('allChildren')
       ->get();
   }
+  public function toIndex($id)
+  {
+    return Category::where('parent_id',$id)
+      ->with('allChildren')
+      ->get();
+  }
 }

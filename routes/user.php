@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('load/master', 'MasterDataController@loadMasterData');
+Route::get('load/master/{id}', 'MasterDataController@loadMasterDataIndex');
 Route::get('menus', 'MenuController@index');
 Route::get('clinics', 'ClinicController@search');
 Route::get('stuffs', 'StuffController@search');
@@ -110,7 +111,7 @@ Route::group(['middleware' => ['auth.patient']], function() {
   Route::post('stuffs/{stuff}/toggleFavorite', 'StuffController@toggleFavorite');
 
   // ドクター
-  Route::get('doctors/{doctor}', 'DoctorController@get');
+  Route::get('doctors/{id}', 'DoctorController@get');
   Route::post('doctors/{doctor}/toggleLike', 'DoctorController@toggleLike');
   Route::post('doctors/{doctor}/toggleFavorite', 'DoctorController@toggleFavorite');
 

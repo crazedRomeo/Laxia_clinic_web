@@ -43,7 +43,8 @@ class Doctor extends Model
 
   protected $appends = [
     'diaries_count',
-    'avg_rate'
+    'avg_rate',
+    'categories'
   ];
 
   protected $hidden = [
@@ -233,6 +234,10 @@ class Doctor extends Model
 
   public function cases() {
     return $this->hasMany(TreatCase::class);
+  }
+  public function getCategoriesAttribute()
+  {
+    return $this->categories()->get();
   }
   public function categories()
   {

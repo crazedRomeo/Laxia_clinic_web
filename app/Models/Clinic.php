@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Master\Category;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Master\City;
 use App\Models\Master\DayInfo;
@@ -52,7 +53,6 @@ class Clinic extends Model
     'email',
     'role',
     'work_times',
-    'avg_rate'
   ];
 
   public function getFirebaseKeyAttribute()
@@ -66,19 +66,6 @@ class Clinic extends Model
   public function getDiariesCountAttribute()
   {
     return $this->diaries()->count();
-  }
-  public function getAvgRateAttribute()
-  {
-     $avg_rate=0;
-     $diaries=$this->diaries()->get();
-     $count=count($diaries);
-     for($i=0;$i< $count;$i++){
-        $avg_rate+=$diaries[$i]['ave_rate'];
-     }
-     if($count){
-        return $avg_rate/$count;
-     }
-     return 0;
   }
   public function getCounselingsCountAttribute()
   {
@@ -229,7 +216,6 @@ class Clinic extends Model
   {
     return $this->hasMany(Doctor::class);
   }
-
   public function favoriters()
   {
     return $this->morphToMany(Patient::class, 'favoriable', 'favorites');

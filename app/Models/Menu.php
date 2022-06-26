@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Master\Category;
+use App\Models\MenuProcess;
 
 class Menu extends Model
 {
@@ -52,7 +53,10 @@ class Menu extends Model
   {
     return $this->belongsTo(Clinic::class);
   }
-
+  public function process()
+  {
+    return $this->hasMany(MenuProcess::class)->orderBy('index','asc');
+  }
   public function cases()
   {
     return $this->hasMany(TreatCase::class);
