@@ -207,7 +207,14 @@ class Diary extends Model
       ->orderby('updated_at', 'desc')
       ->take(1);
   }
-
+  public function aftermedias()
+  {
+    return $this->medias()->where('type',1);
+  }
+  public function beforemedias()
+  {
+    return $this->medias()->where('type',0);
+  }
   public function medias()
   {
     return $this->morphMany(Media::class, 'mediable');
