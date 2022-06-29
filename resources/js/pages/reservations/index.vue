@@ -53,10 +53,10 @@
                 </td>
                 <td v-else></td>
                 <td>
-                  {{ rsv.patient.kana }}
+                  {{ rsv.patient? rsv.patient.kana : '' }}
                 </td>
-                <td>{{ gender_types[rsv.patient.gender] }}</td>
-                <td>{{ rsv.patient.phone_only_number | formatTelephone }}</td>
+                <td>{{ rsv.patient? gender_types[rsv.patient.gender] : '' }}</td>
+                <td>{{ rsv.patient? rsv.patient.phone_only_number : '' | formatTelephone }}</td>
                 <td>
                   <div v-if="rsv.type == 5" class="source-info"><img src="/img/msg.svg">{{ $t('チャット') }}</div>
                   <div v-if="rsv.type == 10" class="source-info"><img src="/img/tel.svg">{{ $t('電話予約') }}</div>
@@ -75,7 +75,7 @@
             v-if="pageInfo"
             :page="query.page"
             :page-count="pageInfo.last_page"
-            :click-handler="handlePaginate" /> 
+            :click-handler="handlePaginate" />
         </div>
       </div>
     </div>
@@ -86,16 +86,16 @@
       >
       <div v-if="form && selected" class="reserve-content">
         <ul>
-          <li>  
+          <li>
             <div>{{ $t('診察者') }}</div>
             <div class="rsv-main-content">
               <div>
                 <span>{{ $t('名前') }}</span>
-                {{ selected.patient.kana }}
+                {{ selected.patient? selected.patient.kana : '' }}
               </div>
               <div>
                 <span>{{ $t('性別') }}</span>
-                {{ gender_types[selected.patient.gender] }}
+                {{ selected.patient? gender_types[selected.patient.gender] : '' }}
               </div>
               <div>
                 <span>{{ $t('年齢') }}</span>
@@ -136,7 +136,7 @@
                 <span>{{ $t('診断時間') }}</span>
                 <vue-timepicker fixed-dropdown-button placeholder=" " v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15">
                   <template v-slot:dropdownButton>
-                    <img src="/img/polygon.svg" /> 
+                    <img src="/img/polygon.svg" />
                   </template>
                 </vue-timepicker>
 
