@@ -99,15 +99,15 @@
               </div>
               <div>
                 <span>{{ $t('年齢') }}</span>
-                {{ selected.patient.age }}
+                {{ selected.patient? selected.patient.age : '' }}
               </div>
               <div>
                 <span>{{ $t('生年月日') }}</span>
-                {{ selected.patient.birthday | formatDate }}
+                {{ selected.patient? selected.patient.birthday : '' | formatDate }}
               </div>
               <div>
                 <span>{{ $t('電話番号') }}</span>
-                  {{ selected.patient.phone_number }}
+                  {{ selected.patient? selected.patient.phone_number : '' }}
               </div>
             </div>
           </li>
