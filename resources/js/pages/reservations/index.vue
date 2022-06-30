@@ -404,11 +404,12 @@ export default {
 .rsv-status-select {
 	width: 115px;
 	position: relative;
+  margin: auto;
 	h4 {
 		position: relative;
 		height: 25px;
 		// display: flex;
-		justify-content: flex-start;
+		// justify-content: flex-start;
 		font-size: 14px;
 		color: white;
 		align-items: center;
