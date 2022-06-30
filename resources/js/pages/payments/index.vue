@@ -43,7 +43,7 @@
           v-if="pageInfo"
           :page="query.page"
           :page-count="pageInfo.last_page"
-          :click-handler="handlePaginate" /> 
+          :click-handler="handlePaginate" />
       </div>
     </div>
     <form-modal
@@ -81,7 +81,7 @@
             </li>
             <li>
               <div>{{ $t('予定日') }}</div>
-              <div class="rsv-main-content2">
+              <div class="rsv-main-content">
                 <div>
                   <span>{{ $t('日にち') }}</span>
                   {{ selectedRsv.visit_date | formatDateWithDay }}
@@ -94,7 +94,7 @@
             </li>
             <li>
               <div>{{ $t('担当者') }}</div>
-              <div class="rsv-main-content2">
+              <div class="rsv-main-content">
                 <div>
                   <span>{{ $t('医師') }}</span>
                   {{ selectedRsv.doctor && selectedRsv.doctor.name }}
@@ -149,7 +149,7 @@
               <div class="rsv-main-content2">
                 <div>
                   <span>{{ $t('日にち') }}</span>
-                  <v-date-picker 
+                  <v-date-picker
                     v-model="rsv_form.reservations.visit_date"
                     :masks="{ L: 'YYYY-MM-DD' }"
                     :attributes="attrs"
@@ -166,16 +166,16 @@
                 </div>
                 <div class="time-picker-content">
                   <span>{{ $t('診断時間') }}</span>
-                    <vue-timepicker 
+                    <vue-timepicker
                       fixed-dropdown-button
                       placeholder=" "
-                      v-model="rsv_form.reservations.start_time" 
-                      :class="{'is-invalid' : errors && errors['reservations.start_time'] }" 
-                      :hour-range="[[6, 23]]" 
+                      v-model="rsv_form.reservations.start_time"
+                      :class="{'is-invalid' : errors && errors['reservations.start_time'] }"
+                      :hour-range="[[6, 23]]"
                       :minute-interval="15"
                     >
                     <template v-slot:dropdownButton>
-                      <img src="/img/polygon.svg" /> 
+                      <img src="/img/polygon.svg" />
                     </template>
                     </vue-timepicker>
                     <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
@@ -399,7 +399,7 @@ export default {
         .catch(error => {
           this.$store.dispatch('state/removeIsLoading')
         })
-    }, 
+    },
 
     handleSelectDate(param) {
       if (param == 'current') {
@@ -409,7 +409,7 @@ export default {
       } else if (param == 'prev') {
         this.query.selected_date = this.$moment(this.query.selected_date).add(-1, 'days').format('YYYY-MM-DD');
       }
-    }, 
+    },
 
     handleShowPaymentModal(rsvId) {
       this.selectedRsv = this.reservations.find(el => el.id == rsvId);
@@ -436,7 +436,7 @@ export default {
         }
       }
       this.$refs.paymentModal.show()
-    }, 
+    },
 
     handleShowRsvModal(rsvId) {
       this.selectedRsv = this.reservations.find(el => el.id == rsvId);
@@ -518,7 +518,7 @@ export default {
       this.errors = undefined
     },
 
-    
+
   selectedDoctor(selected_option) {
     this.rsv_form.reservations.doctor_id = selected_option ? selected_option.id : null;
   },
@@ -533,7 +533,7 @@ export default {
       .then(res => {
         if(res.data.status == 1) {
           this.reservations = this.reservations.filter(el => el.id != res.data.id);
-  
+
           this.$store.dispatch('state/removeIsLoading');
           this.$refs.rsvModal.hide()
 
