@@ -102,15 +102,15 @@
                 </div>
                 <div>
                   <span>{{ $t("年齢") }}</span>
-                  {{ selectedRsv.patient.age }}
+                  {{ selectedRsv.patient? selectedRsv.patient.age : '' }}
                 </div>
                 <div>
                   <span>{{ $t("電話番号") }}</span>
-                  {{ selectedRsv.patient.phone_number }}
+                  {{ selectedRsv.patient? selectedRsv.patient.phone_number : ''}}
                 </div>
                 <div>
                   <span>{{ $t("生年月日") }}</span>
-                  {{ selectedRsv.patient.birthday | formatDate }}
+                  {{ selectedRsv.patient? selectedRsv.patient.birthday : ''| formatDate }}
                 </div>
               </div>
             </li>
@@ -189,15 +189,15 @@
                 </div>
                 <div>
                   <span>{{ $t("年齢") }}</span>
-                  {{ selectedRsv.patient.age }}
+                  {{ selectedRsv.patient ? selectedRsv.patient.age : ''}}
                 </div>
                 <div>
                   <span>{{ $t("生年月日") }}</span>
-                  {{ selectedRsv.patient.birthday | formatDate }}
+                  {{ selectedRsv.patient? selectedRsv.patient.birthday : '' | formatDate }}
                 </div>
                 <div>
                   <span>{{ $t("電話番号") }}</span>
-                  {{ selectedRsv.patient.phone_number }}
+                  {{ selectedRsv.patient? selectedRsv.patient.phone_number : ''}}
                 </div>
               </div>
             </li>
@@ -332,7 +332,7 @@
           </div>
           <div>
             <span></span>
-            {{ selectedRsv.patient.age }}歳/{{
+            {{ selectedRsv.patient? selectedRsv.patient.age : ''}}歳/{{
               selectedRsv.patient
                 ? selectedRsv.patient.gender
                 : "" &&
