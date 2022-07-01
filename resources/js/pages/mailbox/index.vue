@@ -39,7 +39,7 @@
           />
           <textarea
             v-if="reservation"
-            :placeholder="`${reservation.patient.kana}さんにメッセージを書く`"
+            :placeholder="`${reservation.patient? reservation.patient.kana : ''}さんにメッセージを書く`"
             v-model="newMessage" ></textarea>
           <button class="message-send" @click="handleSendMessage">{{ $t('送信') }}</button>
         </div>
@@ -50,19 +50,19 @@
             <ul>
               <li>
                 <p><span>{{ $t('名前') }}</span></p>
-                <p class="hiragana">{{ reservation.patient.kana }}</p>
+                <p class="hiragana">{{ reservation.patient? reservation.patient.kana : '' }}</p>
               </li>
               <li>
                 <p><span>{{ $t('生年月日') }}</span></p>
-                <p>{{ reservation.patient.birthday | formatDate }}{{ reservation.patient.age }}歳</p>
+                <p>{{ reservation.patient? reservation.patient.birthday : '' | formatDate }}{{ reservation.patient? reservation.patient.age : '' }}歳</p>
               </li>
               <li>
                 <p><span>{{ $t('性別') }}</span></p>
-                <p>{{reservation.patient.gender && gender_types[reservation.patient.gender]}}</p>
+                <p>{{reservation.patient? reservation.patient.gender : '' && gender_types[reservation.patient? reservation.patient.gender : '']}}</p>
               </li>
               <li>
                 <p><span>{{ $t('電話番号') }}</span></p>
-                <p>{{ reservation.patient.phone_number }}</p>
+                <p>{{ reservation.patient? reservation.patient.phone_number : '' }}</p>
               </li>
               <li>
                 <p><span>{{ $t('希望ドクター') }}</span></p>
@@ -83,7 +83,7 @@
                   <p>第{{ index + 1 }}希望</p>
                   <p>{{ hope_time.start_time_str }}</p>
                 </div>
-              </li>            
+              </li>
             </ul>
           </div>
         <div class="item-center">
@@ -106,28 +106,28 @@
       >
       <div v-if="reservation_form && reservation" class="reserve-content">
         <ul>
-          <li>  
+          <li>
             <div>{{ $t('診察者') }}</div>
             <div class="rsv-main-content">
               <div>
                 <span>{{ $t('名前') }}</span>
-                {{ reservation.patient.kana }}
+                {{ reservation.patient? reservation.patient.kana : '' }}
               </div>
               <div>
                 <span>{{ $t('性別') }}</span>
-                {{ gender_types[reservation.patient.gender] }}
+                {{ gender_types[reservation.patient? reservation.patient.gender : ''] }}
               </div>
               <div>
                 <span>{{ $t('年齢') }}</span>
-                {{ reservation.patient.age }}
+                {{ reservation.patient? reservation.patient.age : '' }}
               </div>
               <div>
                 <span>{{ $t('生年月日') }}</span>
-                {{ reservation.patient.birthday | formatDate }}
+                {{ reservation.patient? reservation.patient.birthday : '' | formatDate }}
               </div>
               <div>
                 <span>{{ $t('電話番号') }}</span>
-                  {{ reservation.patient.phone_number }}
+                  {{ reservation.patient? reservation.patient.phone_number : '' }}
               </div>
             </div>
           </li>
@@ -320,7 +320,7 @@ export default {
           hope_treat: this.reservation.hope_treat,
         }
       }
-      
+
       if(this.$refs.doctorSelect) this.$refs.doctorSelect.set(this.reservation_form.reservations.doctor_id);
       this.$refs.modal.show()
     },
@@ -339,9 +339,9 @@ export default {
     scrollToEnd() {
       setTimeout(() => {
         var container = this.$el.querySelector("#chat-main");
-        container.scrollBy({ 
+        container.scrollBy({
           top: container.scrollHeight, // could be negative value
-          left: 0, 
+          left: 0,
           behavior: 'smooth'
         });
       }, 500)
@@ -443,7 +443,7 @@ export default {
                 }
 
                 // this.updateFirebase(this.reservation.patient_info.firebase_key, pushMessage)
-                
+
                 this.$forceUpdate();
 
                 let self = this;
@@ -485,7 +485,7 @@ export default {
 
     // registerSnapshot() {
     //     if (this.user.firebase_key) {
-          
+
     //       let self = this;
     //       this.snapShot = firestore.collection("users").doc(this.user.firebase_key)
     //           .onSnapshot(function (docRef) {
@@ -493,11 +493,11 @@ export default {
     //               if (!self.lastMessage) {
     //                 self.lastMessage = { ...to.message }
     //               }
-                
+
     //               if (!to.message) return;
-                
+
     //               if (self.lastMessage && JSON.stringify(self.lastMessage) !== JSON.stringify(to.message) && parseInt(to.message.mailbox_id) === parseInt(self.mailboxId)) {
-                      
+
     //                   if (to.message.user_id === self.reservation.patient.user_id) {
     //                       self.messages.push({
     //                           is_mine: false,
@@ -516,7 +516,7 @@ export default {
     //                       self.lastMessage = { ...to.message }
 
     //                       self.$forceUpdate()
-                          
+
     //                       self.scrollToEnd()
     //                   }
     //               }
@@ -543,7 +543,7 @@ export default {
     selectedDoctor(selected_option) {
       this.reservation_form.reservations.doctor_id = selected_option ? selected_option.id : null;
     },
-    
+
     selectedHopeTreat(selected_option) {
       this.reservation_form.reservations.hope_treat = selected_option;
     },
@@ -608,7 +608,7 @@ export default {
 <style scoped>
   * >>> #del-modal .form-modal-header{
     display: none !important;
-    
+
   }
   * >>> #del-modal.form-modal-wrapper{
     top: 130px;
