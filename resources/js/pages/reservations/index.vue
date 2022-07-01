@@ -313,7 +313,7 @@ export default {
     showRsvModal(rsvId) {
       this.errors = {}
       this.selected = this.reservations.find(el => el.id == rsvId);
-      console.log('qqqqqqqqqqqqqqqqq', this.selected);
+      console.log('kkkkkkkkkkkkkkk', this.selected);
       this.form = {
         reservations: {
           visit_date: this.selected.visit_date,
@@ -341,7 +341,7 @@ export default {
         mm: ''
       }
 
-      this.$refs.modal.hide();
+      // this.$refs.modal.hide();
     },
 
     handleConfirmRsv() {
@@ -351,10 +351,8 @@ export default {
       else
         this.form.reservations.start_time = this.timePicker_start_time.HH + ':' + this.timePicker_start_time.mm;
 
-      // console.log('wwwwwwwwwwwwwwwwwwwwwww', (new Date(this.form.reservations.visit_date)).toISOString());
       if(this.form.reservations.visit_date != null)
         this.form.reservations.visit_date = (new Date(this.form.reservations.visit_date)).toISOString().substring(0, 10);
-      console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrrrr', this.form.reservations.visit_date);
 
       axios.put(`/api/clinic/reservations/${this.selected.id}`, this.form)
         .then(res => {

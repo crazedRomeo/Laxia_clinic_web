@@ -4,7 +4,7 @@
       <div class="chat-content">
         <div class="chat-main--wrapper">
           <div class="chat-main" id="chat-main">
-            <template v-for="(msg, index) in messages">
+            <template v-for="(msg, index) in messages" >
               <div v-if="!index || getDateString(messages[index-1].created_at) != getDateString(msg.created_at)" class="chat-date">{{ msg.created_at | formatDateWithDay }}</div>
               <div :class="{'other': !msg.is_mine, 'me': msg.is_mine }">
                 <p class="avatar"><img src="/img/img.svg" width="45px"></p>
@@ -87,7 +87,7 @@
             </ul>
           </div>
         <div class="item-center">
-            <button class="btn btn-chat-confirm" @click="showRsvModal()">日時を確定</button>
+            <button v-if="reservation.status == 5" class="btn btn-chat-confirm" @click="showRsvModal()">日時を確定</button>
             <button class="btn btn-danger" @click="showDelModal()">予約をキャンセル</button>
         </div>
       </div>
@@ -137,9 +137,11 @@
               <div>
                 <span>{{ $t('日にち') }}</span>
                 <v-date-picker
+                  class="h-auto"
                   v-model="reservation_form.reservations.visit_date"
                   :masks="{ L: 'YYYY-MM-DD' }"
                   :attributes='attrs'
+                  :class="{'is-invalid' : errors && errors['reservations.visit_date'] && reservation_form.reservations.visit_date == null}"
                 >
                   <template v-slot="{ inputValue, inputEvents }">
                     <input
@@ -153,7 +155,7 @@
               </div>
               <div class="time-picker-content">
                 <span>{{ $t('診断時間') }}</span>
-                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="reservation_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15"></vue-timepicker>
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="timePicker_start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] && (timePicker_start_time.HH == '' || timePicker_start_time.mm == '')}" :hour-range="[[6, 23]]" :minute-interval="15"></vue-timepicker>
                 <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
               </div>
             </div>
@@ -176,6 +178,7 @@
                   class="select"
                   ref="doctorSelect"
                   @change="selectedDoctor"
+                  :class="{'is-invalid' : errors && errors['reservations.doctor_id'] && reservation_form.reservations.doctor_id == null}"
                 />
                 <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
               </div>
@@ -192,6 +195,7 @@
                   class="select"
                   ref="hopeTreatSelect"
                   @change="selectedHopeTreat"
+                  :class="{'is-invalid' : errors && errors['reservations.hope_treat'] && reservation_form.reservations.hope_treat == null}"
                 />
                 <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
               </div>
@@ -271,9 +275,13 @@ export default {
           },
         ],
         delModalInfo: {
-        title: '',
-        confirmBtnTitle: '',
-      },
+          title: '',
+          confirmBtnTitle: '',
+        },
+        timePicker_start_time: {
+          HH: '',
+          mm: ''
+        },
     }
   },
 
@@ -311,6 +319,7 @@ export default {
 
   methods: {
     showRsvModal() {
+      this.errors = {}
       this.reservation_form = {
         reservations: {
           visit_date: this.reservation.visit_date,
@@ -321,7 +330,14 @@ export default {
         }
       }
 
+      if(this.reservation_form.reservations.start_time != null) {
+        var arr = this.reservation_form.reservations.start_time.split(':');
+        this.timePicker_start_time.HH = arr[0];
+        this.timePicker_start_time.mm = arr[1];
+      }
+
       if(this.$refs.doctorSelect) this.$refs.doctorSelect.set(this.reservation_form.reservations.doctor_id);
+      if(this.$refs.hopeTreatSelect) this.$refs.hopeTreatSelect.set(this.reservation_form.reservations.hope_treat);
       this.$refs.modal.show()
     },
 
@@ -331,6 +347,18 @@ export default {
 
     clearRsvModal() {
       // this.$refs.doctorSelect.clear();
+      this.$refs.doctorSelect.clear();
+      this.$refs.hopeTreatSelect.clear();
+
+      this.errors = undefined;
+      // this.reservation = undefined;
+      this.reservation_form = undefined;
+      this.timePicker_start_time = {
+        HH: '',
+        mm: ''
+      }
+
+      // this.$refs.modal.hide();
     },
 
     cancelModal(){
@@ -551,8 +579,16 @@ export default {
     handleConfirmRsv() {
       this.$store.dispatch('state/setIsLoading')
 
-      this.reservation_form.reservations.start_time = this.getTime(this.reservation_form.reservations.start_time);
-      this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
+      // this.reservation_form.reservations.start_time = this.getTime(this.reservation_form.reservations.start_time);
+      // this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
+
+      if (this.timePicker_start_time.HH == '' || this.timePicker_start_time.mm == '')
+        this.reservation_form.reservations.start_time = null;
+      else
+        this.reservation_form.reservations.start_time = this.timePicker_start_time.HH + ':' + this.timePicker_start_time.mm;
+
+      if(this.reservation_form.reservations.visit_date != null)
+        this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
 
       axios.put(`/api/clinic/reservations/${this.reservation.id}`, this.reservation_form)
         .then(res => {
@@ -595,12 +631,12 @@ export default {
       })
     },
 
-    getTime(time_obj) {
-      if(time_obj.HH)
-        return time_obj.HH + ':' + time_obj.mm;
-      else
-        return time_obj;
-    },
+    // getTime(time_obj) {
+    //   if(time_obj.HH)
+    //     return time_obj.HH + ':' + time_obj.mm;
+    //   else
+    //     return time_obj;
+    // },
   },
 }
 </script>
