@@ -207,9 +207,11 @@
                 <div>
                   <span>{{ $t("日にち") }}</span>
                   <v-date-picker
+                    class="h-auto"
                     v-model="rsv_form.reservations.visit_date"
                     :masks="{ L: 'YYYY-MM-DD' }"
                     :attributes="attrs"
+                    :class="{'is-invalid' : errors && errors['reservations.visit_date'] && rsv_form.reservations.visit_date == null}"
                   >
                     <template v-slot="{ inputValue, inputEvents }">
                       <input
@@ -237,9 +239,9 @@
                   <vue-timepicker
                     fixed-dropdown-button
                     placeholder=" "
-                    v-model="rsv_form.reservations.start_time"
+                    v-model="timePicker_start_time"
                     :class="{
-                      'is-invalid': errors && errors['reservations.start_time'],
+                      'is-invalid': errors && errors['reservations.start_time'] && (timePicker_start_time.HH == '' || timePicker_start_time.mm == ''),
                     }"
                     :hour-range="[[6, 23]]"
                     :minute-interval="15"
@@ -274,6 +276,7 @@
                     class="select"
                     ref="doctorSelect"
                     @change="selectedDoctor"
+                    :class="{'is-invalid' : errors && errors['reservations.doctor_id'] && rsv_form.reservations.doctor_id == null}"
                   />
                   <div
                     v-if="errors && errors['reservations.doctor_id']"
@@ -294,6 +297,7 @@
                     class="select"
                     ref="hopeTreatSelect"
                     @change="selectedHopeTreat"
+                    :class="{'is-invalid' : errors && errors['reservations.hope_treat'] && rsv_form.reservations.hope_treat == null}"
                   />
                   <div
                     v-if="errors && errors['reservations.hope_treat']"
@@ -488,6 +492,10 @@ export default {
           dates: new Date(),
         },
       ],
+      timePicker_start_time: {
+        HH: '',
+        mm: ''
+      },
     };
   },
 
@@ -595,6 +603,7 @@ export default {
 
     handleShowRsvModal(rsvId) {
       this.selectedRsv = this.reservations.find((el) => el.id == rsvId);
+      console.log('hhhhhhhhhhhhhh', this.selectedRsv);
       this.rsv_form = {
         reservations: {
           visit_date: this.selectedRsv.visit_date,
@@ -604,6 +613,13 @@ export default {
           hope_treat: this.selectedRsv.hope_treat,
         },
       };
+
+      if(this.rsv_form.reservations.start_time != null) {
+        var arr = this.rsv_form.reservations.start_time.split(':');
+        this.timePicker_start_time.HH = arr[0];
+        this.timePicker_start_time.mm = arr[1];
+      }
+
       this.isEditing = false;
       if (this.$refs.doctorSelect)
         this.$refs.doctorSelect.set(this.rsv_form.reservations.doctor_id);
@@ -618,6 +634,15 @@ export default {
 
     handleUpdateRsv() {
       this.$store.dispatch("state/setIsLoading");
+
+      if (this.timePicker_start_time.HH == '' || this.timePicker_start_time.mm == '')
+        this.rsv_form.reservations.start_time = null;
+      else
+        this.rsv_form.reservations.start_time = this.timePicker_start_time.HH + ':' + this.timePicker_start_time.mm;
+
+      if(this.rsv_form.reservations.visit_date != null)
+        this.rsv_form.reservations.visit_date = (new Date(this.rsv_form.reservations.visit_date)).toISOString().substring(0, 10);
+
       axios
         .put(
           `/api/clinic/reservations/${this.selectedRsv.id}/with-user-info`,
@@ -678,6 +703,10 @@ export default {
     handleModalClose() {
       this.isEditing = false;
       this.errors = undefined;
+      timePicker_start_time = {
+        HH: '',
+        mm: ''
+      };
     },
 
     selectedDoctor(selected_option) {
