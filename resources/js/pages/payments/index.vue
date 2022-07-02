@@ -375,7 +375,7 @@
                 v-model="form.payments.total_price"
                 min="1"
                 :class="{
-                  'is-invalid': errors && errors['payments.total_price'],
+                  'is-invalid': errors && errors['payments.total_price'] && form.payments.total_price == '',
                 }"
               />
               <div
@@ -396,7 +396,7 @@
                 v-model="form.payments.except_price"
                 min="0"
                 :class="{
-                  'is-invalid': errors && errors['payments.except_price'],
+                  'is-invalid': errors && errors['payments.except_price'] && form.payments.except_price == '',
                 }"
               />
               <div
@@ -703,7 +703,7 @@ export default {
     handleModalClose() {
       this.isEditing = false;
       this.errors = undefined;
-      timePicker_start_time = {
+      this.timePicker_start_time = {
         HH: '',
         mm: ''
       };
