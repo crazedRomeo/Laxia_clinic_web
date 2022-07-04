@@ -56,7 +56,8 @@
               <div v-for="(item, index) in clinic.work_times" :key="index" class="work-time">
                 <p>{{ item.weekday }}</p>
                 <p v-if="item.type == null">未入力</p>
-                <p v-else-if="item.type == 0">{{ item.start_time }} ~ {{ item.end_time }}</p>
+                <p v-else-if="item.type == 0&&item.start_time!=null&&item.end_time!=null">{{ startTimeOptions.find(el => el.val ==item.start_time)['text']}} ~ {{ startTimeOptions.find(el => el.val ==item.end_time)['text']}}</p>
+                <p v-else-if="item.type == 0">未入力</p>
                 <p v-else>定休日</p>
               </div>
             </div>
@@ -224,6 +225,7 @@
               <file-upload
                 ref="fileUploadComponent"
                 uploadUrl="/api/clinic/stuffs/photoupload"
+                :photo='form.clinic.photo'
                 :avatar="true"
                 @file-upload-success="handleFileSaved"
                 @file-removed="hanleFileRemove"
@@ -300,6 +302,8 @@
               </select> -->
               <c-select
                   :options="statusOptions"
+                  :tabindex="index"
+                  :default="item.type"
                   :textkey="'text'"
                   :valkey="'val'"
                   :emptyable="true"
@@ -316,6 +320,8 @@
               </select> -->
               <c-select
                   :options="startTimeOptions"
+                  :tabindex="index"
+                  :default="item.start_time"
                   :textkey="'text'"
                   :valkey="'val'"
                   :emptyable="true"
@@ -333,6 +339,8 @@
               </select> -->
               <c-select
                   :options="startTimeOptions"
+                  :tabindex="index"
+                  :default="item.end_time"
                   :textkey="'text'"
                   :valkey="'val'"
                   :emptyable="true"
@@ -393,7 +401,7 @@
             </div>
           </div>
         </div>
-      </div>  
+      </div>
       <template v-slot:footer>
         <button type="button" class="btn btn-primary btn-modal-footer" @click="handleUpdate">{{ modalInfo.confirmBtnTitle }}</button>
       </template>
@@ -556,6 +564,7 @@ export default {
     },
 
     handleSaveClinic() {
+      console.log(this.form);
       this.$store.dispatch('state/setIsLoading')
       axios.put(`/api/clinic/${this.user.id}`, this.form)
         .then(res => {
@@ -648,19 +657,27 @@ export default {
 
     },
 
-    selectedStatus01(selected_option) {
+    selectedStatus01(selected_option,tabindex) {
+      if(selected_option!=null){
+        this.form.clinic.work_times[tabindex].type=selected_option.val;
       console.log(selected_option);
+      }
+
     },
 
     selectedAdress(selected_option) {
       console.log(selected_option);
     },
 
-    selectedStartTime(selected_option) {
+    selectedStartTime(selected_option,tabindex) {
+      if(selected_option!=null)
+      this.form.clinic.work_times[tabindex].start_time=selected_option.val;
       console.log(selected_option);
     },
 
-    selectedEndTime(selected_option) {
+    selectedEndTime(selected_option,tabindex) {
+      if(selected_option!=null)
+      this.form.clinic.work_times[tabindex].end_time=selected_option.val;
       console.log(selected_option);
     },
   }

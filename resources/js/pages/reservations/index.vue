@@ -53,10 +53,10 @@
                 </td>
                 <td v-else></td>
                 <td>
-                  {{ rsv.patient.kana }}
+                  {{ rsv.patient? rsv.patient.kana : '' }}
                 </td>
-                <td>{{ gender_types[rsv.patient.gender] }}</td>
-                <td>{{ rsv.patient.phone_only_number | formatTelephone }}</td>
+                <td>{{ rsv.patient? gender_types[rsv.patient.gender] : '' }}</td>
+                <td>{{ rsv.patient? rsv.patient.phone_only_number : '' | formatTelephone }}</td>
                 <td>
                   <div v-if="rsv.type == 5" class="source-info"><img src="/img/msg.svg">{{ $t('チャット') }}</div>
                   <div v-if="rsv.type == 10" class="source-info"><img src="/img/tel.svg">{{ $t('電話予約') }}</div>
@@ -75,7 +75,7 @@
             v-if="pageInfo"
             :page="query.page"
             :page-count="pageInfo.last_page"
-            :click-handler="handlePaginate" /> 
+            :click-handler="handlePaginate" />
         </div>
       </div>
     </div>
@@ -86,28 +86,28 @@
       >
       <div v-if="form && selected" class="reserve-content">
         <ul>
-          <li>  
+          <li>
             <div>{{ $t('診察者') }}</div>
             <div class="rsv-main-content">
               <div>
                 <span>{{ $t('名前') }}</span>
-                {{ selected.patient.kana }}
+                {{ selected.patient? selected.patient.kana : '' }}
               </div>
               <div>
                 <span>{{ $t('性別') }}</span>
-                {{ gender_types[selected.patient.gender] }}
+                {{ selected.patient? gender_types[selected.patient.gender] : '' }}
               </div>
               <div>
                 <span>{{ $t('年齢') }}</span>
-                {{ selected.patient.age }}
+                {{ selected.patient? selected.patient.age : '' }}
               </div>
               <div>
                 <span>{{ $t('生年月日') }}</span>
-                {{ selected.patient.birthday | formatDate }}
+                {{ selected.patient? selected.patient.birthday : '' | formatDate }}
               </div>
               <div>
                 <span>{{ $t('電話番号') }}</span>
-                  {{ selected.patient.phone_number }}
+                  {{ selected.patient? selected.patient.phone_number : '' }}
               </div>
             </div>
           </li>
@@ -404,11 +404,12 @@ export default {
 .rsv-status-select {
 	width: 115px;
 	position: relative;
+  margin: auto;
 	h4 {
 		position: relative;
 		height: 25px;
 		// display: flex;
-		justify-content: flex-start;
+		// justify-content: flex-start;
 		font-size: 14px;
 		color: white;
 		align-items: center;

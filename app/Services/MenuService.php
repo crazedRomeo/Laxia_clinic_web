@@ -25,6 +25,7 @@ class MenuService
         'clinic',
         'images',
         'diaries',
+        'process'
       ])->withCount('diaries');
 
     if (isset($search['clinic_id'])) {
@@ -48,17 +49,17 @@ class MenuService
     //     $query->whereIn('category_id', $ids);
     //   }
     // }
-    if (isset($search['category_id']))
-    {
-        $query->whereHas('categories',function($suvquery) use ($search) {
-            $suvquery->whereIn('menus_categories.id',explode(',',$search['category_id']));
-        });
-    //   $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
-    // //   $ids = $category->descendantsAndSelf()->pluck('id');
-    //   $query->whereHas('categories', function($subquery) use ($ids) {
-    //     $subquery->whereIn('diary_categories.category_id', $ids);
-    //   });
-    }
+    // if (isset($search['category_id']))
+    // {
+    //     $query->whereHas('categories',function($suvquery) use ($search) {
+    //         $suvquery->whereIn('menus_categories.id',explode(',',$search['category_id']));
+    //     });
+    // //   $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
+    // // //   $ids = $category->descendantsAndSelf()->pluck('id');
+    // //   $query->whereHas('categories', function($subquery) use ($ids) {
+    // //     $subquery->whereIn('diary_categories.category_id', $ids);
+    // //   });
+    // }
 
     // if (isset($search['category_id']) && $search['category_id'] != '-1') {
     //   $query->join('menu_categories as mc', 'menus.id', '=', 'mc.menu_id')
@@ -155,7 +156,11 @@ class MenuService
         'path' => $photo
       ]);
     }
-
+    foreach ($attributes['menus']['process'] as $process) {
+        $menu->process()->create(
+          $process
+        );
+      }
     $categoryAttrs = Arr::get($attributes, 'categories');
     $menu->categories()->sync($categoryAttrs);
 
@@ -164,10 +169,16 @@ class MenuService
 
   public function update($attributes, $where)
   {
+
     $menuAttrs = Arr::get($attributes, 'menus');
     $menu = Menu::where($where)->firstOrFail();
     $menu->update($menuAttrs);
-
+    $menu->process()->delete();
+    foreach ($attributes['menus']['process'] as $process) {
+      $menu->process()->create(
+        $process
+      );
+    }
     $menuPhotos = Arr::get($attributes, 'menuPhotos');
     $menu->images()->delete();
     foreach ($menuPhotos as $photo) {

@@ -21,7 +21,6 @@ class MenuProcess extends Model
    */
   protected $fillable = [
     'menu_id',
-    'index',
     'title',
     'period'
   ];

@@ -89,7 +89,6 @@ class ClinicService
         'menus',
         'counselings',
         'diaries',
-        'questions'
       ])
       ->where('id', $id)
       ->firstOrFail();
@@ -101,7 +100,6 @@ class ClinicService
     $clinic = Clinic::where($where)->firstOrFail();
     $clinic->fill($clinicAttrs);
     $clinic->save();
-
     $companyPhotos = Arr::get($attributes, 'companyPhotos');
     $clinic->images()->delete();
     foreach ($companyPhotos as $photo) {
@@ -109,7 +107,17 @@ class ClinicService
         'path' => $photo
       ]);
     }
-
+    $clinic->clinic_day_infos()->delete();
+    foreach ($attributes['clinic']['work_times'] as $index=> $work_time) {
+            $clinic->clinic_day_infos()->create(
+                [
+                    'day_info_id'=>$index+1,
+                    'type'=>$work_time['type']-0,
+                    'start_time'=>$work_time['start_time'],
+                    'end_time'=>$work_time['end_time'],
+                ]
+                );
+    }
     return $clinic;
   }
 

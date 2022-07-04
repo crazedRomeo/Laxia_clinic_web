@@ -17,7 +17,6 @@ class CreateMenuProcessTable extends Migration
             $table->id();
             $table->bigInteger('menu_id')->unsigned();
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
-            $table->bigInteger('index')->unsigned();
             $table->string('title')->nullable();
             $table->bigInteger('period')->unsigned();
             $table->timestamps();

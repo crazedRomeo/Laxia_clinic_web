@@ -46,16 +46,20 @@ class Menu extends Model
 
   protected $appends = [
     'is_favorite',
-    'diarycount'
+    'diarycount',
+    'periodsum'
   ];
 
   public function clinic()
   {
     return $this->belongsTo(Clinic::class);
   }
+  public function getPeriodsumAttribute(){
+    return $this->process()->sum('period');
+  }
   public function process()
   {
-    return $this->hasMany(MenuProcess::class)->orderBy('index','asc');
+    return $this->hasMany(MenuProcess::class)->orderBy('id','asc');
   }
   public function cases()
   {
@@ -84,7 +88,6 @@ class Menu extends Model
   {
     return $this->belongsToMany(Diary::class,'diary_menu','menu_id','diary_id');
   }
-
   public function favoriters()
   {
     return $this->morphToMany(Patient::class, 'favoriable', 'favorites');

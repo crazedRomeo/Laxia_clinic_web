@@ -27,13 +27,13 @@ class DiaryService
       if (isset($search['category_id']))
       {
     //     $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
-    //   //   $ids = $category->descendantsAndSelf()->pluck('id'); 
+    //   //   $ids = $category->descendantsAndSelf()->pluck('id');
     //     $query->whereHas('categories', function($subquery) use ($ids) {
     //       $subquery->whereIn('diary_categories.category_id', $ids);
     //     });
         $query->whereHas('categories',function($suvquery) use ($search) {
-        $suvquery->whereIn('diary_categories.id',explode(',',$search['category_id']));
-    });
+            $suvquery->whereIn('mtb_part_categories.id',explode(',',$search['category_id']));
+        });
       }
 
     if (isset($search['favorite']) && $search['favorite'] == 1)

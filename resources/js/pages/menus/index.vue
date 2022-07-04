@@ -63,13 +63,13 @@
                 :height="30"
                 :font-size="12" /> -->
                 <Toggle :defaultState="form.menus.status == 0 ? true:false" @change="triggerEvent"/>
-            </div>          
+            </div>
           </div>
           <div class="form-group row m-row">
             <div class="col-md-8">
               <small>{{ $t('メニュー名') }}</small>
               <input type="text" v-model="form.menus.name" class="form-control" :class="{'is-invalid' : errors && errors['menus.name'], 'fulled-status' : form.menus.name ? 'fulled-input': ''}" placeholder="例：二重切開">
-              <!-- <i v-if="errors && errors['menus.name']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>, 'is-valid' : errors && !errors['menus.name'] 
+              <!-- <i v-if="errors && errors['menus.name']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>, 'is-valid' : errors && !errors['menus.name']
               <i v-if="errors && !errors['menus.name']" class="i-text-valid bi bi-check-circle-fill"></i> -->
               <div v-if="errors && errors['menus.name']" class="error invalid-feedback">{{ errors['menus.name'][0] }}</div>
             </div>
@@ -167,17 +167,17 @@
           </div>
           <div class="row create-menu-flow-title">
             <div class="col-9">
-              <div>{{ $t('施術の流れ') }}</div>
+              <div>{{ $t(' ') }}</div>
             </div>
             <div class="col-3">
               <div>{{ $t('所要時間') }}</div>
             </div>
           </div>
-          <div class="form-group row m-row create-menu-flow" v-for="(inp, ind) in inputGroups" :key="ind"> 
+          <div class="form-group row m-row create-menu-flow" v-for="(inp, ind) in form.menus.process" :key="ind">
             <div class= "create-menu-flow-index">{{ind + 1}}</div>
             <div class="col-9">
               <div>
-                <input type="text" placeholder="例：麻酔">
+                <input type="text" placeholder="例：麻酔" v-model="inp.title">
               </div>
             </div>
             <div class="col-3">
@@ -188,6 +188,8 @@
               <c-enum-select
                   :options="required_time"
                   :emptyable="true"
+                  :default="inp.period"
+                  :tabindex="ind"
                   class="select"
                   ref="requireTimeSelects"
                   @change="selectedRequireTime"
@@ -388,9 +390,9 @@
                   @change="selectedSportImpossible"
                 />
             </div>
-          </div>       
+          </div>
         </div>
-      </div>  
+      </div>
       <!-- </vue-custom-scrollbar> -->
       <template v-slot:footer>
         <button type="button" class="btn btn-primary btn-modal-footer" @click="handleUpdateMenu">{{ modalInfo.confirmBtnTitle }}</button>
@@ -471,17 +473,21 @@
             <div>
               <small>{{ $t('施術の流れ') }}</small>
               <span>{{ $t('施術の工程') }}</span>
-              <div>
-                <div class= "create-menu-flow-index">{{ $t('1') }}</div>
-                <p>局部麻酔を二ヶ所</p>
-              </div>
+                <template v-for="(item, key) in this.form.menus.process" :value="key">
+                  <div :key="key">
+                    <div  class= "create-menu-flow-index">{{ $t(key+1) }}</div>
+                    <p>{{item.title}}</p>
+                  </div>
+                </template>
             </div>
             <div>
-              <small>{{ $t('施術時間 75分') }}</small>
+              <small>{{ $t('施術時間')}} {{this.form.menus.periodsum}} {{$t('分') }}</small>
               <span>{{ $t('施術の工程') }}</span>
-              <p>{{ $t('10分') }}</p>
+              <template v-for="(item, key) in this.form.menus.process" :value="key">
+                <p :key="key" style="margin-top:10px">{{item.period}}{{ $t('分') }}</p>
+              </template>
             </div>
-          </div>          
+          </div>
           <div class="form-group row">
             <div class="col">
               <small>{{ $t('施術時間') }}</small>
@@ -591,7 +597,7 @@
             </div>
           </div>
         </div>
-      </div>  
+      </div>
       <!-- </vue-custom-scrollbar> -->
       <template v-slot:footer>
           <div class="view-modal-footer">
@@ -645,6 +651,7 @@ export default {
           sport_impossible: '',
           status: true,
           photo: '',
+          process:[]
         },
         fileChanged: false,
         menuPhotos: [],
@@ -712,7 +719,7 @@ export default {
 
     search_categories() {
       let tc = [];
-      
+
       this.categories.map(el => {
         el.all_children.map(item => {
           tc.push({
@@ -752,7 +759,11 @@ export default {
       this.selected_categories.splice(idx, 1);
     },
     handleClick() {
-      this.inputGroups.push(1);
+      this.form.menus.process.push({
+        menu_id:this.form.menus.id,
+        title:'',
+        period:undefined
+      });
     },
     getData() {
       this.$store.dispatch('state/setIsLoading')
@@ -760,7 +771,7 @@ export default {
       axios.get(`/api/clinic/menus?${qs}`)
         .then(res => {
           this.menus = res.data.menus.data;
-          
+
           this.query = {
             ...this.query,
             per_page: res.data.menus.per_page
@@ -802,12 +813,14 @@ export default {
           sport_impossible: selected.sport_impossible,
           status: selected.status == 1,
           photo: selected.photo,
+          process:selected.process,
+          periodsum:selected.periodsum
         },
-        menuPhotos: 
+        menuPhotos:
           selected.images.map(el => el.path)
         ,
       }
-      
+
       this.selected_categories = []
       let opt_groud_name;
       this.category_options.forEach(item => {
@@ -889,7 +902,7 @@ export default {
       this.inputGroups.forEach((val, i) => {
         if(this.$refs.requireTimeSelects && this.$refs.requireTimeSelects[i]) this.$refs.requireTimeSelects[i].clear();
       });
-      
+
       if(this.$refs.timeTreatSelect) this.$refs.timeTreatSelect.set(this.form.menus.treat_time);
       if(this.$refs.basshiSelect) this.$refs.basshiSelect.set(this.form.menus.basshi);
       if(this.$refs.hospitalVisitSelect) this.$refs.hospitalVisitSelect.set(this.form.menus.hospital_visit);
@@ -903,11 +916,11 @@ export default {
       if(this.$refs.massageSelect) this.$refs.massageSelect.set(this.form.menus.massage);
       if(this.$refs.sportImpossibleSelect) this.$refs.sportImpossibleSelect.set(this.form.menus.sport_impossible);
       this.$refs.modal.show();
-      
-    },   
 
-    selectedRequireTime(selected_option) {
-      console.log(selected_option);
+    },
+
+    selectedRequireTime(selected_option,tabindex) {
+      this.form.menus.process[tabindex].period = selected_option;
     },
 
     selectedTimeTreat(selected_option) {
@@ -951,7 +964,7 @@ export default {
     },
 
     selectedMassage(selected_option) {
-      this.form.menus.shower = selected_option;
+      this.form.menus.massage = selected_option;
     },
 
     selectedSportImpossible(selected_option) {
@@ -993,7 +1006,7 @@ export default {
     },
 
     handleSaveMenu() {
-      this.$store.dispatch('state/setIsLoading')   
+      this.$store.dispatch('state/setIsLoading')
       let url = '/api/clinic/menus';
       if (this.form.menus.id) {
         url += `/${this.form.menus.id}`
@@ -1030,7 +1043,7 @@ export default {
             title: '登録できません。',
             icon: 'error',
           })
-          this.errors = { ...error.response.data.errors }          
+          this.errors = { ...error.response.data.errors }
           this.$store.dispatch('state/removeIsLoading')
         })
     },
@@ -1063,7 +1076,7 @@ export default {
     },
 
     // handleFileSaved(fileUrl) {
-    //   this.selected_photos.push(fileUrl); 
+    //   this.selected_photos.push(fileUrl);
     //   this.form.menus.photo = fileUrl
     //   this.form.fileChanged = false
     //   this.handleSaveMenu()
@@ -1101,23 +1114,23 @@ export default {
       // }
     },
 
-    handleRemoveFile(index) {      
+    handleRemoveFile(index) {
       this.form.menuPhotos.splice(index, 1)
     },
 
     handleCategoryChange(e) {
       e.preventDefault();
       this.query.category_id = e.target.value
-      this.getData()      
+      this.getData()
     },
-    triggerEvent(value){      
+    triggerEvent(value){
       if(value)
         this.form.menus.status = 0;
       else
         this.form.menus.status = 1;
     },
     scrollHanle(evt) {
-      
+
     },
   }
 }
@@ -1154,7 +1167,7 @@ div.create-menu-content{
   justify-content: center;
 }
 .vue-dropzone:hover {
-  background-color: #fff !important; 
+  background-color: #fff !important;
 }
 .btn-file-upload{
     width: 200px;

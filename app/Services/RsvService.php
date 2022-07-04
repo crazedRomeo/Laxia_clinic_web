@@ -23,11 +23,11 @@ class RsvService
 
     $query = Reservation::query()
       ->with(['patient', 'doctor', 'clinic', 'payments', 'mailbox']);
-    
+
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
     }
-    
+
     if (isset($search['status']) && $search['status']) {
       $query->where('status', $search['status']);
     }
@@ -54,13 +54,13 @@ class RsvService
     $totalCount = Reservation::where($where)->count();
     $notSupportedCount = Reservation::where($where)->where('status', Status::NOTSUPPORTED)->count();
     $inProgressCount = Reservation::where($where)->where('status', Status::INPROGRESS)->count();
-    
+
     return [
       'all' => $totalCount,
       'not_supported' => $notSupportedCount,
       'in_progress' => $inProgressCount,
     ];
-  } 
+  }
 
   public function get($id)
   {
@@ -71,7 +71,7 @@ class RsvService
   public function store($attributes, $addtional = [])
   {
     $rsvAttrs = Arr::get($attributes, 'rsv');
-    
+
     $addtional['status'] = 5;
     $data = array_merge($rsvAttrs, $addtional);
     $rsv = Reservation::create($data);

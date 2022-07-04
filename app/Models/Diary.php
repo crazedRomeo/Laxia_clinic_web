@@ -141,7 +141,7 @@ class Diary extends Model
   public function getIsLikeAttribute()
   {
     $currentUser = auth()->guard('patient')->user();
-    if (!$currentUser) return false;
+    if (!$currentUser||$currentUser->role=='clinic') return false;
     $likerIds = $this->likers()
       ->get()
       ->pluck('id')

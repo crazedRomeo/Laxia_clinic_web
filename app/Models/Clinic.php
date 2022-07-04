@@ -8,6 +8,7 @@ use App\Models\Master\City;
 use App\Models\Master\DayInfo;
 use App\Models\Master\Pref;
 use App\Models\Master\Town;
+use App\Models\ClinicDayInfo;
 
 class Clinic extends Model
 {
@@ -147,7 +148,9 @@ class Clinic extends Model
 
     return $result;
   }
-
+  public function clinic_day_infos(){
+    return $this->hasMany(ClinicDayInfo::class);
+  }
   public function user()
   {
     return $this->belongsTo(User::class);
