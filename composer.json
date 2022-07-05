@@ -47,9 +47,9 @@
         "psr-4": {
             "App\\": "app/"
         },
+        "files": ["app/Helper/Helper.php"],
         "Database\\Factories\\": "database/factories/",
-        "Database\\Seeders\\": "database/seeders/",
-        "files": ["app/Helper/Helper.php"]
+        "Database\\Seeders\\": "database/seeders/"
     },
     "autoload-dev": {
         "psr-4": {

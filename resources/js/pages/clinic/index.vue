@@ -387,7 +387,7 @@
               <div v-if="form.clinic.images.length" class="company-profile-img-list">
                 <div v-for="(img, index) in form.clinic.images" class="company-image--edit" :key="index">
                   <div class="over-hidden">
-                    <img :src="img" />
+                    <img :src="img.path" />
                   </div>
                   <span class="remove-btn" @click="handleRemoveFile(index)">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -606,6 +606,7 @@ export default {
     },
 
     handleMultiFileSaved(fileUrl) {
+      this.form.clinic.images.push({path:fileUrl})
       this.form.companyPhotos.push(fileUrl)
     },
 
@@ -625,12 +626,13 @@ export default {
     handleMultiFilesQueueComplete() {
       console.log('Multi Files Uplaod Complete!');
       this.form.companyPhotoFileChanged = false
-      if (!this.form.avatarFileChanged) {
-        this.handleSaveClinic()
-      }
+      // if (!this.form.avatarFileChanged) {
+      //   this.handleSaveClinic()
+      // }
     },
 
     handleRemoveFile(index) {
+      this.form.clinic.images.splice(index, 1)
       this.form.companyPhotos.splice(index, 1)
       // this.form.companyPhotoThumbs.splice(index, 1)
     },
