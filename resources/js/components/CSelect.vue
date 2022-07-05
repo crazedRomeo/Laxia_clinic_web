@@ -89,7 +89,7 @@ export default {
   position: relative;
   width: 100%;
   height: 50px;
-  padding: 0;
+  padding: 0 !important;
   border: none;
   border-radius: 5px;
   background:url(/img/polygon.svg) no-repeat right #fff;

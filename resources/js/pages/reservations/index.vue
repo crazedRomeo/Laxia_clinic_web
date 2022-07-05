@@ -118,9 +118,11 @@
                 <span>{{ $t('日にち') }}</span>
                 <!-- <input type="date" :min="currentDate" v-model="form.reservations.visit_date" :class="{'is-invalid' : errors && errors['reservations.visit_date'] }"/> -->
                 <v-date-picker
+                  class="h-auto"
                   v-model="form.reservations.visit_date"
                   :masks="{ L: 'YYYY-MM-DD' }"
                   :attributes="attrs"
+                  :class="{'is-invalid' : errors && errors['reservations.visit_date'] && form.reservations.visit_date == null}"
                 >
                   <template v-slot="{ inputValue, inputEvents }">
                     <input
@@ -134,7 +136,7 @@
               </div>
               <div class="time-picker-content">
                 <span>{{ $t('診断時間') }}</span>
-                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15">
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="timePicker_start_time" :class="{'is-invalid rm-icon-is-invalid' : errors && errors['reservations.start_time'] && (timePicker_start_time.HH == '' || timePicker_start_time.mm == '')}" :hour-range="[[6, 23]]" :minute-interval="15">
                   <template v-slot:dropdownButton>
                     <img src="/img/polygon.svg" />
                   </template>
@@ -162,6 +164,7 @@
                   class="select"
                   ref="doctorSelect"
                   @change="selectedDoctor"
+                  :class="{'is-invalid' : errors && errors['reservations.doctor_id'] && form.reservations.doctor_id == null}"
                 />
                 <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
               </div>
@@ -178,6 +181,7 @@
                   class="select"
                   ref="hopeTreatSelect"
                   @change="selectedHopeTreat"
+                  :class="{'is-invalid' : errors && errors['reservations.hope_treat'] && form.reservations.hope_treat == null}"
                 />
                 <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
               </div>
@@ -238,6 +242,10 @@ export default {
           dates: new Date(),
         },
       ],
+      timePicker_start_time: {
+        HH: '',
+        mm: ''
+      },
     }
   },
 
@@ -305,6 +313,7 @@ export default {
     showRsvModal(rsvId) {
       this.errors = {}
       this.selected = this.reservations.find(el => el.id == rsvId);
+      console.log('kkkkkkkkkkkkkkk', this.selected);
       this.form = {
         reservations: {
           visit_date: this.selected.visit_date,
@@ -321,14 +330,29 @@ export default {
     },
 
     clearRsvModal() {
-      // this.$refs.doctorSelect.clear();
-      // this.$refs.hopeTreatSelect.clear();
+      this.$refs.doctorSelect.clear();
+      this.$refs.hopeTreatSelect.clear();
+
+      this.errors = undefined;
+      this.selected = undefined;
+      this.form = undefined;
+      this.timePicker_start_time = {
+        HH: '',
+        mm: ''
+      }
+
+      // this.$refs.modal.hide();
     },
 
     handleConfirmRsv() {
       this.$store.dispatch('state/setIsLoading')
-      this.form.reservations.start_time = this.form.reservations.start_time.HH + ':' + this.form.reservations.start_time.mm;
-      this.form.reservations.visit_date = (new Date(this.form.reservations.visit_date)).toISOString().substring(0, 10);
+      if (this.timePicker_start_time.HH == '' || this.timePicker_start_time.mm == '')
+        this.form.reservations.start_time = null;
+      else
+        this.form.reservations.start_time = this.timePicker_start_time.HH + ':' + this.timePicker_start_time.mm;
+
+      if(this.form.reservations.visit_date != null)
+        this.form.reservations.visit_date = (new Date(this.form.reservations.visit_date)).toISOString().substring(0, 10);
 
       axios.put(`/api/clinic/reservations/${this.selected.id}`, this.form)
         .then(res => {

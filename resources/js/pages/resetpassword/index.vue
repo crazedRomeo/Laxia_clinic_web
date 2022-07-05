@@ -36,7 +36,10 @@
         <div class="profile-dialog-container">
           <div class="input-con">
             <label>{{ $t('新しいメールアドレス') }}</label>
-            <input class="form-control" type="text" v-model="form.email" @keyup="add_todo_keyup" />
+            <input class="form-control" type="text" v-model="form.email" @keyup="add_todo_keyup"
+              :class="{'is-invalid' : errors && errors['email'] && (form.email == '' || show_email_error) }"
+            />
+            <div v-if="errors && errors['email']" class="error invalid-feedback">{{ errors['email'][0] }}</div>
           </div>
           <div class="btn-grp">
               <button class="btn btn-notify-secondary btn-sm"  @click="handleCancelEmail">キャンセル</button>
@@ -53,7 +56,7 @@
     >
       <div v-if="isPasswordModal" class="main-modal">
         <div class="profile-dialog-container">
-          
+
           <div class="item-con">
             <div class="label lable-grp">
               <span class="label-title">{{ $t('現在のパスワード') }}</span>
@@ -107,6 +110,15 @@ export default {
     })
   },
 
+  watch: {
+    'form.email': function(newVal, oldVal) {
+      if(newVal) {
+        this.show_email_error = false
+      } else {
+        this.show_email_error = true
+      }
+    }
+  },
   mounted () {
     this.getData();
   },
@@ -134,6 +146,8 @@ export default {
       curPwType: 'password',
       newPwType: 'password',
       confirmPwType: 'password',
+
+      show_email_error: false,
     }
   },
 
@@ -173,12 +187,15 @@ export default {
         .then(res => {
           this.$store.dispatch('state/removeIsLoading')
           this.clinic = res.data.data
+          this.isEmailModal = false
+      this.$refs.emailModal.hide();
         })
         .catch(error => {
           this.$store.dispatch('state/removeIsLoading')
+          this.errors = { ...error.response.data.errors }
         })
-      this.isEmailModal = false
-      this.$refs.emailModal.hide();
+      // this.isEmailModal = false
+      // this.$refs.emailModal.hide();
     },
 
     handlePassword() {

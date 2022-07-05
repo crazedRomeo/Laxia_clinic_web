@@ -4,7 +4,7 @@
       <div class="chat-content">
         <div class="chat-main--wrapper">
           <div class="chat-main" id="chat-main">
-            <template v-for="(msg, index) in messages">
+            <template v-for="(msg, index) in messages" >
               <div v-if="!index || getDateString(messages[index-1].created_at) != getDateString(msg.created_at)" class="chat-date">{{ msg.created_at | formatDateWithDay }}</div>
               <div :class="{'other': !msg.is_mine, 'me': msg.is_mine }">
                 <p class="avatar"><img src="/img/img.svg" width="45px"></p>
@@ -39,7 +39,7 @@
           />
           <textarea
             v-if="reservation"
-            :placeholder="`${reservation.patient.kana}さんにメッセージを書く`"
+            :placeholder="`${reservation.patient? reservation.patient.kana : ''}さんにメッセージを書く`"
             v-model="newMessage" ></textarea>
           <button class="message-send" @click="handleSendMessage">{{ $t('送信') }}</button>
         </div>
@@ -50,19 +50,19 @@
             <ul>
               <li>
                 <p><span>{{ $t('名前') }}</span></p>
-                <p class="hiragana">{{ reservation.patient.kana }}</p>
+                <p class="hiragana">{{ reservation.patient? reservation.patient.kana : '' }}</p>
               </li>
               <li>
                 <p><span>{{ $t('生年月日') }}</span></p>
-                <p>{{ reservation.patient.birthday | formatDate }}{{ reservation.patient.age }}歳</p>
+                <p>{{ reservation.patient? reservation.patient.birthday : '' | formatDate }}{{ reservation.patient? reservation.patient.age : '' }}歳</p>
               </li>
               <li>
                 <p><span>{{ $t('性別') }}</span></p>
-                <p>{{reservation.patient.gender && gender_types[reservation.patient.gender]}}</p>
+                <p>{{reservation.patient? reservation.patient.gender : '' && gender_types[reservation.patient? reservation.patient.gender : '']}}</p>
               </li>
               <li>
                 <p><span>{{ $t('電話番号') }}</span></p>
-                <p>{{ reservation.patient.phone_number }}</p>
+                <p>{{ reservation.patient? reservation.patient.phone_number : '' }}</p>
               </li>
               <li>
                 <p><span>{{ $t('希望ドクター') }}</span></p>
@@ -83,11 +83,11 @@
                   <p>第{{ index + 1 }}希望</p>
                   <p>{{ hope_time.start_time_str }}</p>
                 </div>
-              </li>            
+              </li>
             </ul>
           </div>
         <div class="item-center">
-            <button class="btn btn-chat-confirm" @click="showRsvModal()">日時を確定</button>
+            <button v-if="reservation.status == 5" class="btn btn-chat-confirm" @click="showRsvModal()">日時を確定</button>
             <button class="btn btn-danger" @click="showDelModal()">予約をキャンセル</button>
         </div>
       </div>
@@ -106,28 +106,28 @@
       >
       <div v-if="reservation_form && reservation" class="reserve-content">
         <ul>
-          <li>  
+          <li>
             <div>{{ $t('診察者') }}</div>
             <div class="rsv-main-content">
               <div>
                 <span>{{ $t('名前') }}</span>
-                {{ reservation.patient.kana }}
+                {{ reservation.patient? reservation.patient.kana : '' }}
               </div>
               <div>
                 <span>{{ $t('性別') }}</span>
-                {{ gender_types[reservation.patient.gender] }}
+                {{ gender_types[reservation.patient? reservation.patient.gender : ''] }}
               </div>
               <div>
                 <span>{{ $t('年齢') }}</span>
-                {{ reservation.patient.age }}
+                {{ reservation.patient? reservation.patient.age : '' }}
               </div>
               <div>
                 <span>{{ $t('生年月日') }}</span>
-                {{ reservation.patient.birthday | formatDate }}
+                {{ reservation.patient? reservation.patient.birthday : '' | formatDate }}
               </div>
               <div>
                 <span>{{ $t('電話番号') }}</span>
-                  {{ reservation.patient.phone_number }}
+                  {{ reservation.patient? reservation.patient.phone_number : '' }}
               </div>
             </div>
           </li>
@@ -137,9 +137,11 @@
               <div>
                 <span>{{ $t('日にち') }}</span>
                 <v-date-picker
+                  class="h-auto"
                   v-model="reservation_form.reservations.visit_date"
                   :masks="{ L: 'YYYY-MM-DD' }"
                   :attributes='attrs'
+                  :class="{'is-invalid' : errors && errors['reservations.visit_date'] && reservation_form.reservations.visit_date == null}"
                 >
                   <template v-slot="{ inputValue, inputEvents }">
                     <input
@@ -153,7 +155,7 @@
               </div>
               <div class="time-picker-content">
                 <span>{{ $t('診断時間') }}</span>
-                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="reservation_form.reservations.start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] }" :hour-range="[[6, 23]]" :minute-interval="15"></vue-timepicker>
+                <vue-timepicker fixed-dropdown-button placeholder=" " v-model="timePicker_start_time" :class="{'is-invalid' : errors && errors['reservations.start_time'] && (timePicker_start_time.HH == '' || timePicker_start_time.mm == '')}" :hour-range="[[6, 23]]" :minute-interval="15"></vue-timepicker>
                 <div v-if="errors && errors['reservations.start_time']" class="error invalid-feedback">{{ errors['reservations.start_time'][0] }}</div>
               </div>
             </div>
@@ -176,6 +178,7 @@
                   class="select"
                   ref="doctorSelect"
                   @change="selectedDoctor"
+                  :class="{'is-invalid' : errors && errors['reservations.doctor_id'] && reservation_form.reservations.doctor_id == null}"
                 />
                 <div v-if="errors && errors['reservations.doctor_id']" class="error invalid-feedback">{{ errors['reservations.doctor_id'][0] }}</div>
               </div>
@@ -192,6 +195,7 @@
                   class="select"
                   ref="hopeTreatSelect"
                   @change="selectedHopeTreat"
+                  :class="{'is-invalid' : errors && errors['reservations.hope_treat'] && reservation_form.reservations.hope_treat == null}"
                 />
                 <div v-if="errors && errors['reservations.hope_treat']" class="error invalid-feedback">{{ errors['reservations.hope_treat'][0] }}</div>
               </div>
@@ -271,9 +275,13 @@ export default {
           },
         ],
         delModalInfo: {
-        title: '',
-        confirmBtnTitle: '',
-      },
+          title: '',
+          confirmBtnTitle: '',
+        },
+        timePicker_start_time: {
+          HH: '',
+          mm: ''
+        },
     }
   },
 
@@ -311,6 +319,7 @@ export default {
 
   methods: {
     showRsvModal() {
+      this.errors = {}
       this.reservation_form = {
         reservations: {
           visit_date: this.reservation.visit_date,
@@ -320,8 +329,15 @@ export default {
           hope_treat: this.reservation.hope_treat,
         }
       }
-      
+
+      if(this.reservation_form.reservations.start_time != null) {
+        var arr = this.reservation_form.reservations.start_time.split(':');
+        this.timePicker_start_time.HH = arr[0];
+        this.timePicker_start_time.mm = arr[1];
+      }
+
       if(this.$refs.doctorSelect) this.$refs.doctorSelect.set(this.reservation_form.reservations.doctor_id);
+      if(this.$refs.hopeTreatSelect) this.$refs.hopeTreatSelect.set(this.reservation_form.reservations.hope_treat);
       this.$refs.modal.show()
     },
 
@@ -331,6 +347,18 @@ export default {
 
     clearRsvModal() {
       // this.$refs.doctorSelect.clear();
+      this.$refs.doctorSelect.clear();
+      this.$refs.hopeTreatSelect.clear();
+
+      this.errors = undefined;
+      // this.reservation = undefined;
+      this.reservation_form = undefined;
+      this.timePicker_start_time = {
+        HH: '',
+        mm: ''
+      }
+
+      // this.$refs.modal.hide();
     },
 
     cancelModal(){
@@ -339,9 +367,9 @@ export default {
     scrollToEnd() {
       setTimeout(() => {
         var container = this.$el.querySelector("#chat-main");
-        container.scrollBy({ 
+        container.scrollBy({
           top: container.scrollHeight, // could be negative value
-          left: 0, 
+          left: 0,
           behavior: 'smooth'
         });
       }, 500)
@@ -443,7 +471,7 @@ export default {
                 }
 
                 // this.updateFirebase(this.reservation.patient_info.firebase_key, pushMessage)
-                
+
                 this.$forceUpdate();
 
                 let self = this;
@@ -485,7 +513,7 @@ export default {
 
     // registerSnapshot() {
     //     if (this.user.firebase_key) {
-          
+
     //       let self = this;
     //       this.snapShot = firestore.collection("users").doc(this.user.firebase_key)
     //           .onSnapshot(function (docRef) {
@@ -493,11 +521,11 @@ export default {
     //               if (!self.lastMessage) {
     //                 self.lastMessage = { ...to.message }
     //               }
-                
+
     //               if (!to.message) return;
-                
+
     //               if (self.lastMessage && JSON.stringify(self.lastMessage) !== JSON.stringify(to.message) && parseInt(to.message.mailbox_id) === parseInt(self.mailboxId)) {
-                      
+
     //                   if (to.message.user_id === self.reservation.patient.user_id) {
     //                       self.messages.push({
     //                           is_mine: false,
@@ -516,7 +544,7 @@ export default {
     //                       self.lastMessage = { ...to.message }
 
     //                       self.$forceUpdate()
-                          
+
     //                       self.scrollToEnd()
     //                   }
     //               }
@@ -543,7 +571,7 @@ export default {
     selectedDoctor(selected_option) {
       this.reservation_form.reservations.doctor_id = selected_option ? selected_option.id : null;
     },
-    
+
     selectedHopeTreat(selected_option) {
       this.reservation_form.reservations.hope_treat = selected_option;
     },
@@ -551,8 +579,16 @@ export default {
     handleConfirmRsv() {
       this.$store.dispatch('state/setIsLoading')
 
-      this.reservation_form.reservations.start_time = this.getTime(this.reservation_form.reservations.start_time);
-      this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
+      // this.reservation_form.reservations.start_time = this.getTime(this.reservation_form.reservations.start_time);
+      // this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
+
+      if (this.timePicker_start_time.HH == '' || this.timePicker_start_time.mm == '')
+        this.reservation_form.reservations.start_time = null;
+      else
+        this.reservation_form.reservations.start_time = this.timePicker_start_time.HH + ':' + this.timePicker_start_time.mm;
+
+      if(this.reservation_form.reservations.visit_date != null)
+        this.reservation_form.reservations.visit_date = (new Date(this.reservation_form.reservations.visit_date)).toISOString().substring(0, 10);
 
       axios.put(`/api/clinic/reservations/${this.reservation.id}`, this.reservation_form)
         .then(res => {
@@ -595,12 +631,12 @@ export default {
       })
     },
 
-    getTime(time_obj) {
-      if(time_obj.HH)
-        return time_obj.HH + ':' + time_obj.mm;
-      else
-        return time_obj;
-    },
+    // getTime(time_obj) {
+    //   if(time_obj.HH)
+    //     return time_obj.HH + ':' + time_obj.mm;
+    //   else
+    //     return time_obj;
+    // },
   },
 }
 </script>
@@ -608,7 +644,7 @@ export default {
 <style scoped>
   * >>> #del-modal .form-modal-header{
     display: none !important;
-    
+
   }
   * >>> #del-modal.form-modal-wrapper{
     top: 130px;

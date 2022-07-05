@@ -31,7 +31,7 @@
                   <!-- <img v-else :src="'/img/menu-img.png'"> -->
                   <!-- <img v-else class="menu-blank-img"> -->
                 </p>
-              </div> 
+              </div>
               <div class="case-info">
                 <p class="case-cat empty-cat" v-if="item.categories.length === 0"></p>
                 <template v-for="(item, key) in item.categories" :value="key">
@@ -50,7 +50,7 @@
         :page="query.page"
         :page-count="pageInfo.last_page"
         :click-handler="handlePaginate" />
-      </div>      
+      </div>
     </div>
 
     <form-modal
@@ -66,8 +66,8 @@
           <div class="form-group row mt-0">
             <div class="col-12">
               <small>{{ $t('タイトル') }}</small>
-              <input type="text" id="case_name" v-model="form.cases.name" placeholder="例：奥二重の方の二重切開" class="form-control" :class="{'is-invalid' : errors && errors['cases.name'], 'is-valid' : errors && !errors['cases.name'] && showstatus }"  @keyup="inputValid" />
-              <i v-if="errors && errors['cases.name'] && showstatus" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>
+              <input type="text" id="case_name" v-model="form.cases.name" placeholder="例：奥二重の方の二重切開" class="form-control" :class="{'is-invalid' : errors && errors['cases.name'] && form.cases.name == '', 'is-valid' : errors && !errors['cases.name'] && showstatus && form.cases.name != ''}"  @keyup="inputValid" />
+              <!-- <i v-if="errors && errors['cases.name'] && showstatus" class="i-text-invalid bi bi-exclamation-triangle-fill"></i> -->
               <i v-if="errors && !errors['cases.name'] && showstatus" class="i-text-valid bi bi-check-circle-fill"></i>
               <div v-if="errors && errors['cases.name']" class="error invalid-feedback">{{ errors['cases.name'][0] }}</div>
             </div>
@@ -180,8 +180,9 @@
                 deselectLabel="削除"
                 deselectGroupLabel="削除"
                 @select="handleCateChange"
+                :class="{'is-invalid' : errors && errors['categories'] && selected_categories.length == 0 }"
               ></multiselect>
-              <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
+              <div v-if="errors && errors['categories'] && selected_categories.length == 0" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
               <div class="view-cate-panel mt-2">
                 <template v-for="(item, idx) in selected_categories" :value="id">
                   <p :key="idx">
@@ -192,7 +193,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- <div class="form-group row">
             <div class="col-12">
                 <small>{{ $t('担当者') }}</small>
@@ -218,6 +219,7 @@
                   class="select"
                   ref="ageSelect"
                   @change="selectedAge"
+                  :class="{'is-invalid' : errors && errors['cases.patient_age'] && (form.cases.patient_age == null || form.cases.patient_age == '') }"
               />
                 <div v-if="errors && errors['cases.patient_age']" class="error invalid-feedback">{{ errors['cases.patient_age'][0] }}</div>
             </div>
@@ -233,18 +235,19 @@
                   class="select"
                   ref="genderSelect"
                   @change="selectedGender"
+                  :class="{'is-invalid' : errors && errors['cases.patient_gender'] && (form.cases.patient_gender == null || form.cases.patient_gender == '')}"
                 />
               <div v-if="errors && errors['cases.patient_gender']" class="error invalid-feedback">{{ errors['cases.patient_gender'][0] }}</div>
             </div>
           </div>
           <div class="create-case-text">
             <small>{{ $t('施術の解説') }}</small>
-            <textarea v-model="form.cases.case_description" class="form-control" :class="{'is-invalid' : errors && errors['cases.case_description'] }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
+            <textarea v-model="form.cases.case_description" class="form-control" :class="{'is-invalid' : errors && errors['cases.case_description'] && form.cases.case_description == ''}" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
             <div v-if="errors && errors['cases.case_description']" class="error invalid-feedback">{{ errors['cases.case_description'][0] }}</div>
           </div>
           <div class="create-case-text">
             <small>{{ $t('副作用・リスク') }}</small>
-            <textarea v-model="form.cases.treat_risk" class="form-control" :class="{'is-invalid' : errors && errors['cases.treat_risk'] }" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
+            <textarea v-model="form.cases.treat_risk" class="form-control" :class="{'is-invalid' : errors && errors['cases.treat_risk'] && form.cases.treat_risk == ''}" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
             <div v-if="errors && errors['cases.treat_risk']" class="error invalid-feedback">{{ errors['cases.treat_risk'][0] }}</div>
           </div>
           <div class="create-case-text">
@@ -252,9 +255,9 @@
             <textarea v-model="form.cases.doctor_opinion" class="form-control" placeholder="例：この施術は〇〇な方に向いているかと思います。"></textarea>
             <!-- <div v-if="errors && errors['cases.treat_risk']" class="error invalid-feedback">{{ errors['cases.treat_risk'][0] }}</div> -->
           </div>
-          </div>     
+          </div>
         </div>
-      </div>  
+      </div>
       <!-- </vue-custom-scrollbar> -->
       <template v-slot:footer>
         <button type="button" class="btn btn-primary" @click="handleUpdateCase">{{ modalInfo.confirmBtnTitle }}</button>
@@ -465,7 +468,7 @@ export default {
     },
     search_categories() {
       let tc = [];
-      
+
       this.categories.map(el => {
         el.all_children.map(item => {
           tc.push({
@@ -618,7 +621,7 @@ export default {
       this.modalInfo = {
         title: '症例を追加する',
         confirmBtnTitle: '症例を追加する'
-      }      
+      }
 
       if(this.$refs.genderSelect) this.$refs.genderSelect.set(this.form.cases.patient_gender);
       if(this.$refs.ageSelect) this.$refs.ageSelect.set(this.form.cases.patient_age);
@@ -790,11 +793,11 @@ export default {
       // this.handleSaveCase()
     },
 
-    handleBeforeRemoveFile(index) {      
+    handleBeforeRemoveFile(index) {
       this.form.beforePhotos.splice(index, 1)
     },
 
-    handleAfterRemoveFile(index) {      
+    handleAfterRemoveFile(index) {
       this.form.afterPhotos.splice(index, 1)
     },
 
@@ -847,6 +850,12 @@ div.create-menu-content {
   justify-content: center;
 }
 .vue-dropzone:hover {
-  background-color: #fff !important; 
+  background-color: #fff !important;
+}
+* >>> .is-invalid .multiselect__tags {
+    border-color: #dc3545 !important;
+}
+* >>> .is-invalid .selected {
+    border-color: #dc3545 !important;
 }
 </style>
