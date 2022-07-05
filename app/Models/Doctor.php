@@ -7,6 +7,7 @@ use App\Models\Master\Pref;
 use App\Models\Master\Job;
 use App\Models\Master\Speciality;
 use App\Models\Diary;
+use App\Models\Master\Category;
 
 class Doctor extends Model
 {
@@ -41,26 +42,15 @@ class Doctor extends Model
   ];
 
   protected $appends = [
-    'firebase_key',
-    'job_name',
-    'spec0_name',
-    'spec1_name',
-    'spec2_name',
-    'name',
-    'email',
-    'role',
-    'likes_count',
-    'is_like',
-    'favoriters_count',
-    'is_favorite',
-    'views_count',
+    'diaries_count',
+    'avg_rate',
+    'categories'
   ];
 
   protected $hidden = [
     'created_at',
-    'updated_at',
+    'updated_at'
   ];
-
   public function getFirebaseKeyAttribute()
   {
     if ($this->user()->count()) {
@@ -78,7 +68,10 @@ class Doctor extends Model
   {
     return $this->user()->first()->name;
   }
-
+  public function getClinicAttribute()
+  {
+    return $this->clinic()->first();
+  }
   public function getEmailAttribute()
   {
     return $this->user()->first()->email;
@@ -114,7 +107,7 @@ class Doctor extends Model
   public function getSpec0NameAttribute()
   {
     $speciality = $this->speciality0()->where('id', $this->spec0)->first();
-    
+
     if(empty($speciality)) return null;
 
     $parent = Speciality::where('id', $speciality->parent_id)->first();
@@ -132,7 +125,7 @@ class Doctor extends Model
   public function getSpec1NameAttribute()
   {
     $speciality = $this->speciality1()->where('id', $this->spec1)->first();
-    
+
     if(empty($speciality)) return null;
 
     $parent = Speciality::where('id', $speciality->parent_id)->first();
@@ -150,7 +143,7 @@ class Doctor extends Model
   public function getSpec2NameAttribute()
   {
     $speciality = $this->speciality2()->where('id', $this->spec2)->first();
-    
+
     if(empty($speciality)) return null;
 
     $parent = Speciality::where('id', $speciality->parent_id)->first();
@@ -158,7 +151,23 @@ class Doctor extends Model
 
     return $speciality ? $parent_name . $speciality->name : null;
   }
-
+  public function getAvgRateAttribute()
+  {
+     $avg_rate=0;
+     $diaries=$this->diaries()->get();
+     $count=count($diaries);
+     for($i=0;$i< $count;$i++){
+        $avg_rate+=$diaries[$i]['ave_rate'];
+     }
+     if($count){
+        return $avg_rate/$count;
+     }
+     return 0;
+  }
+  public function getDiariesCountAttribute()
+  {
+    return $this->diaries()->count();
+  }
   public function diaries() {
     return $this->hasMany(Diary::class);
   }
@@ -188,7 +197,7 @@ class Doctor extends Model
         ->toArray();
       return in_array($currentUser->patient->id, $likerIds);
   }
-  
+
   public function favoriters()
   {
     return $this->morphToMany(Patient::class, 'favoriable', 'favorites');
@@ -209,14 +218,14 @@ class Doctor extends Model
       ->toArray();
     return in_array($currentUser->patient->id, $favoriterIds);
   }
-  
+
   public function getViewsCountAttribute()
   {
     return $this->viewers()->count();
   }
 
   public function clinic() {
-    return $this->belongsTo(Clinic::class); 
+    return $this->belongsTo(Clinic::class);
   }
 
   public function counselings() {
@@ -225,5 +234,13 @@ class Doctor extends Model
 
   public function cases() {
     return $this->hasMany(TreatCase::class);
+  }
+  public function getCategoriesAttribute()
+  {
+    return $this->categories()->get();
+  }
+  public function categories()
+  {
+    return $this->belongsToMany(Category::class, 'doctor_categories', 'doctor_id', 'category_id');
   }
 }

@@ -28,7 +28,7 @@
               {{ item.patient.kana }}
               </td>
               <td>{{ item.patient.gender && gender_types[item.patient.gender] }}</td>
-              <td>{{ item.doctor ? item.doctor.name : '' }}</td>
+              <td>{{ item.doctor ? item.doctor.hira_name : '' }}</td>
               <td>{{ item.hope_treat ? hope_treat_types[item.hope_treat] : '' }}</td>
               <td>
                 <button type="button" class="btn-primary normal-btn" @click="handleShowRsvModal(item.id)">{{ $t('詳細') }}</button>

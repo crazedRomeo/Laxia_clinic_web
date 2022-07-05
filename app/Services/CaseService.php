@@ -17,7 +17,7 @@ class CaseService
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = TreatCase::query()
-      ->with(['categories', 'menus', 'images']);
+      ->with(['categories', 'menus', 'images'])->withCount('likers');
 
     if (isset($search['clinic_id'])) {
       $query->where('clinic_id', $search['clinic_id']);
@@ -32,7 +32,16 @@ class CaseService
       $query->join('case_categories as cc', 'cases.id', '=', 'cc.case_id')
             ->where('cc.category_id', $search['category_id']);
     }
-    
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+        //     //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('likers_count', 'DESC');
+    }
+    else if(isset($search['filter'])&&$search['filter']==1){
+        $query->orderby('updated_at', 'DESC');
+    }
     $query->orderby('created_at', 'desc');
 
     return $query->paginate($per_page);
@@ -46,7 +55,7 @@ class CaseService
   public function store($attributes, $addtional = [])
   {
     $caseAttrs = Arr::get($attributes, 'cases');
-    
+
     $data = array_merge($caseAttrs, $addtional);
     $case = TreatCase::create($data);
 
@@ -88,9 +97,9 @@ class CaseService
     $case->menus()->sync($menuAttrs);
 
     $beforePhotos = Arr::get($attributes, 'beforePhotos');
-    $afterPhotos = Arr::get($attributes, 'afterPhotos');	
+    $afterPhotos = Arr::get($attributes, 'afterPhotos');
     $case->images()->delete();
-	
+
     foreach ($beforePhotos as $photo) {
       $case->images()->create([
         'path' => $photo

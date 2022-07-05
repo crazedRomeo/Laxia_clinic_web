@@ -19,7 +19,7 @@
         @click="
           selected = option;
           open = false;
-          $emit('change', option);
+          $emit('change', option,tabindex);
         "
       >
         {{ option[textkey] }}
@@ -59,23 +59,26 @@ export default {
       default: true,
     }
   },
+
   data() {
+    console.log('aa',this.default);
     return {
-      selected: this.default
-        ? this.options.find(el => el.id == this.default)
+
+      selected: this.default!=null
+        ? this.options.find(el => el.val == this.default)
         : null,
       open: false,
     };
   },
   mounted() {
-    this.$emit("change", this.selected);
+    this.$emit("change", this.selected,this.tabindex);
   },
   methods: {
     clear() {
       if(this.emptyable) this.selected = null;
     },
     set(selected) {
-        this.selected = this.options.find(el => el.id == selected);
+        this.selected = this.options.find(el => el.val == selected);
     }
   },
 };

@@ -141,7 +141,7 @@ class Diary extends Model
   public function getIsLikeAttribute()
   {
     $currentUser = auth()->guard('patient')->user();
-    if (!$currentUser) return false;
+    if (!$currentUser||$currentUser->role=='clinic') return false;
     $likerIds = $this->likers()
       ->get()
       ->pluck('id')
@@ -149,7 +149,7 @@ class Diary extends Model
     return in_array($currentUser->patient->id, $likerIds);
   }
 
-  // 
+  //
   public function owner()
   {
     return $this->belongsTo(Patient::class, 'patient_id');
@@ -207,7 +207,14 @@ class Diary extends Model
       ->orderby('updated_at', 'desc')
       ->take(1);
   }
-
+  public function aftermedias()
+  {
+    return $this->medias()->where('type',1);
+  }
+  public function beforemedias()
+  {
+    return $this->medias()->where('type',0);
+  }
   public function medias()
   {
     return $this->morphMany(Media::class, 'mediable');

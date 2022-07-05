@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Master\Category;
 use App\Models\Master\Pref;
+use App\Models\RecentSearch;
 use Carbon\Carbon;
 
 class Patient extends Model
@@ -45,7 +46,13 @@ class Patient extends Model
     'is_follow',
     'phone_only_number'
   ];
-
+  public function recentsearch(){
+    return $this->hasMany(RecentSearch::class);
+  }
+//   public function getRecentsearchAttribute()
+//   {
+//     return $this->recentsearch()->get();
+//   }
   public function getFirebaseKeyAttribute()
   {
     if ($this->user()->count()) {
@@ -144,7 +151,7 @@ class Patient extends Model
   {
     return $this->morphedByMany(CounselingReport::class, 'favoriable', 'favorites');
   }
-  
+
   public function favoriteMenus()
   {
     return $this->morphedByMany(Menu::class, 'favoriable', 'favorites');

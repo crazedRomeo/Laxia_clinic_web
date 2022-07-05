@@ -22,16 +22,19 @@ class DiaryService
     $query = Diary::query()
       ->with([
         'categories'
-      ]);
+      ])->withCount('likers');
 
-    if (isset($search['category_id']))
-    {
-      $category = Category::find($search['category_id']);
-      $ids = $category->descendantsAndSelf()->pluck('id');
-      $query->whereHas('categories', function($subquery) use ($ids) {
-        $subquery->whereIn('diary_categories.category_id', $ids);
-      });
-    }
+      if (isset($search['category_id']))
+      {
+    //     $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
+    //   //   $ids = $category->descendantsAndSelf()->pluck('id');
+    //     $query->whereHas('categories', function($subquery) use ($ids) {
+    //       $subquery->whereIn('diary_categories.category_id', $ids);
+    //     });
+        $query->whereHas('categories',function($suvquery) use ($search) {
+            $suvquery->whereIn('mtb_part_categories.id',explode(',',$search['category_id']));
+        });
+      }
 
     if (isset($search['favorite']) && $search['favorite'] == 1)
     {
@@ -58,7 +61,7 @@ class DiaryService
         $subquery->where('pref_id', $pref_id);
       });
     }
-    
+
     // if (isset($search['city'])) {
     //   $city = $search['city'];
     //   $query->whereHas('clinic', function($subquery) use ($city) {
@@ -87,18 +90,30 @@ class DiaryService
         ->where('ave_rate', '>', $rate - 1);
     }
 
-    if (isset($search['orderby'])) {
-      $orderby = $search['orderby'];
-      if ($orderby == 'ave_rate') {
-        $query->orderby('ave_rate', 'DESC');
-      } else if ($orderby == 'comments_count') {
-        $query->withCount('comments')
-          ->orderby('comments_count', 'DESC');
-      } else if ($orderby == 'news') {
-        $query->orderby('updated_at', 'DESC');
-      }
+    // if (isset($search['orderby'])) {
+    //   $orderby = $search['orderby'];
+    //   if ($orderby == 'ave_rate') {
+    //     $query->orderby('ave_rate', 'DESC');
+    //   } else if ($orderby == 'comments_count') {
+    //     $query->withCount('comments')
+    //       ->orderby('comments_count', 'DESC');
+    //   } else if ($orderby == 'news') {
+    //     $query->orderby('updated_at', 'DESC');
+    //   }
+    // }
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+            //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('likers_count', 'DESC');
     }
-
+    elseif(isset($search['filter'])&&$search['filter']==1)
+    {
+        $query->orderby('ave_rate', 'DESC');
+    }else if(isset($search['filter'])&&$search['filter']==2){
+        $query->orderby('updated_at', 'DESC');
+    }
     return $query->paginate($per_page);
   }
 
@@ -130,7 +145,7 @@ class DiaryService
     $categoryAttrs = Arr::get($attributes, 'categories');
     $diary->categories()->sync($categoryAttrs);
 
-    
+
     $menuPivot = [];
     foreach ($menuAttrs as $item) {
       $menuPivot[$item['id']] = [
@@ -146,13 +161,13 @@ class DiaryService
       if (!$media) continue;
       $diary->medias()->save($media);
     }
-    
+
     $textQustionAttrs = Arr::get($attributes, 'diary_tqs');
     foreach ($textQustionAttrs as $key => $val)
     {
       $diary->text_questions()->attach($key, ['answer' => $val]);
     }
-    
+
     return $diary->load([
         'categories',
         'medias',
@@ -194,21 +209,21 @@ class DiaryService
       if (!$media) continue;
       $diary->medias()->save($media);
     }
-    
+
     // $diary->rate_questions()->sync([]);
     // $rateQustionAttrs = Arr::get($attributes, 'diary_rqs');
     // foreach ($rateQustionAttrs as $key => $val)
     // {
     //   $diary->rate_questions()->attach($key, ['rate' => $val]);
     // }
-    
+
     $diary->text_questions()->sync([]);
     $textQustionAttrs = Arr::get($attributes, 'diary_tqs');
     foreach ($textQustionAttrs as $key => $val)
     {
       $diary->text_questions()->attach($key, ['answer' => $val]);
     }
-    
+
     return $diary->load([
         'categories',
         'medias',
@@ -217,7 +232,7 @@ class DiaryService
         'text_questions',
       ]);
   }
-  
+
   public function storeProgress($attributes, $additional = [])
   {
     $progressAttrs = Arr::get($attributes, 'progresses');

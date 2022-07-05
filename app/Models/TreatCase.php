@@ -14,7 +14,7 @@ class TreatCase extends Model
      * @var string
      */
     protected $table = 'cases';
-  
+
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +36,8 @@ class TreatCase extends Model
       'comments_count',
       'likes_count',
       'is_like',
+      'beforeimage',
+      'afterimage'
     ];
 
     public function clinic()
@@ -47,7 +49,7 @@ class TreatCase extends Model
     {
       return $this->belongsTo(Doctor::class);
     }
-  
+
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'case_categories', 'case_id', 'category_id');
@@ -57,7 +59,12 @@ class TreatCase extends Model
     {
         return $this->belongsToMany(Menu::class, 'case_menus', 'case_id', 'menu_id');
     }
-
+    public function getBeforeimageAttribute(){
+        return $this->images()->where('img_type',0)->get();
+    }
+    public function getAfterimageAttribute(){
+        return $this->images()->where('img_type',1)->get();
+    }
     public function images()
     {
         return $this->morphMany(Attachment::class, 'attachable');

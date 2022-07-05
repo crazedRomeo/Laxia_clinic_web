@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Master\Category;
+use App\Models\MenuProcess;
 
 class Menu extends Model
 {
@@ -42,16 +43,24 @@ class Menu extends Model
     'photo',
     'status'
   ];
-  
+
   protected $appends = [
     'is_favorite',
+    'diarycount',
+    'periodsum'
   ];
 
   public function clinic()
   {
     return $this->belongsTo(Clinic::class);
   }
-
+  public function getPeriodsumAttribute(){
+    return $this->process()->sum('period');
+  }
+  public function process()
+  {
+    return $this->hasMany(MenuProcess::class)->orderBy('id','asc');
+  }
   public function cases()
   {
     return $this->hasMany(TreatCase::class);
@@ -72,12 +81,13 @@ class Menu extends Model
   {
     return $query->where('status', 1);
   }
-
+  public function getDiarycountAttribute(){
+    return  $this->diaries()->count();
+  }
   public function diaries()
   {
-    return $this->belongsToMany(Diary::class);
+    return $this->belongsToMany(Diary::class,'diary_menu','menu_id','diary_id');
   }
-
   public function favoriters()
   {
     return $this->morphToMany(Patient::class, 'favoriable', 'favorites');

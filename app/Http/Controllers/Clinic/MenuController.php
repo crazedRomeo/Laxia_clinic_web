@@ -30,7 +30,7 @@ class MenuController extends Controller
         $params = $request->all();
         $params['clinic_id'] = auth()->guard('clinic')->user()->clinic->id;
         $menus = $this->service->paginate($params);
-        
+
         return response()->json([
             'menus' => $menus
         ], 200);
@@ -89,14 +89,14 @@ class MenuController extends Controller
 
     public function uploadPhoto(Request $request)
     {
-        $path = $this->mediaUploadWithThumb('/clinic/menus', $request->file, 300);        
+        $path = $this->mediaUploadWithThumb('/clinic/menus', $request->file, 300);
         return response()->json([
             'photo' => $path[1]
         ], 200);
     }
 
     // public function uploadPhoto(Request $request)
-    // {    
+    // {
     //     $uploadedFile = $request->file;
     //     // $request->validate([
     //     //     'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -114,10 +114,10 @@ class MenuController extends Controller
     public function delete($id) {
         $menu = Menu::where('id', $id)->firstOrFail();
         $menu->images()->delete();
-        $menunInfo = Menu::where('id', $id);        
+        $menunInfo = Menu::where('id', $id);
         $menunInfo->delete();
-        
+
         return true;
     }
-    
+
 }
