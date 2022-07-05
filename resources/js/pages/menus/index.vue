@@ -1140,7 +1140,7 @@ export default {
         this.$refs.sportImpossibleSelect.set(this.form.menus.sport_impossible);
       this.$refs.modal.show();
     },
-  },
+
 
   selectedRequireTime(selected_option, tabindex) {
     this.form.menus.process[tabindex].period = selected_option;
@@ -1271,6 +1271,7 @@ export default {
     else this.form.menus.status = 1;
   },
   scrollHanle(evt) {},
+  }
 };
 </script>
 
