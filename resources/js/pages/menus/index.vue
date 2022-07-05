@@ -1140,137 +1140,156 @@ export default {
         this.$refs.sportImpossibleSelect.set(this.form.menus.sport_impossible);
       this.$refs.modal.show();
     },
+    selectedRequireTime(selected_option, tabindex) {
+      this.form.menus.process[tabindex].period = selected_option;
+    },
 
+    selectedTimeTreat(selected_option) {
+      this.form.menus.treat_time = selected_option;
+    },
 
-  selectedRequireTime(selected_option, tabindex) {
-    this.form.menus.process[tabindex].period = selected_option;
-  },
+    selectedBasshi(selected_option) {
+      this.form.menus.basshi = selected_option;
+    },
 
-  selectedTimeTreat(selected_option) {
-    this.form.menus.treat_time = selected_option;
-  },
+    selectedHospitalVisit(selected_option) {
+      this.form.menus.hospital_visit = selected_option;
+    },
 
-  selectedBasshi(selected_option) {
-    this.form.menus.basshi = selected_option;
-  },
+    selectedHare(selected_option) {
+      this.form.menus.hare = selected_option;
+    },
 
-  selectedHospitalVisit(selected_option) {
-    this.form.menus.hospital_visit = selected_option;
-  },
+    selectedPain(selected_option) {
+      this.form.menus.pain = selected_option;
+    },
 
-  selectedHare(selected_option) {
-    this.form.menus.hare = selected_option;
-  },
+    selectedBleeding(selected_option) {
+      this.form.menus.bleeding = selected_option;
+    },
 
-  selectedPain(selected_option) {
-    this.form.menus.pain = selected_option;
-  },
+    selectedHospitalNeed(selected_option) {
+      this.form.menus.hospital_need = selected_option;
+    },
 
-  selectedBleeding(selected_option) {
-    this.form.menus.bleeding = selected_option;
-  },
+    selectedMasui(selected_option) {
+      this.form.menus.masui = selected_option;
+    },
 
-  selectedHospitalNeed(selected_option) {
-    this.form.menus.hospital_need = selected_option;
-  },
+    selectedMakeup(selected_option) {
+      this.form.menus.makeup = selected_option;
+    },
 
-  selectedMasui(selected_option) {
-    this.form.menus.masui = selected_option;
-  },
+    selectedShower(selected_option) {
+      this.form.menus.shower = selected_option;
+    },
 
-  selectedMakeup(selected_option) {
-    this.form.menus.makeup = selected_option;
-  },
-
-  selectedShower(selected_option) {
-    this.form.menus.shower = selected_option;
-  },
-
-  selectedMassage(selected_option) {
-    this.form.menus.massage = selected_option;
-  },
-
-  handleDeleteMenu() {
-    this.$refs.viewModal.hide();
-    let url = "/api/clinic/menus";
-    if (this.form.menus.id) {
-      url += `/${this.form.menus.id}`;
-    }
-    axios
-      .delete(url)
-      .then((res) => {
-        this.getData();
-        this.$swal({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          title: "削除。",
-          icon: "success",
+    selectedMassage(selected_option) {
+      this.form.menus.massage = selected_option;
+    },
+    handleUpdateMenu() { //pstar
+      let flg = false;
+      if (this.form.fileChanged) {
+        flg = true
+        this.$refs.multiFilesUploadComponent.processQueue();
+      } else {
+        this.handleSaveMenu();
+        // this.modalInfo = {
+        //   title: 'メニューの詳細',
+        //   confirmBtnTitle: 'メニューを編集',
+        //   delBtnTitle: 'メニューを削除'
+        // }
+        // this.$refs.modal.hide();
+        // this.$refs.viewModal.show();
+      }
+    },
+    handleDeleteMenu() {
+      this.$refs.viewModal.hide();
+      let url = "/api/clinic/menus";
+      if (this.form.menus.id) {
+        url += `/${this.form.menus.id}`;
+      }
+      axios
+        .delete(url)
+        .then((res) => {
+          this.getData();
+          this.$swal({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            title: "削除。",
+            icon: "success",
+          });
+        })
+        .catch((error) => {
+          this.$store.dispatch("state/removeIsLoading");
         });
-      })
-      .catch((error) => {
-        this.$store.dispatch("state/removeIsLoading");
-      });
-  },
+    },
+    handlePaginate(pageNum) {
+      this.query = {
+        ...this.query,
+        page: pageNum,
+      }
+      this.getData()
+    },
+    handleModalClose() {
+      this.$refs.multiFilesUploadComponent.removeAllFiles();
+    },
 
-  handleModalClose() {
-    this.$refs.multiFilesUploadComponent.removeAllFiles();
-  },
+    // handleFileSaved(fileUrl) {
+    //   this.selected_photos.push(fileUrl);
+    //   this.form.menus.photo = fileUrl
+    //   this.form.fileChanged = false
+    //   this.handleSaveMenu()
+    // },
 
-  // handleFileSaved(fileUrl) {
-  //   this.selected_photos.push(fileUrl);
-  //   this.form.menus.photo = fileUrl
-  //   this.form.fileChanged = false
-  //   this.handleSaveMenu()
-  // },
+    // hanleFileRemove() {
+    //   this.form.fileChanged = false;
+    //   this.form.menus.photo = '';
+    // },
 
-  // hanleFileRemove() {
-  //   this.form.fileChanged = false;
-  //   this.form.menus.photo = '';
-  // },
+    // handleFileAdded(flg) {
+    //   this.form.fileChanged = flg;
+    // },
 
-  // handleFileAdded(flg) {
-  //   this.form.fileChanged = flg;
-  // },
+    handleMultiFileSaved(fileUrl) {
+      this.form.menuPhotos.push(fileUrl);
+    },
 
-  handleMultiFileSaved(fileUrl) {
-    this.form.menuPhotos.push(fileUrl);
-  },
+    hanleMultiFileRemove(id) {
+      let length = this.$refs.multiFilesUploadComponent.getQueuedFiles();
+      if (!length) {
+        this.form.fileChanged = false;
+      }
+    },
 
-  hanleMultiFileRemove(id) {
-    let length = this.$refs.multiFilesUploadComponent.getQueuedFiles();
-    if (!length) {
+    handleMultiFileAdded(flg) {
+      this.form.fileChanged = flg;
+    },
+
+    handleMultiFilesQueueComplete() {
       this.form.fileChanged = false;
-    }
-  },
+      // if (!this.form.avatarFileChanged) {
+      console.log(this.form.beforePhotos);
+      // this.handleSaveMenu()
+      // }
+    },
 
-  handleMultiFileAdded(flg) {
-    this.form.fileChanged = flg;
-  },
+    handleRemoveFile(index) {
+      this.form.menuPhotos.splice(index, 1);
+    },
 
-  handleMultiFilesQueueComplete() {
-    this.form.fileChanged = false;
-    // if (!this.form.avatarFileChanged) {
-    console.log(this.form.beforePhotos);
-    // this.handleSaveMenu()
-    // }
-  },
-
-  handleRemoveFile(index) {
-    this.form.menuPhotos.splice(index, 1);
-  },
-
-  handleCategoryChange(e) {
-    e.preventDefault();
-    this.query.category_id = e.target.value;
-    this.getData();
-  },
-  triggerEvent(value) {
-    if (value) this.form.menus.status = 0;
-    else this.form.menus.status = 1;
-  },
-  scrollHanle(evt) {},
+    handleCategoryChange(e) {
+      e.preventDefault();
+      this.query.category_id = e.target.value;
+      this.getData();
+    },
+    triggerEvent(value) {
+      if (value) this.form.menus.status = 0;
+      else this.form.menus.status = 1;
+    },
+    scrollHanle(evt) {},
   }
 };
 </script>
