@@ -82,7 +82,7 @@ textarea:active{
 	outline: none;
 }
 .form-group{
-	input:focus, 
+	input:focus,
 	input:active,
 	textarea:focus,
 	textarea:active{
@@ -103,7 +103,7 @@ textarea:active{
 	outline: none;
 }
 .form-group select {
-	-webkit-appearance: none; 
+	-webkit-appearance: none;
 	background: url('/img/polygon.svg')no-repeat right #fff;
 	background-position:
 		calc(100% - 16px) calc(1em),
@@ -247,7 +247,7 @@ button:focus {
 	// color: #5CA3F6;
 	background: #F5F5F5;
     margin: 0 10px;
-	
+
 	//background: linear-gradient(90deg, rgba(225, 225, 241, 0.5) 0%, rgba(196, 196, 196, 0) 100%);
 }
 .menu ul li a.active{
@@ -255,11 +255,11 @@ button:focus {
 	background: #D3E7FF;
 }
 .menu ul li a svg path{
-	stroke: #5F6377;	
+	stroke: #5F6377;
 }
 
 .menu ul li a.active svg path{
-	stroke: #5CA3F6;	
+	stroke: #5CA3F6;
 }
 .menu ul li a.active:before, .menu ul li a:hover:before{
 	content: '';
@@ -337,8 +337,8 @@ button:focus {
 	position: relative;
 	background: #EFEFEF;
 	input:-webkit-autofill,
-	input:-webkit-autofill:hover, 
-	input:-webkit-autofill:focus, 
+	input:-webkit-autofill:hover,
+	input:-webkit-autofill:focus,
 	input:-webkit-autofill:active
 	{
 		-webkit-box-shadow: 0 0 0 30px #EFEFEF inset !important;
@@ -493,7 +493,7 @@ button:focus {
 	}
 }
 .btn-file-upload:hover{
-	color: #5CA3F6;	
+	color: #5CA3F6;
 }
 .btn-modal-footer{
 	font-size: 24px;
@@ -980,6 +980,15 @@ button:focus {
 				border: 1px solid #5CA3F6 !important ;
 			}
 		}
+    .is-invalid {
+      // padding-right: 0 !important;
+      input {
+        border: 1px solid red !important;
+      }
+      .selected {
+        border: 1px solid red !important;
+      }
+    }
 		select{
 			-webkit-appearance: none;
     		background: url(/img/polygon.svg) no-repeat right #fff;
@@ -1013,7 +1022,7 @@ button:focus {
 	tbody{
 		tr {
 			height: 66px;
-		}	
+		}
 	}
 }
 
@@ -1023,7 +1032,7 @@ button:focus {
 			border: 1px solid #C9D6DF !important;
 			padding: 3px 8px !important;
 		}
-		
+
 		&:focus-visible {
 			border: 1px solid #5CA3F6 !important;
 
@@ -1036,7 +1045,7 @@ button:focus {
 			height: 50px !important;
 		}
 	}
-	
+
 	.dropdown{
 		width: 100% !important;
 		outline: none !important;
@@ -1058,7 +1067,7 @@ button:focus {
 	.controls>*{
 		color: #C9D6DF !important;
 	}
-} 
+}
 .chat{
 	background-color: #fff;
 	border-radius: 20px 20px 0 0;
@@ -1222,7 +1231,7 @@ button:focus {
 		max-width: 10px;
 		width: 10px !important;
 	}
-} 
+}
 
 .date-pick{
 	display: flex;
@@ -1261,12 +1270,12 @@ button:focus {
 			border: 1px solid #C9D6DF;
 			border-radius: 48px;
 			padding: 0 10px;
-	
+
 			&:focus {
 				outline: none;
 			}
 		}
-	
+
 		span{
 			border: 1px solid #C9D6DF;
 			border-radius: 48px;
@@ -1410,7 +1419,7 @@ button:focus {
 }
 .staff-header p{
 	margin-bottom: -2px;
-} 
+}
 .staff-doctor-header{
 	margin-top: 30px;
 }
@@ -1642,7 +1651,7 @@ button:focus {
 	flex-wrap: wrap;
 	margin-bottom: 16px;
 	margin-top: 40px;
-	
+
 	> div {
 
 		&:nth-child(2n){
@@ -1959,7 +1968,7 @@ span.switcher.switcher-1 input:not(:checked) + label {
 		padding: 0px;
 		margin-bottom: 5px;
 	}
-} 
+}
 .create-menu-flow-index{
 	width: 22px;
     height: 22px;
@@ -2274,7 +2283,7 @@ span.switcher.switcher-1 input:not(:checked) + label {
 	bottom: 10px;
 }
 .header-menu a:hover{
-	background: #F5F5F5;	
+	background: #F5F5F5;
 }
 
 // 20年08月07日
@@ -2480,14 +2489,14 @@ span.switcher.switcher-1 input:not(:checked) + label {
 			color: $auth-info-color;
 			font-size: 14px;
 			font-weight: 500;
-		}		
+		}
 		i{
 			font-size: 16px;
 			float: right;
 			margin-top: -1.8rem !important;
 			margin-right: 10px;
 			cursor: pointer;
-		}		
+		}
 	}
 
 	.sent-btn-panel{
@@ -2541,13 +2550,13 @@ input.is-login-valid {
 }
 i.i-text-invalid{
 	position: absolute;
-	color: #FF3654;	
+	color: #FF3654;
     right: 25px;
     top: 33px;
 }
 i.i-text-valid{
 	position: absolute;
-	color: #13BD38;	
+	color: #13BD38;
     right: 25px;
     top: 33px;
 }
@@ -2555,7 +2564,7 @@ i.i-login-invalid{
 	color: #FF3654;
 	&.passwd-invalid{
 		margin-right: 35px;
-	}	
+	}
 }
 i.i-login-valid{
 	color: #13BD38;
@@ -2783,14 +2792,14 @@ i.i-login-valid{
 	}
 }
 
-.case-file-upload .multi-files-uploader, 
+.case-file-upload .multi-files-uploader,
 .menu-file-upload .multi-files-uploader{
 	.dz-message{
 		display: block !important;
 	}
 	.dz-preview.dz-image-preview{
 		display: none !important;
-	}	
+	}
 }
 .menu-file-upload, .case-file-upload{
 	.btn-file-upload{
@@ -2939,7 +2948,7 @@ i.i-login-valid{
 		max-width: 25%;
 		height: 120px;
 		display: flex;
-		flex: auto;		
+		flex: auto;
 		& > div{
 			border-radius: 7%;
 		}
@@ -2987,7 +2996,7 @@ i.i-login-valid{
 		& > div{
 			border-radius: 0;
 			filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25));
-		}		
+		}
 	}
 }
 .remove-btn {
@@ -3111,7 +3120,7 @@ i.i-login-valid{
 		&.clinic-search-con {
 			display: block !important;
 			margin-bottom: 40px;
-	
+
 			.search-doctor_item {
 				width: 100%;
 				display: flex;
@@ -3226,7 +3235,7 @@ i.i-login-valid{
 	top: -4px;
     margin-right: 3px;
     position: relative;
-	color: rgba(19, 19, 64, 0.3);    
+	color: rgba(19, 19, 64, 0.3);
 	i::before{
 		font-weight: bolder !important;
 	}
@@ -3291,7 +3300,7 @@ i.i-login-valid{
 	i::before{
 		line-height: 1.2;
 	}
-	
+
 }
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
