@@ -1203,6 +1203,9 @@ export default {
         // this.$refs.viewModal.show();
       }
     },
+    selectedSportImpossible(selected_option) {
+      this.form.menus.sport_impossible = selected_option;
+    },
     handleDeleteMenu() {
       this.$refs.viewModal.hide();
       let url = "/api/clinic/menus";
