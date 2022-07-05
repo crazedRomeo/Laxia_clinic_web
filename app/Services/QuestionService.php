@@ -33,18 +33,37 @@ class QuestionService
       });
     }
 
-    if (isset($search['orderby'])) {
-      $orderby = $search['orderby'];
-      if ($orderby == 'comments_count') {
-        $query->withCount('comments')
-          ->orderby('comments_count', 'DESC');
-      } else if ($orderby == 'news') {
-        $query->orderby('updated_at', 'DESC');
-      }
-    } else {
-      $query->orderby('updated_at', 'desc');
+    // if (isset($search['orderby'])) {
+    //   $orderby = $search['orderby'];
+    //   if ($orderby == 'comments_count') {
+    //     $query->withCount('comments')
+    //       ->orderby('comments_count', 'DESC');
+    //   } else if ($orderby == 'news') {
+    //     $query->orderby('updated_at', 'DESC');
+    //   }
+    // } else {
+    //   $query->orderby('updated_at', 'desc');
+    // }
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+            //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        $result=$query->get();
+        return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
     }
-
+    else if(isset($search['filter'])&&$search['filter']==1){
+        $query->orderby('updated_at', 'DESC');
+    }
+    if(isset($search['isanswer'])&&$search['isanswer']==0)
+    {
+            //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        $result=$query->get();
+        return array_slice($result->sortByDesc('is_answer')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }
+    else if(isset($search['isanswer'])&&$search['isanswer']==1){
+        $result=$query->get();
+        return array_slice($result->sortBy('is_answer')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }
+    $query->orderby('created_at', 'DESC');
     return $query->paginate($per_page);
   }
 
@@ -60,9 +79,9 @@ class QuestionService
     $mediaArr = Arr::get($attributes, 'medias');
     $data = array_merge($menuAttrs, $addtional);
     $question = Question::create($data);
-    
+
     $question->categories()->sync($cateArr);
-    
+
     foreach ($mediaArr as $id)
     {
       $media = Media::find($id);

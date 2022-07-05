@@ -44,7 +44,7 @@ class DiaryController extends Controller
         $this->viewService = $viewService;
         $this->commentService = $commentService;
     }
-    
+
     public function loadMaster()
     {
         $data = $this->diaryMasterService->loadMaster();
@@ -58,7 +58,7 @@ class DiaryController extends Controller
     {
         $params = $request->all();
         $diaries = $this->service->paginate($params);
-        
+
         return response()->json([
             'status' => 1,
             'data' => [
@@ -92,7 +92,8 @@ class DiaryController extends Controller
                     // 'rate_questions',
                     // 'clinic',
                     // 'doctor',
-                    'medias',
+                    'beforemedias',
+                    'aftermedias',
                     'progresses',
                     'progresses.medias',
                 ])
@@ -262,7 +263,7 @@ class DiaryController extends Controller
             ]
         ], 200);
     }
-    
+
     public function storeComment(Request $request, Diary $diary)
     {
         $validator = Validator::make($request->all(), [

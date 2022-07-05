@@ -36,18 +36,22 @@ class DoctorController extends Controller
             'doctors' => $doctors
         ], 200);
     }
-    
-    public function get(Doctor $doctor)
+
+    public function get($id)
     {
-        $patient = auth()->guard('patient')->user()->patient;
-        $this->viewService->view($patient, $doctor);
+        // $patient = auth()->guard('patient')->user()->patient;
+        // $this->viewService->view($patient, $doctor);
+        // return response()->json([
+        //     'doctor' => $doctor->load([
+        //         // 'specialities'
+        //         'clinic',
+        //         'counselings',
+        //         'cases',
+        //     ])
+        // ], 200);
+        $doctor = $this->service->get($id);
         return response()->json([
-            'doctor' => $doctor->load([
-                // 'specialities'
-                'clinic',
-                'counselings',
-                'cases',
-            ])
+            'doctor' => $doctor
         ], 200);
     }
 
@@ -76,5 +80,5 @@ class DoctorController extends Controller
             'data' => $result
         ], 200);
     }
-    
+
 }

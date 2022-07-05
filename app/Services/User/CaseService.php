@@ -34,7 +34,7 @@ class CaseService
     // if (isset($search['category_id']) && $search['category_id'] != '-1') {
     //   $query->where('category_id', $search['category_id']);
     // }
-    
+
     $query->orderby('created_at', 'desc');
     return $query->paginate($per_page);
   }
@@ -47,7 +47,7 @@ class CaseService
   public function store($attributes, $addtional = [])
   {
     $caseAttrs = Arr::get($attributes, 'cases');
-    
+
     $data = array_merge($caseAttrs, $addtional);
     $case = TreatCase::create($data);
 

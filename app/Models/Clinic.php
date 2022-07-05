@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Master\Category;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Master\City;
 use App\Models\Master\DayInfo;
 use App\Models\Master\Pref;
 use App\Models\Master\Town;
+use App\Models\ClinicDayInfo;
 
 class Clinic extends Model
 {
@@ -66,7 +68,6 @@ class Clinic extends Model
   {
     return $this->diaries()->count();
   }
-
   public function getCounselingsCountAttribute()
   {
     return $this->counselings()->count();
@@ -147,7 +148,9 @@ class Clinic extends Model
 
     return $result;
   }
-
+  public function clinic_day_infos(){
+    return $this->hasMany(ClinicDayInfo::class);
+  }
   public function user()
   {
     return $this->belongsTo(User::class);
@@ -216,7 +219,6 @@ class Clinic extends Model
   {
     return $this->hasMany(Doctor::class);
   }
-
   public function favoriters()
   {
     return $this->morphToMany(Patient::class, 'favoriable', 'favorites');

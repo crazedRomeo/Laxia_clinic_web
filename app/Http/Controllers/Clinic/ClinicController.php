@@ -41,8 +41,8 @@ class ClinicController extends Controller
 
     public function update(ClinicRequest $request, $id)
     {
-        $clinic = $this->service->get($id);
 
+        $clinic = $this->service->get($id);
         \DB::beginTransaction();
         try {
             $clinic = $this->service->update($request->all(), ['id' => $id]);
@@ -53,7 +53,7 @@ class ClinicController extends Controller
             \Log::error($e->getMessage());
 
             return response()->json([
-                'message' => 'スタッフを変更できません。'
+                'message' =>$e->getMessage()
             ], 500);
         }
         return response()->json([
@@ -102,5 +102,5 @@ class ClinicController extends Controller
             'photo' => $path[1]
         ], 200);
     }
-    
+
 }

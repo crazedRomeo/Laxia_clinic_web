@@ -17,7 +17,14 @@ class ClinicService
   public function paginate($search) {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
 
-    $query = Clinic::query();
+    $query = Clinic::query()
+  ->with([
+        'doctors'
+      ])->withCount([
+        'diaries'
+      ])->withAvg(
+        'diaries as ave_rate','ave_rate'
+      );
     if (isset($search['q'])) {
       $query->where('name', 'LIKE', "%{$search['q']}%");
     }
@@ -54,7 +61,21 @@ class ClinicService
     //     $query->orderBy('ave_diaries_rate', 'DESC');
     //   }
     // }
-
+    if(isset($search['category_id'])){
+        $query->whereHas('doctors.categories',function($suvquery) use ($search) {
+            $suvquery->whereIn('mtb_part_categories.id',explode(',',$search['category_id']));
+        });
+    }
+    if(isset($search['filter'])&&$search['filter']==0)
+    {
+        //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('avg_rate')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->orderby('ave_rate','Desc');
+    }else if(isset($search['filter'])&&$search['filter']==1){
+        $query->orderby('diaries_count','Desc');
+        //return array_slice($result->sortByDesc('diaries_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+    }
     return $query->paginate($per_page);
   }
 
@@ -67,6 +88,7 @@ class ClinicService
         'doctors',
         'menus',
         'counselings',
+        'diaries',
       ])
       ->where('id', $id)
       ->firstOrFail();
@@ -78,7 +100,6 @@ class ClinicService
     $clinic = Clinic::where($where)->firstOrFail();
     $clinic->fill($clinicAttrs);
     $clinic->save();
-
     $companyPhotos = Arr::get($attributes, 'companyPhotos');
     $clinic->images()->delete();
     foreach ($companyPhotos as $photo) {
@@ -86,7 +107,17 @@ class ClinicService
         'path' => $photo
       ]);
     }
-
+    $clinic->clinic_day_infos()->delete();
+    foreach ($attributes['clinic']['work_times'] as $index=> $work_time) {
+            $clinic->clinic_day_infos()->create(
+                [
+                    'day_info_id'=>$index+1,
+                    'type'=>$work_time['type']-0,
+                    'start_time'=>$work_time['start_time'],
+                    'end_time'=>$work_time['end_time'],
+                ]
+                );
+    }
     return $clinic;
   }
 

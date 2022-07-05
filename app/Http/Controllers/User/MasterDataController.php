@@ -79,7 +79,24 @@ class MasterDataController extends Controller
             ]
         ], 200);
     }
+    public function loadMasterDataIndex($id)
+    {
+        $partCategories = $this->categoryService->toIndex($id);
+        // $concenrCategories = $this->concernCategoryService->toArray();
+        // $treatCategories = $this->treatCategoryService->toArray();
 
+        return response()->json([
+            'status' => 1,
+            'message' => '',
+            'data' => [
+                // 'treatCategories' => $treatCategories,
+                'treatCategories' => $partCategories,
+                // 'partCategories' => $partCategories,
+                // 'concernCategories' => $concenrCategories
+                // 'concernCategories' => $partCategories
+            ]
+        ], 200);
+    }
     public function getAreas()
     {
         return response()->json([
@@ -94,7 +111,7 @@ class MasterDataController extends Controller
         $patient = $currentUser->patient;
         $area_id = $patient->area_id;
         $patient_id = $patient->id;
-        
+
         $clinics = \DB::table('clinics')
             ->select('id', 'name')
             ->where(['pref_id' => $area_id])

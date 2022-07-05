@@ -19,7 +19,7 @@
         @click="
           selected = (id);
           open = false;
-          $emit('change', (id));
+          $emit('change', id,tabindex);
         "
       >
         {{ name }}
@@ -60,7 +60,7 @@ export default {
     };
   },
   mounted() {
-    this.$emit("change", this.selected);
+    this.$emit("change", this.selected,this.tabindex);
   },
   methods: {
     clear() {

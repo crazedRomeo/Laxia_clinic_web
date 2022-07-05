@@ -45,7 +45,7 @@ class MenuRequest extends FormRequest
             'menus.shower' => 'nullable|integer',
             'menus.massage' => 'nullable|integer',
             'menus.sport_impossible' => 'nullable|integer',
-            'menus.status' => 'required|boolean',
+            'menus.status' => 'required|boolean'
         ];
     }
 
