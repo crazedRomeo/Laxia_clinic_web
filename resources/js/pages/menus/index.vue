@@ -1206,6 +1206,48 @@ export default {
     selectedSportImpossible(selected_option) {
       this.form.menus.sport_impossible = selected_option;
     },
+    handleSaveMenu() {
+      this.$store.dispatch('state/setIsLoading')
+      let url = '/api/clinic/menus';
+      if (this.form.menus.id) {
+        url += `/${this.form.menus.id}`
+      }
+      this.form = {
+        ...this.form,
+        categories: this.selected_categories.map(el => el.id)
+      }
+      axios.post(url, this.form)
+        .then(res => {
+          let menu = res.data.menu
+          this.$store.dispatch('state/removeIsLoading')
+          // if (menu.status == 1) {
+            this.$store.dispatch('data/addMenu', { menu: menu })
+          // }
+          this.errors = undefined
+          this.$refs.modal.hide()
+          this.$swal({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            title: '登録しました。',
+            icon: 'success',
+          })
+          this.getData()
+        })
+        .catch(error => {
+          this.$swal({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            title: '登録できません。',
+            icon: 'error',
+          })
+          this.errors = { ...error.response.data.errors }
+          this.$store.dispatch('state/removeIsLoading')
+        })
+    },
     handleDeleteMenu() {
       this.$refs.viewModal.hide();
       let url = "/api/clinic/menus";
