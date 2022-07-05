@@ -63,19 +63,19 @@
                 :height="30"
                 :font-size="12" /> -->
                 <Toggle :defaultState="form.menus.status == 0 ? true:false" @change="triggerEvent"/>
-            </div>          
+            </div>
           </div>
           <div class="form-group row m-row">
             <div class="col-md-8">
               <small>{{ $t('メニュー名') }}</small>
-              <input type="text" v-model="form.menus.name" class="form-control" :class="{'is-invalid' : errors && errors['menus.name'], 'fulled-status' : form.menus.name ? 'fulled-input': ''}" placeholder="例：二重切開">
-              <!-- <i v-if="errors && errors['menus.name']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>, 'is-valid' : errors && !errors['menus.name'] 
+              <input type="text" v-model="form.menus.name" class="form-control" :class="{'is-invalid' : errors && errors['menus.name'] && form.menus.name == '', 'fulled-status' : form.menus.name ? 'fulled-input': ''}" placeholder="例：二重切開">
+              <!-- <i v-if="errors && errors['menus.name']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i>, 'is-valid' : errors && !errors['menus.name']
               <i v-if="errors && !errors['menus.name']" class="i-text-valid bi bi-check-circle-fill"></i> -->
               <div v-if="errors && errors['menus.name']" class="error invalid-feedback">{{ errors['menus.name'][0] }}</div>
             </div>
             <div class="col-md-4">
               <small>{{ $t('料金') }}</small>
-              <input type="number" v-model="form.menus.price" class="form-control" :class="{'is-invalid' : errors && errors['menus.price'], 'fulled-status' : form.menus.price ? 'fulled-input': ''}" placeholder="例：250000円">
+              <input type="number" v-model="form.menus.price" class="form-control" :class="{'is-invalid' : errors && errors['menus.price'] && form.menus.price == '', 'fulled-status' : form.menus.price ? 'fulled-input': ''}" placeholder="例：250000円">
               <!-- <i v-if="errors && errors['menus.price']" class="i-text-invalid bi bi-exclamation-triangle-fill"></i> , 'is-valid' : errors && !errors['menus.price']
               <i v-if="errors && !errors['menus.price']" class="i-text-valid bi bi-check-circle-fill"></i> -->
               <div v-if="errors && errors['menus.price']" class="error invalid-feedback">{{ errors['menus.price'][0] }}</div>
@@ -101,8 +101,9 @@
                   deselectLabel="削除"
                   deselectGroupLabel="削除"
                   @select="handleCateChange"
+                  :class="{'is-invalid' : errors && errors['categories'] && selected_categories.length == 0 }"
                 ></multiselect>
-                <div v-if="errors && errors['categories']" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
+                <div v-if="errors && errors['categories'] && selected_categories.length == 0" class="error invalid-feedback d-block">{{ errors['categories'][0] }}</div>
                 <div class="view-cate-panel mt-2">
                   <template v-for="(item, idx) in selected_categories" :value="id">
                     <p :key="idx">
@@ -152,17 +153,17 @@
           </div>
           <div class="create-menu-desc">
             <small>{{ $t('メニューの説明') }}</small>
-            <textarea rows="5" v-model="form.menus.description" class="form-control" :class="{'is-invalid' : errors && errors['menus.description'], 'fulled-status' : form.menus.description ? 'fulled-input': '' }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
+            <textarea rows="5" v-model="form.menus.description" class="form-control" :class="{'is-invalid' : errors && errors['menus.description'] && form.menus.description == '', 'fulled-status' : form.menus.description ? 'fulled-input': '' }" placeholder="例：この施術は目頭を切る施術になります。"></textarea>
             <div v-if="errors && errors['menus.description']" class="error invalid-feedback">{{ errors['menus.description'][0] }}</div>
           </div>
           <div class="create-menu-risk">
             <small>{{ $t('副作用・リスク') }}</small>
-            <textarea rows="5" v-model="form.menus.risk" class="form-control" :class="{'is-invalid' : errors && errors['menus.risk'], 'fulled-status' : form.menus.risk ? 'fulled-input': '' }" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
+            <textarea rows="5" v-model="form.menus.risk" class="form-control" :class="{'is-invalid' : errors && errors['menus.risk'] && form.menus.risk == '', 'fulled-status' : form.menus.risk ? 'fulled-input': '' }" placeholder="例：施術後一週間ほど腫れる場合があります。"></textarea>
             <div v-if="errors && errors['menus.risk']" class="error invalid-feedback">{{ errors['menus.risk'][0] }}</div>
           </div>
           <div class="create-menu-gurantee">
             <small>{{ $t('施術の保証') }}</small>
-            <textarea rows="5" v-model="form.menus.guarantee" class="form-control" :class="{'is-invalid' : errors && errors['menus.guarantee'], 'fulled-status' : form.menus.guarantee ? 'fulled-input': '' }" placeholder="例：何日間の保証があります。"></textarea>
+            <textarea rows="5" v-model="form.menus.guarantee" class="form-control" :class="{'is-invalid' : errors && errors['menus.guarantee'] && form.menus.guarantee == '', 'fulled-status' : form.menus.guarantee ? 'fulled-input': '' }" placeholder="例：何日間の保証があります。"></textarea>
             <div v-if="errors && errors['menus.guarantee']" class="error invalid-feedback">{{ errors['menus.guarantee'][0] }}</div>
           </div>
           <div class="row create-menu-flow-title">
@@ -173,7 +174,7 @@
               <div>{{ $t('所要時間') }}</div>
             </div>
           </div>
-          <div class="form-group row m-row create-menu-flow" v-for="(inp, ind) in inputGroups" :key="ind"> 
+          <div class="form-group row m-row create-menu-flow" v-for="(inp, ind) in inputGroups" :key="ind">
             <div class= "create-menu-flow-index">{{ind + 1}}</div>
             <div class="col-9">
               <div>
@@ -388,9 +389,9 @@
                   @change="selectedSportImpossible"
                 />
             </div>
-          </div>       
+          </div>
         </div>
-      </div>  
+      </div>
       <!-- </vue-custom-scrollbar> -->
       <template v-slot:footer>
         <button type="button" class="btn btn-primary btn-modal-footer" @click="handleUpdateMenu">{{ modalInfo.confirmBtnTitle }}</button>
@@ -481,7 +482,7 @@
               <span>{{ $t('施術の工程') }}</span>
               <p>{{ $t('10分') }}</p>
             </div>
-          </div>          
+          </div>
           <div class="form-group row">
             <div class="col">
               <small>{{ $t('施術時間') }}</small>
@@ -591,7 +592,7 @@
             </div>
           </div>
         </div>
-      </div>  
+      </div>
       <!-- </vue-custom-scrollbar> -->
       <template v-slot:footer>
           <div class="view-modal-footer">
@@ -712,7 +713,7 @@ export default {
 
     search_categories() {
       let tc = [];
-      
+
       this.categories.map(el => {
         el.all_children.map(item => {
           tc.push({
@@ -760,7 +761,7 @@ export default {
       axios.get(`/api/clinic/menus?${qs}`)
         .then(res => {
           this.menus = res.data.menus.data;
-          
+
           this.query = {
             ...this.query,
             per_page: res.data.menus.per_page
@@ -803,11 +804,11 @@ export default {
           status: selected.status == 1,
           photo: selected.photo,
         },
-        menuPhotos: 
+        menuPhotos:
           selected.images.map(el => el.path)
         ,
       }
-      
+
       this.selected_categories = []
       let opt_groud_name;
       this.category_options.forEach(item => {
@@ -889,7 +890,7 @@ export default {
       this.inputGroups.forEach((val, i) => {
         if(this.$refs.requireTimeSelects && this.$refs.requireTimeSelects[i]) this.$refs.requireTimeSelects[i].clear();
       });
-      
+
       if(this.$refs.timeTreatSelect) this.$refs.timeTreatSelect.set(this.form.menus.treat_time);
       if(this.$refs.basshiSelect) this.$refs.basshiSelect.set(this.form.menus.basshi);
       if(this.$refs.hospitalVisitSelect) this.$refs.hospitalVisitSelect.set(this.form.menus.hospital_visit);
@@ -903,8 +904,8 @@ export default {
       if(this.$refs.massageSelect) this.$refs.massageSelect.set(this.form.menus.massage);
       if(this.$refs.sportImpossibleSelect) this.$refs.sportImpossibleSelect.set(this.form.menus.sport_impossible);
       this.$refs.modal.show();
-      
-    },   
+
+    },
 
     selectedRequireTime(selected_option) {
       console.log(selected_option);
@@ -993,7 +994,7 @@ export default {
     },
 
     handleSaveMenu() {
-      this.$store.dispatch('state/setIsLoading')   
+      this.$store.dispatch('state/setIsLoading')
       let url = '/api/clinic/menus';
       if (this.form.menus.id) {
         url += `/${this.form.menus.id}`
@@ -1030,7 +1031,7 @@ export default {
             title: '登録できません。',
             icon: 'error',
           })
-          this.errors = { ...error.response.data.errors }          
+          this.errors = { ...error.response.data.errors }
           this.$store.dispatch('state/removeIsLoading')
         })
     },
@@ -1063,7 +1064,7 @@ export default {
     },
 
     // handleFileSaved(fileUrl) {
-    //   this.selected_photos.push(fileUrl); 
+    //   this.selected_photos.push(fileUrl);
     //   this.form.menus.photo = fileUrl
     //   this.form.fileChanged = false
     //   this.handleSaveMenu()
@@ -1101,23 +1102,23 @@ export default {
       // }
     },
 
-    handleRemoveFile(index) {      
+    handleRemoveFile(index) {
       this.form.menuPhotos.splice(index, 1)
     },
 
     handleCategoryChange(e) {
       e.preventDefault();
       this.query.category_id = e.target.value
-      this.getData()      
+      this.getData()
     },
-    triggerEvent(value){      
+    triggerEvent(value){
       if(value)
         this.form.menus.status = 0;
       else
         this.form.menus.status = 1;
     },
     scrollHanle(evt) {
-      
+
     },
   }
 }
@@ -1154,11 +1155,22 @@ div.create-menu-content{
   justify-content: center;
 }
 .vue-dropzone:hover {
-  background-color: #fff !important; 
+  background-color: #fff !important;
 }
 .btn-file-upload{
     width: 200px;
     min-width: 200px;
     font-size: 14px;
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+* >>> .is-invalid .multiselect__tags {
+    border-color: #dc3545 !important;
+}
+* >>> .is-invalid .selected {
+    border-color: #dc3545 !important;
 }
 </style>

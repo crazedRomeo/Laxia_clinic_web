@@ -8,8 +8,8 @@
       <div class="staff-header staff-doctor-header tab-con mb-2">
         <p>
           <a href="#" :class="{'active': query.status == 0}" @click="handleStatusChange(0)">{{ $t('すべて') }}</a>
-          <a href="#" :class="{'active': query.status == 1}" @click="handleStatusChange(1)" >{{ $t('ドクター') }} ({{doctor_cnt}})</a> 
-          <a href="#" :class="{'active': query.status == 2}" @click="handleStatusChange(2)" >{{ $t('スタッフ') }} ({{staff_cnt}})</a> 
+          <a href="#" :class="{'active': query.status == 1}" @click="handleStatusChange(1)" >{{ $t('ドクター') }} ({{doctor_cnt}})</a>
+          <a href="#" :class="{'active': query.status == 2}" @click="handleStatusChange(2)" >{{ $t('スタッフ') }} ({{staff_cnt}})</a>
         </p>
       </div>
       <div class="search-staff-doctor">
@@ -34,7 +34,7 @@
             <p class="staff-name">{{ item.job && item.job_name }}{{ $t('ドクター') }}</p>
           </div>
         </div>
-      
+
         <div v-if="stuff_datas.length && (query.status == 0 || query.status == 2)" v-for="(item, index) in stuff_datas" :key="'stuff'+index" class="staff-one" @click="handleShowStuff(item.id)">
           <div v-if="item.photo" class="photo-item">
             <p class="staff-img">
@@ -68,7 +68,7 @@
       >
       <div v-if="isEditing && form">
         <span class="label-title">写真</span>
-        
+
         <div class="upload-con">
           <file-upload
             v-if="form.stuffs.photo"
@@ -94,11 +94,13 @@
         <div class="name-grp">
           <div class="name-item">
             <span class="label-title">名前(漢字)</span>
-            <input type="text" class="form-control" v-model="form.stuffs.name" placeholder="例：田中太郎"/>
+            <input type="text" class="form-control" v-model="form.stuffs.name" placeholder="例：田中太郎" :class="{'is-invalid' : errors && errors['stuffs.name'] && form.stuffs.name == ''}"/>
+            <div v-if="errors && errors['stuffs.name']" class="error invalid-feedback">{{ errors['stuffs.name'][0] }}</div>
           </div>
           <div class="name-item">
             <span class="label-title">名前(カタカナ)</span>
-            <input type="text" class="form-control" v-model="form.stuffs.kana" placeholder="例：タナカタロウ"/>
+            <input type="text" class="form-control" v-model="form.stuffs.kana" placeholder="例：タナカタロウ" :class="{'is-invalid' : errors && errors['stuffs.kana'] && form.stuffs.kana == ''}"/>
+            <div v-if="errors && errors['stuffs.kana']" class="error invalid-feedback">{{ errors['stuffs.kana'][0] }}</div>
           </div>
         </div>
 
@@ -137,6 +139,7 @@
       ref="inviteDoctor"
       id="invite-doctor-modal"
       :title="modalInfo.title"
+      @cancel="closeInviteModal"
     >
       <div v-if="isInviteDoctor" class="main-modal">
         <div class="label">{{ $t('招待したいドクターの氏名を入力してください') }}</div>
@@ -177,7 +180,7 @@
         <div class="row mb-5">
           <div class="col-md-4 col-6">
             <!-- <img class="md-doctor-avatar-img" :src="doctorItem.photo || '/img/menu-img.png'" /> -->
-            <img class="md-doctor-avatar-img" v-if="doctorItem.photo" :src="doctorItem.photo" />           
+            <img class="md-doctor-avatar-img" v-if="doctorItem.photo" :src="doctorItem.photo" />
             <svg v-else width="145" height="145" viewBox="0 0 145 145" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="72.5" cy="72.5" r="72.5" fill="#F5F5F5"/>
             <path opacity="0.3" d="M99.1381 78.2378C97.3863 74.8907 95.3706 71.8751 93.3869 69.7364C95.8451 66.04 97.2864 61.6093 97.2864 56.8293C97.2829 43.9258 86.8115 33.464 73.8963 33.4604C60.981 33.464 50.5096 43.9258 50.5096 56.8293C50.5096 61.6022 51.951 66.04 54.4092 69.7364C52.422 71.8751 50.4097 74.8943 48.658 78.2378C46.8991 81.6276 45.4399 85.2598 44.8869 88.6782C44.7049 89.8153 44.6193 90.9238 44.6193 91.9968C44.605 95.5684 45.6361 98.7943 47.4449 101.396C50.1564 105.324 54.345 107.805 58.9688 109.352C63.6104 110.892 68.7908 111.534 73.8963 111.537C80.7071 111.52 87.6428 110.422 93.262 107.474C96.0663 105.995 98.553 104.013 100.351 101.396C102.153 98.7943 103.184 95.572 103.177 91.9968C103.177 90.9203 103.091 89.8153 102.906 88.6782C102.356 85.2598 100.897 81.6312 99.1381 78.2378ZM61.905 44.849C64.984 41.7729 69.2011 39.8837 73.8963 39.8837C78.5879 39.8837 82.8121 41.7729 85.8875 44.849C88.9593 47.9252 90.8573 52.142 90.8573 56.8293C90.8538 61.5167 88.9629 65.7299 85.8875 68.8097C82.8085 71.8787 78.5879 73.7714 73.8927 73.7714C69.2011 73.7679 64.9804 71.8787 61.9015 68.8097C58.8261 65.7335 56.9316 61.5202 56.9316 56.8293C56.9352 52.142 58.8296 47.9252 61.905 44.849ZM95.0495 97.7713C93.4511 100.113 90.5719 102.006 86.7865 103.264C83.019 104.522 78.4558 105.121 73.8927 105.114C67.8168 105.132 61.7267 104.034 57.531 101.796C55.4296 100.691 53.817 99.3325 52.7431 97.7641C51.6727 96.1886 51.0555 94.3921 51.0448 92.0003C51.0448 91.2874 51.1055 90.5104 51.2339 89.6798C51.5871 87.3843 52.8108 84.1549 54.3557 81.2106C55.7364 78.5514 57.3883 76.1062 58.7155 74.5842C62.8005 78.0774 68.0987 80.1982 73.8963 80.1982C79.6974 80.1982 84.992 78.0774 89.0806 74.5877C90.4042 76.1098 92.0597 78.5514 93.4404 81.2141C94.9852 84.1584 96.209 87.3879 96.5586 89.6834C96.6906 90.5139 96.7513 91.2839 96.7513 92.0039C96.737 94.3921 96.1234 96.1886 95.0495 97.7713Z" fill="#666E6E"/>
@@ -434,7 +437,7 @@ export default {
     },
 
     handleShowStuff(id) {
-      let selected = this.stuff_datas.find(el => el.id == id);      
+      let selected = this.stuff_datas.find(el => el.id == id);
       this.form = {
         fileChanged: false,
         stuffs: {
@@ -481,7 +484,7 @@ export default {
 
     handleDeleteConfirmDoctor(p_status){
       this.cancel_status = p_status;
-      this.$refs.delConfirmModal.show()      
+      this.$refs.delConfirmModal.show()
       this.delModalInfo = {
         confirmBtnTitle: 'キャンセル',
         delBtnTitle: '削除する'
@@ -490,9 +493,12 @@ export default {
 
     cancelModal(){
       this.$refs.delConfirmModal.hide()
-      // this.$refs.stuffViewModal.hide()      
+      // this.$refs.stuffViewModal.hide()
     },
-
+    closeInviteModal() {
+      this.doctorId = '';
+      this.search_doctors = [];
+    },
     handleDelete(){
       if(this.cancel_status == 0)
         this.handleDeleteStuff(this.form.stuffs.id);
@@ -629,7 +635,8 @@ export default {
     },
 
     handleModalClose() {
-      this.$refs.fileUploadComponent.removeAllFiles()
+      this.$refs.fileUploadComponent.removeAllFiles();
+      this.errors = undefined;
     },
 
     handleFileSaved(fileUrl) {
@@ -662,7 +669,7 @@ export default {
   }
   * >>> #del-confirm-modal .form-modal-header{
     display: none !important;
-    
+
   }
   * >>> #del-confirm-modal.form-modal-wrapper{
     top: 130px;
@@ -674,6 +681,6 @@ export default {
     padding: 0;
   }
   .vue-dropzone:hover {
-    background-color: #fff !important; 
-  }  
+    background-color: #fff !important;
+  }
 </style>

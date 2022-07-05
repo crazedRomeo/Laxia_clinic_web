@@ -233,7 +233,7 @@
           </div>
           <div class="form-group">
               <small>{{ $t('クリニック名') }}</small>
-              <input type="text" v-model="form.clinic.name" placeholder="例：ABCクリニック" :class="{'is-invalid' : errors && errors['clinic.name'] }">
+              <input type="text" v-model="form.clinic.name" placeholder="例：ABCクリニック" :class="{'is-invalid' : errors && errors['clinic.name'] && form.clinic.name == ''}">
               <div v-if="errors && errors['clinic.name']" class="error invalid-feedback">{{ errors['clinic.name'][0] }}</div>
           </div>
           <div class="form-group">
@@ -393,7 +393,7 @@
             </div>
           </div>
         </div>
-      </div>  
+      </div>
       <template v-slot:footer>
         <button type="button" class="btn btn-primary btn-modal-footer" @click="handleUpdate">{{ modalInfo.confirmBtnTitle }}</button>
       </template>
@@ -572,7 +572,7 @@ export default {
           this.$store.dispatch('state/removeIsLoading')
         })
         .catch(error => {
-          this.$refs.modal.hide();
+          // this.$refs.modal.hide();
           this.errors = { ...error.response.data.errors }
           this.$store.dispatch('state/removeIsLoading')
         })
