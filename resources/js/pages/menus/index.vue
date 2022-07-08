@@ -986,6 +986,15 @@ export default {
         });
     },
 
+    handleStatusChange(status) {
+      this.query = {
+        ...this.query,
+        page: 1,
+        status: status
+      }
+      this.getData()
+    },
+
     handleShowMenu(id) {
       let selected = this.menus.find((el) => el.id == id);
       this.form = {
