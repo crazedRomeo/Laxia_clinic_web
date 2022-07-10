@@ -16,15 +16,18 @@ class ClinicService
 {
   public function paginate($search) {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
+    $diary_avg = \DB::table('diaries')
+      ->select('clinic_id', DB::raw('avg(ave_rate) as ave_rate'))
+      ->groupBy('clinic_id');
 
     $query = Clinic::query()
   ->with([
         'doctors'
       ])->withCount([
         'diaries'
-      ])->withAvg(
-        'diaries as ave_rate','ave_rate'
-      );
+      ])->leftJoinSub($diary_avg, 'diary_avg', function ($join) {
+        $join->on('clinics.id', '=', 'diary_avg.clinic_id');
+      });
     if (isset($search['q'])) {
       $query->where('name', 'LIKE', "%{$search['q']}%");
     }

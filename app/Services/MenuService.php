@@ -75,10 +75,10 @@ class MenuService
     }
     if (isset($search['city_id']))
     {
-    $ids = Clinic::whereIn('id',explode(',',$search['city_id']))->select('id')->get();
+    // $ids = Clinic::whereIn('id',explode(',',$search['city_id']))->select('id')->get();
     //   $ids = $category->descendantsAndSelf()->pluck('id');
       $query->whereHas('clinic', function($subquery) use ($search){
-        $subquery->where('clinic.city_id',$search['city_id']);
+        $subquery->whereIn('clinics.city_id',explode(',',$search['city_id']));
       });
     }
     if(isset($search['q']) && $search['q'] != '') {

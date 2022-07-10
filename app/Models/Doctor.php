@@ -8,6 +8,7 @@ use App\Models\Master\Job;
 use App\Models\Master\Speciality;
 use App\Models\Diary;
 use App\Models\Master\Category;
+use App\Models\DoctorImages;
 
 class Doctor extends Model
 {
@@ -44,7 +45,8 @@ class Doctor extends Model
   protected $appends = [
     'diaries_count',
     'avg_rate',
-    'categories'
+    'categories',
+    'job_name',
   ];
 
   protected $hidden = [
@@ -63,7 +65,6 @@ class Doctor extends Model
   {
     return $this->belongsTo(User::class);
   }
-
   public function getNameAttribute()
   {
     return $this->user()->first()->name;
@@ -84,8 +85,12 @@ class Doctor extends Model
 
   public function images()
   {
-    return $this->morphMany(Attachment::class, 'attachable');
+    return $this->hasMany(DoctorImages::class, 'doctor_id','user_id');
   }
+//   public function images()
+//   {
+//     return $this->morphMany(Attachment::class, 'attachable');
+//   }
 
   public function job()
   {
@@ -223,7 +228,10 @@ class Doctor extends Model
   {
     return $this->viewers()->count();
   }
-
+  public function questions()
+  {
+    return $this->belongsToMany(Question::class, 'answers', 'doctor_id', 'question_id');
+  }
   public function clinic() {
     return $this->belongsTo(Clinic::class);
   }

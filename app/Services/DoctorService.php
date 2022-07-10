@@ -18,10 +18,12 @@ class DoctorService
 {
   public function paginate($search) {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
-
-    $query = Doctor::query()->withAvg(
-        'diaries as ave_rate','ave_rate'
-      )->withCount('diaries');
+    $diary_acount = \DB::table('diaries')
+    ->select('doctor_id', DB::raw('avg(ave_rate) as ave_rate, count(id) as diaries_count'))
+    ->groupBy('doctor_id');
+    $query = Doctor::query()->leftJoinSub($diary_acount, 'diary_avg', function ($join) {
+        $join->on('doctors.id', '=', 'diary_avg.doctor_id');
+      });
     if (isset($search['category_id']))
     {
     //   $ids = Category::whereIn('id',explode(',',$search['category_id']))->select('id')->get();
