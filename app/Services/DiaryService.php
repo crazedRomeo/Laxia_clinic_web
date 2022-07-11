@@ -55,10 +55,10 @@ class DiaryService
       $query->where('patient_id', $search['patient_id']);
     }
 
-    if (isset($search['pref_id'])) {
-      $pref_id = $search['pref_id'];
-      $query->whereHas('clinic', function($subquery) use ($pref_id) {
-        $subquery->where('pref_id', $pref_id);
+    if (isset($search['city_id'])) {
+      $city_id = $search['city_id'];
+      $query->whereHas('clinic', function($subquery) use ($city_id) {
+        $subquery->whereIn('city_id', $city_id);
       });
     }
 
@@ -69,11 +69,11 @@ class DiaryService
     //   });
     // }
 
-    if (isset($search['price_min'])) {
+    if ($search['price_min']!=0) {
       $query->where('price', '>=', $search['price_min']);
     }
 
-    if (isset($search['price_max'])) {
+    if ($search['price_max']!=0) {
       $query->where('price', '<=', $search['price_max']);
     }
 
@@ -84,7 +84,7 @@ class DiaryService
       });
     }
 
-    if (isset($search["rate"])) {
+    if ($search['rate']!='6,6,6,6,6') {
       $rate = $search["rate"];
       $query->where('ave_rate', '<=', $rate)
         ->where('ave_rate', '>', $rate - 1);

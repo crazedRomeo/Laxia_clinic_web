@@ -32,6 +32,17 @@ class CaseService
       $query->join('case_categories as cc', 'cases.id', '=', 'cc.case_id')
             ->where('cc.category_id', $search['category_id']);
     }
+    if ($search['price_min']!=0) {
+      $query->whereHas('menus', function ($subquery) use ($search) {
+        $subquery->where('price', '>=', $search['price_min']);
+      });
+    }
+    if ($search['price_max']!=0) {
+        $query->whereHas('menus', function ($subquery) use ($search) {
+
+             $subquery->where('price', '<=', $search['price_max']);
+        });
+    }
     if(isset($search['filter'])&&$search['filter']==0)
     {
         //     //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
@@ -46,7 +57,6 @@ class CaseService
 
     return $query->paginate($per_page);
   }
-
   public function get($id)
   {
     return TreatCase::findOrFail($id);

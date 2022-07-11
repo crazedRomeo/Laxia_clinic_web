@@ -18,12 +18,17 @@ class QuestionService
   public function paginate($search)
   {
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
+    $answer_count = \DB::table('answers')
+        ->select('question_id', DB::raw('count(id) as count'))
+        ->groupBy('question_id');
     $query = Question::query()
       ->with([
         'owner',
         'medias',
         'categories'
-      ]);
+      ])->withCount('likers')->withCount('answer')->leftJoinSub($answer_count, 'answer_count', function ($join) {
+        $join->on('questions.id', '=', 'answer_count.question_id');
+      });
 
     if (isset($search['category_id']))
     {
@@ -46,22 +51,25 @@ class QuestionService
     // }
     if(isset($search['filter'])&&$search['filter']==0)
     {
+        $query->orderby('likers_count', 'DESC');
             //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
-        $result=$query->get();
-        return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('likes_count')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
     }
     else if(isset($search['filter'])&&$search['filter']==1){
         $query->orderby('updated_at', 'DESC');
     }
     if(isset($search['isanswer'])&&$search['isanswer']==0)
     {
-            //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
-        $result=$query->get();
-        return array_slice($result->sortByDesc('is_answer')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->where('answer_count.count','>', '0');
+        //$query->selectRaw("menus.*, IF(ISNULL(`diary_menu`.`id`), 0, COUNT(`menus`.`id`)) as diarycount")->leftJoin('diary_menu', 'menus.id', '=', 'diary_menu.menu_id')->groupBy('menus.id');
+        // $result=$query->get();
+        // return array_slice($result->sortByDesc('is_answer')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
     }
     else if(isset($search['isanswer'])&&$search['isanswer']==1){
-        $result=$query->get();
-        return array_slice($result->sortBy('is_answer')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
+        $query->where('answer_count.count','=', null);
+        // $result=$query->get();
+        // return array_slice($result->sortBy('is_answer')->values()->all(),($search['page']-1)*$search['per_page'],$search['per_page']);
     }
     $query->orderby('created_at', 'DESC');
     return $query->paginate($per_page);
