@@ -11,7 +11,7 @@
  Target Server Version : 100418
  File Encoding         : 65001
 
- Date: 11/07/2022 18:03:40
+ Date: 11/07/2022 22:45:47
 */
 
 SET NAMES utf8mb4;
@@ -4008,7 +4008,7 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'クリニック1', 'clinic@gmail.com', NULL, '$2y$10$zhBAjFjWFYqaX7jfCijuZe3l1RS.CtWNUNYRMhkqEsxc6.TUMTYAq', 'clinic', '1g0HUAR2W7WjOFBsvhsBwp7bfmCfVCTTtEMbcHPjiA5kuiH65QZIoB4tUkMW', '2021-02-11 05:49:40', '2021-08-30 16:52:57', 'YKo7jsNyr5yIXe79xK1T', NULL, 0, NULL, NULL);
+INSERT INTO `users` VALUES (1, 'クリニック1', 'clinic@gmail.com', NULL, '$2y$10$Km7Hzu78pwrhABCVleQoKeSerUvxit3YUdh.X4rWSUJ97fMhGMJpW', 'clinic', '1g0HUAR2W7WjOFBsvhsBwp7bfmCfVCTTtEMbcHPjiA5kuiH65QZIoB4tUkMW', '2021-02-11 05:49:40', '2022-07-12 14:44:47', 'YKo7jsNyr5yIXe79xK1T', NULL, 0, NULL, NULL);
 INSERT INTO `users` VALUES (2, '患者_0', 'patient_0@test.com', NULL, '$2y$10$zhBAjFjWFYqaX7jfCijuZe3l1RS.CtWNUNYRMhkqEsxc6.TUMTYAq', 'patient', NULL, '2021-02-11 05:49:41', '2021-02-11 05:49:41', NULL, NULL, 0, NULL, NULL);
 INSERT INTO `users` VALUES (4, '患者_2', 'patient_2@test.com', NULL, '$2y$10$aQ689bqJVIhBlxMAaO/DFOzbv69P/yuF6fbzUjEcVcsH.UUN6v8ua', 'patient', NULL, '2021-02-11 05:49:42', '2021-02-11 05:49:42', NULL, NULL, 0, NULL, NULL);
 INSERT INTO `users` VALUES (5, '患者_3', 'patient_3@test.com', NULL, '$2y$10$CI.5H2DBDiTbyq9ISb46O.Q2JtjW6q5zDLVSrmPgI.xcmIJWdeVW2', 'patient', NULL, '2021-02-11 05:49:43', '2021-02-11 05:49:43', NULL, NULL, 0, NULL, NULL);
