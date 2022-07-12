@@ -33,7 +33,7 @@ class CounselingController extends Controller
     {
         $params = $request->all();
         $counselings = $this->service->paginate($params);
-        
+
         return response()->json([
             'status' => 1,
             'data' => [
@@ -47,17 +47,20 @@ class CounselingController extends Controller
         $currentUser = auth()->guard('patient')->user();
         $patient = $currentUser->patient;
         if ($patient->id != $counseling->patient_id) {
-            $this->viewService->view($patient, $counseling);
+            // $this->viewService->view($patient, $counseling);
         }
 
         return response()->json([
             'status' => 1,
             'data' => [
                 'counseling' => $counseling->load([
-                    'medias',
+                    'mediaSelf',
+                    'mediaLike',
+                    'mediaDislike',
                     'questions',
                     'clinic',
                     'doctor',
+                    'categories'
                 ])
             ]
         ], 200);
@@ -145,7 +148,7 @@ class CounselingController extends Controller
             'data' => $this->commentService->paginate($request->all(), $counseling),
         ]);
     }
-    
+
     public function storeComment(Request $request, CounselingReport $counseling)
     {
         $validator = Validator::make($request->all(), [

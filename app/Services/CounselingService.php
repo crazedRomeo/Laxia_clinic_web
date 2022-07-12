@@ -20,7 +20,9 @@ class CounselingService
     $per_page = isset($search['per_page']) ? $search['per_page'] : 20;
     $query = CounselingReport::query()
       ->with([
-        'medias',
+        'mediaSelf',
+        'mediaLike',
+        'mediaDislike',
         'categories'
       ])->withCount('likers');
 
