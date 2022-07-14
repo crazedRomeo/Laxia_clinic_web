@@ -32,7 +32,26 @@ class PatientService
 
     return $query->paginate($per_page);
   }
-  
+  public function get($id)
+  {
+    return Patient::with([
+      'questions.medias',
+      'diaries.categories',
+      'counselings.medias'      
+    ])
+    ->where('id', $id)
+    ->firstOrFail();
+  }
+  public function IsFollow($id,$myid)
+  {
+    $follow=\DB::table('follows')
+          ->where('patient_id', $myid)
+          ->where('follow_id', $id)->first();
+    if($follow){
+      return 1;
+    }
+    return 0;
+  }
 
   public function toggleFollow($cPatientId, $id)
   {

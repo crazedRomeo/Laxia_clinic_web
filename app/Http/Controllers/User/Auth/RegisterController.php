@@ -115,7 +115,6 @@ class RegisterController extends Controller
         // UserVerifyEmailJob::dispatch($user);
         if(!empty($unique_id)) {
             $patient = Patient::where('unique_id', $unique_id)->first();
-
             if(!empty($patient)) {
                 PointHistory::create([
                     'patient_id' => $patient->id,
@@ -123,6 +122,7 @@ class RegisterController extends Controller
                     'type_id' => $user->id,
                     'use_point' => config('constants.user_invitation')
                 ]);
+                $patient->increment('point',3000);
             }
         }
 

@@ -28,8 +28,14 @@ class PatientController extends Controller
         return PatientResource::collection($patients);
     }
 
-    public function get(Patient $patient)
+    public function get(Request $request,$id)
     {
+        $currentUser = auth()->guard('patient')->user();
+        $patient = $currentUser->patient;
+        $patient = $this->service->get($id);
+        $isfollow = $this->service->IsFollow($id,$patient->id);
+        $patient['isfollow']=$isfollow;
+        
         return response()->json([
             'status' => 1,
             'data' => [
@@ -74,7 +80,7 @@ class PatientController extends Controller
     {
         $currentUser = auth()->guard('patient')->user();
         $result = $this->service->toggleFollow($currentUser->patient->id, $patient->id);
-        
+
         return response()->json([
             'status' => 1,
             'data' => $result

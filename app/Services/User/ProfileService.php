@@ -31,6 +31,7 @@ class ProfileService
 
   public function get($id) {
     return Patient::with([
+      'questions.medias',
       'diaries.medias',
       'counselings.medias',
       'favoriteDiaries.medias',

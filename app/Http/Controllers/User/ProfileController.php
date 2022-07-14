@@ -42,7 +42,7 @@ class ProfileController extends Controller
             'patients.birthday' => 'nullable|date',
             'patients.intro' => 'nullable|string',
             'patients.area_id' => 'nullable|integer|exists:mtb_prefs,id',
-            'photo' => 'nullable|file|image',
+            'medias' => 'nullable|file|image',
             'patient_categories' => 'nullable|array'
         ]);
 
@@ -60,8 +60,8 @@ class ProfileController extends Controller
             $patient = $currentUser->patient;
 
             $params = $request->all();
-            if ($request->file('photo')) {
-                $pathInfo = $this->mediaUploadWithThumb('/user/patients', $request->photo, 150);
+            if ($request->file('medias')) {
+                $pathInfo = $this->mediaUploadWithThumb('/user/patients', $request->medias, 150);
                 $params['patients']['photo'] = $pathInfo[1];
             }
             
